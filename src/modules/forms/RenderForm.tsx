@@ -104,7 +104,7 @@ export const RenderForm = ({
       }
       void submitForm()
     },
-    [router, id, redirect, confirmationType],
+    [router, id, redirect, confirmationType, confirmationMessage, formMethods],
   )
 
   return (
