@@ -2,6 +2,7 @@ import { access } from '@/payload/access'
 import { visibleFor } from '@/payload/utils/visibleFor'
 import { formBuilderPlugin, fields } from '@payloadcms/plugin-form-builder'
 import { Field, FieldBase } from 'payload'
+import { revalidate, revalidateDelete } from '../hooks/revalidate'
 
 const nameField: Field = {
   name: 'name',
@@ -326,6 +327,10 @@ export const formBuilder = formBuilderPlugin({
         en: 'Forms',
         ru: 'Формы',
       },
+    },
+    hooks: {
+      afterChange: [revalidate],
+      afterDelete: [revalidateDelete],
     },
     access: {
       read: () => true,
