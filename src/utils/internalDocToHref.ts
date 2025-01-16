@@ -1,11 +1,14 @@
 import { SerializedLinkNode } from '@payloadcms/richtext-lexical'
 
-export const internalDocToHref = ({ linkNode }: { linkNode: SerializedLinkNode }): string => {
-  const { value, relationTo } = linkNode.fields.doc!
+export const internalDocToHref = ({
+  linkNode,
+}: {
+  linkNode: SerializedLinkNode | { relationTo: string; value: any }
+}): string => {
+  const relationTo = 'fields' in linkNode ? linkNode.fields?.doc?.relationTo : linkNode.relationTo
+  const value = 'fields' in linkNode ? linkNode.fields?.doc?.value : linkNode.value
 
-  if (typeof value !== 'object') {
-    throw new Error('Expected value to be an object')
-  }
+  if (!value || typeof value !== 'object') return '/'
 
   switch (relationTo) {
     case 'page':
@@ -13,6 +16,6 @@ export const internalDocToHref = ({ linkNode }: { linkNode: SerializedLinkNode }
     case 'post':
       return `/post/${value?.slug}`
     default:
-      return '#'
+      return '/'
   }
 }

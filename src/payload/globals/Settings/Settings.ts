@@ -1,6 +1,7 @@
 import { revalidateGlobal } from '@/payload/hooks/revalidateGlobal'
 import { MetaDescriptionField, MetaTitleField } from '@payloadcms/plugin-seo/fields'
 import { GlobalConfig } from 'payload'
+import { link, linkGroup } from '@/payload/fields/link'
 
 export const Settings: GlobalConfig = {
   slug: 'settings',
@@ -14,8 +15,11 @@ export const Settings: GlobalConfig = {
       ru: 'Админ',
     },
   },
+  typescript: {
+    interface: 'Settings',
+  },
   hooks: {
-    afterChange: [revalidateGlobal]
+    afterChange: [revalidateGlobal],
   },
   fields: [
     {
@@ -36,7 +40,95 @@ export const Settings: GlobalConfig = {
             en: 'Navigation',
             ru: 'Навигация',
           },
-          fields: [],
+          fields: [
+            {
+              name: 'header',
+              label: {
+                en: 'Header',
+                ru: 'Шапка',
+              },
+              type: 'group',
+              fields: [
+                linkGroup({
+                  appearances: false,
+                  overrides: {
+                    label: {
+                      en: 'Menu Items',
+                      ru: 'Пункты меню',
+                    },
+                    labels: {
+                      singular: {
+                        en: 'Menu Item',
+                        ru: 'Пункт меню',
+                      },
+                      plural: {
+                        en: 'Menu Items',
+                        ru: 'Пункты меню',
+                      },
+                    },
+                  },
+                }),
+              ],
+            },
+            {
+              name: 'footer',
+              label: {
+                en: 'Footer',
+                ru: 'Подвал',
+              },
+              type: 'group',
+              fields: [
+                linkGroup({
+                  appearances: false,
+                  overrides: {
+                    label: {
+                      en: 'Menu Items',
+                      ru: 'Пункты меню',
+                    },
+                    labels: {
+                      singular: {
+                        en: 'Menu Item',
+                        ru: 'Пункт меню',
+                      },
+                      plural: {
+                        en: 'Menu Items',
+                        ru: 'Пункты меню',
+                      },
+                    },
+                  },
+                }),
+
+                {
+                  name: 'copyText',
+                  label: {
+                    en: 'Copy Text',
+                    ru: 'Текст копирайта',
+                  },
+                  type: 'text',
+                },
+                linkGroup({
+                  appearances: false,
+                  overrides: {
+                    name: 'legalLinks',
+                    label: {
+                      en: 'Legal Links',
+                      ru: '',
+                    },
+                    labels: {
+                      singular: {
+                        en: 'Legal Link',
+                        ru: '...',
+                      },
+                      plural: {
+                        en: 'Legal Links',
+                        ru: '...',
+                      },
+                    },
+                  },
+                }),
+              ],
+            },
+          ],
         },
         {
           name: 'seo',

@@ -14,7 +14,7 @@
     --secondary: 240 4.8% 95.9%;
     --secondary-foreground: 240 5.9% 10%;
     --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
+    --muted-foreground: 240 3.8% 56.1%;
     --accent: 240 4.8% 95.9%;
     --accent-foreground: 240 5.9% 10%;
     --destructive: 0 84.2% 60.2%;
@@ -28,8 +28,11 @@
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
+
+    --header-height: 5rem;
+    --page-min-height: calc(100vh - var(--header-height));
   }
-  .dark {
+  /* .dark {
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
     --card: 240 10% 3.9%;
@@ -54,7 +57,7 @@
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
-  }
+  } */
 }
 @layer base {
   * {
@@ -76,7 +79,44 @@
     }
   }
 
-  .content-grid {
+  .default-grid {
+    --padding-inline: 1rem;
+    --content-max-width: 75rem;
+    --breakout-max-width: 87.5rem;
+
+    --breakout-size: calc((var(--breakout-max-width) - var(--content-max-width)) / 2);
+
+    display: grid;
+    grid-template-columns:
+      [full-width-start] minmax(var(--padding-inline), 1fr)
+      [breakout-start] minmax(0, var(--breakout-size))
+      [content-start] min(100% - (var(--padding-inline) * 2), var(--content-max-width))
+      [content-end]
+      minmax(0, var(--breakout-size)) [breakout-end]
+      minmax(var(--padding-inline), 1fr) [full-width-end];
+  }
+
+  .default-grid > :not(.breakout, .full-width),
+  .full-width > :not(.breakout, .full-width) {
+    grid-column: content;
+  }
+
+  .default-grid > .breakout {
+    grid-column: breakout;
+  }
+
+  .default-grid > .full-width {
+    grid-column: full-width;
+
+    display: grid;
+    grid-template-columns: inherit;
+  }
+
+  .default-grid > .absolute-full-width {
+    grid-column: full-width;
+  }
+
+  .post-grid {
     --padding-inline: 1rem;
     --content-max-width: 62.5rem;
     --breakout-max-width: 75rem;
@@ -93,16 +133,16 @@
       minmax(var(--padding-inline), 1fr) [full-width-end];
   }
 
-  .content-grid > :not(.breakout, .full-width),
+  .post-grid > :not(.breakout, .full-width),
   .full-width > :not(.breakout, .full-width) {
     grid-column: content;
   }
 
-  .content-grid > .breakout {
+  .post-grid > .breakout {
     grid-column: breakout;
   }
 
-  .content-grid > .full-width {
+  .post-grid > .full-width {
     grid-column: full-width;
 
     display: grid;

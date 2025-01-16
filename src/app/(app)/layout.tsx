@@ -8,6 +8,9 @@ import '@/styles/globals.css'
 import { ExitPreview } from '@/modules/layout/ExitPreview'
 import { Montserrat } from 'next/font/google'
 import { cn } from '@/utils/cn'
+import { Header } from '@/modules/layout/Header'
+import { Footer } from '@/modules/layout/Footer'
+import { Toaster } from '@/components/Sonner'
 
 const montserrat = Montserrat({
   subsets: ['cyrillic'],
@@ -17,16 +20,29 @@ const montserrat = Montserrat({
 
 const RootLayout = async ({ children }: { children: React.ReactNode }) => {
   const { isEnabled: draft } = await draftMode()
+  const settings = await getSettings()
+
   return (
     <html lang="ru">
-      <body className={cn(montserrat.variable, 'relative bg-background font-sans antialiased')}>
-        {draft && (
-          <>
-            <LivePreviewListener />
-            <ExitPreview />
-          </>
+      <body
+        className={cn(
+          montserrat.variable,
+          'relative bg-background font-sans antialiased min-h-screen flex flex-col',
         )}
-        {children}
+      >
+        <div className="flex flex-col flex-grow">
+          {draft && (
+            <>
+              <LivePreviewListener />
+              <ExitPreview />
+            </>
+          )}
+          <Header className="flex-shrink-0" links={settings?.navigation?.header?.links} />
+
+          <main className="flex-grow pt-header">{children}</main>
+          <Footer className="flex-shrink-0" data={settings?.navigation?.footer} />
+        </div>
+        <Toaster />
       </body>
     </html>
   )

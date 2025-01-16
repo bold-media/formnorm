@@ -3,11 +3,12 @@ import { getPayload } from 'payload'
 import React from 'react'
 import config from '@payload-config'
 import { notFound } from 'next/navigation'
-import { RichText } from '@/modules/common/RichText'
 import { Metadata, ResolvingMetadata } from 'next'
 import { generateMeta } from '@/utils/generateMeta'
 import { getPathSegments } from '@/utils/getPathSegments'
 import { getPageByPathname } from '@/modules/common/data'
+import { RichText } from '@/modules/common/RichText'
+import { Hero } from '@/modules/common/Hero'
 
 interface Props {
   params: Promise<{
@@ -20,14 +21,15 @@ const Pages = async ({ params }: Props) => {
   const pathname = resolvePathname(segments)
   const page = await getPageByPathname(pathname)
 
-  if (!page || !page?.content) {
+  if (!page) {
     notFound()
   }
 
   return (
-    <div>
-      <RichText data={page?.content} />
-    </div>
+    <>
+      <Hero {...page.hero} />
+      <RichText data={page?.content} container={page?.containerSize} />
+    </>
   )
 }
 

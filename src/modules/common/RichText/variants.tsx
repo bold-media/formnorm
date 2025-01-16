@@ -9,12 +9,14 @@ import { TypographyVariantProps } from '@/styles/typography'
 export const richTextVariants = cva(undefined, {
   variants: {
     container: {
-      true: 'max-w-none content-grid',
-      false: '',
+      default: 'mx-auto px-4',
+      post: 'max-w-[62.5rem] mx-auto px-4',
+      true: 'px-4',
+      false: 'max-w-none px-0',
     },
   },
   defaultVariants: {
-    container: true,
+    container: false,
   },
 })
 
@@ -23,4 +25,6 @@ export interface RichTextProps
     VariantProps<typeof richTextVariants> {
   data: SerializedEditorState<SerializedLexicalNode> | undefined | null
   prose?: TypographyVariantProps | false
+  tag?: 'div' | 'section' | 'article' | null | undefined
+  wrapperClassName?: string
 }

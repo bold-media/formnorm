@@ -12,11 +12,11 @@ import {
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
 import { createBreadcrumbsField, createParentField } from '@payloadcms/plugin-nested-docs'
-import { BlocksFeature, lexicalEditor } from '@payloadcms/richtext-lexical'
-import { Banner } from '@/payload/blocks/Banner/Banner.config'
 import { access } from '@/payload/access'
 import { generatePreviewPath } from '@/utils/generatePreviewPath'
 import { revalidatePage, revalidatePageDelete } from './hooks/revalidatePage'
+import { blocksEditor } from '@/payload/fields/lexical/blocksEditor'
+import { hero } from './fields/hero'
 
 export const Page: CollectionConfig = {
   slug: 'page',
@@ -49,6 +49,7 @@ export const Page: CollectionConfig = {
   defaultPopulate: {
     title: true,
     slug: true,
+    pathname: true,
   },
   versions: {
     drafts: {
@@ -88,6 +89,35 @@ export const Page: CollectionConfig = {
         beforeChange: [syncPathname],
       },
     },
+    {
+      name: 'containerSize',
+      type: 'select',
+      label: {
+        en: 'Container Size',
+        ru: 'Размер контейнера',
+      },
+      defaultValue: 'default',
+      admin: {
+        position: 'sidebar',
+        isClearable: false,
+      },
+      options: [
+        {
+          label: {
+            en: 'Default',
+            ru: 'По умолчанию',
+          },
+          value: 'default',
+        },
+        {
+          label: {
+            en: 'Narrow',
+            ru: 'Узкий',
+          },
+          value: 'post',
+        },
+      ],
+    },
     createParentField('page', {
       label: { en: en.common.parentPage.singular, ru: ru.common.parentPage.singular },
     }),
@@ -100,6 +130,7 @@ export const Page: CollectionConfig = {
             ru: 'Основное',
           },
           fields: [
+            hero,
             {
               name: 'title',
               type: 'text',
@@ -109,6 +140,11 @@ export const Page: CollectionConfig = {
                 ru: ru.common.title.singular,
               },
             },
+            // {
+            //   name: 'blocks',
+            //   type: 'blocks',
+            //   blocks: [RichTextBlock],
+            // },
             {
               name: 'content',
               type: 'richText',
@@ -116,16 +152,7 @@ export const Page: CollectionConfig = {
                 en: en.common.content,
                 ru: ru.common.content,
               },
-              editor: lexicalEditor({
-                features({ rootFeatures }) {
-                  return [
-                    ...rootFeatures,
-                    BlocksFeature({
-                      blocks: [Banner],
-                    }),
-                  ]
-                },
-              }),
+              editor: blocksEditor({ headings: ['h2', 'h3'] }),
             },
           ],
         },

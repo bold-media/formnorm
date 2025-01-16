@@ -18,6 +18,8 @@ const em = (px: number, base: number) => `${round(px / base)}em`
 
 export const typographyConfig = ({ theme }: { theme: Theme }) => ({
   DEFAULT: {
-    css: {},
+    css: {
+      maxWidth: '75rem',
+    },
   },
 })

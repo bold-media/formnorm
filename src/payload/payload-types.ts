@@ -14,6 +14,8 @@ export interface Config {
     media: Media;
     page: Page;
     user: User;
+    forms: Form;
+    'form-submissions': FormSubmission;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -23,6 +25,8 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     page: PageSelect<false> | PageSelect<true>;
     user: UserSelect<false> | UserSelect<true>;
+    forms: FormsSelect<false> | FormsSelect<true>;
+    'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -31,7 +35,7 @@ export interface Config {
     defaultIDType: string;
   };
   globals: {
-    settings: Setting;
+    settings: Settings;
   };
   globalsSelect: {
     settings: SettingsSelect<false> | SettingsSelect<true>;
@@ -148,7 +152,9 @@ export interface Page {
   id: string;
   slug?: string | null;
   pathname?: string | null;
+  containerSize?: ('default' | 'post') | null;
   parent?: (string | null) | Page;
+  hero?: PageHero;
   title: string;
   content?: {
     root: {
@@ -187,6 +193,36 @@ export interface Page {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PageHero".
+ */
+export interface PageHero {
+  type?: ('standard' | 'primary') | null;
+  primary?: {
+    prefix?: string | null;
+    suffix?: string | null;
+    cover?: (string | null) | Media;
+    images?: (string | Media)[] | null;
+  };
+  default?: {
+    richText?: {
+      root: {
+        type: string;
+        children: {
+          type: string;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+  };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "user".
  */
 export interface User {
@@ -202,6 +238,183 @@ export interface User {
   loginAttempts?: number | null;
   lockUntil?: string | null;
   password?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "forms".
+ */
+export interface Form {
+  id: string;
+  title: string;
+  fields?:
+    | (
+        | {
+            name: string;
+            label?: string | null;
+            description?: string | null;
+            width?: number | null;
+            defaultValue?: boolean | null;
+            required?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'checkbox';
+          }
+        | {
+            name: string;
+            label?: string | null;
+            width?: number | null;
+            required?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'email';
+          }
+        | {
+            message?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'message';
+          }
+        | {
+            name: string;
+            label?: string | null;
+            placeholder?: string | null;
+            width?: number | null;
+            defaultValue?: string | null;
+            required?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'number';
+          }
+        | {
+            name: string;
+            label?: string | null;
+            placeholder?: string | null;
+            width?: number | null;
+            defaultValue?: string | null;
+            required?: boolean | null;
+            options?:
+              | {
+                  label: string;
+                  value: string;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'select';
+          }
+        | {
+            name: string;
+            label?: string | null;
+            placeholder?: string | null;
+            width?: number | null;
+            defaultValue?: string | null;
+            required?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'text';
+          }
+        | {
+            name: string;
+            label?: string | null;
+            placeholder?: string | null;
+            width?: number | null;
+            defaultValue?: string | null;
+            required?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'textarea';
+          }
+      )[]
+    | null;
+  submitButtonLabel?: string | null;
+  /**
+   * Choose whether to display an on-page message, or redirect to a different page after they submit the form.
+   */
+  confirmationType?: ('message' | 'redirect') | null;
+  confirmationMessage?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  redirect?: {
+    url: string;
+  };
+  /**
+   * Send custom emails when the form submits. Use comma separated lists to send the same email to multiple recipients. To reference a value from this form, wrap that field's name with double curly brackets, i.e. {{firstName}}.
+   */
+  emails?:
+    | {
+        emailTo?: string | null;
+        cc?: string | null;
+        bcc?: string | null;
+        replyTo?: string | null;
+        emailFrom?: string | null;
+        subject: string;
+        /**
+         * Enter the message that should be sent in this email.
+         */
+        message?: {
+          root: {
+            type: string;
+            children: {
+              type: string;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        } | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "form-submissions".
+ */
+export interface FormSubmission {
+  id: string;
+  form: string | Form;
+  submissionData?:
+    | {
+        field: string;
+        value: string;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -221,6 +434,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'user';
         value: string | User;
+      } | null)
+    | ({
+        relationTo: 'forms';
+        value: string | Form;
+      } | null)
+    | ({
+        relationTo: 'form-submissions';
+        value: string | FormSubmission;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -363,7 +584,9 @@ export interface MediaSelect<T extends boolean = true> {
 export interface PageSelect<T extends boolean = true> {
   slug?: T;
   pathname?: T;
+  containerSize?: T;
   parent?: T;
+  hero?: T | PageHeroSelect<T>;
   title?: T;
   content?: T;
   meta?:
@@ -387,6 +610,26 @@ export interface PageSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PageHero_select".
+ */
+export interface PageHeroSelect<T extends boolean = true> {
+  type?: T;
+  primary?:
+    | T
+    | {
+        prefix?: T;
+        suffix?: T;
+        cover?: T;
+        images?: T;
+      };
+  default?:
+    | T
+    | {
+        richText?: T;
+      };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "user_select".
  */
 export interface UserSelect<T extends boolean = true> {
@@ -400,6 +643,139 @@ export interface UserSelect<T extends boolean = true> {
   hash?: T;
   loginAttempts?: T;
   lockUntil?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "forms_select".
+ */
+export interface FormsSelect<T extends boolean = true> {
+  title?: T;
+  fields?:
+    | T
+    | {
+        checkbox?:
+          | T
+          | {
+              name?: T;
+              label?: T;
+              description?: T;
+              width?: T;
+              defaultValue?: T;
+              required?: T;
+              id?: T;
+              blockName?: T;
+            };
+        email?:
+          | T
+          | {
+              name?: T;
+              label?: T;
+              width?: T;
+              required?: T;
+              id?: T;
+              blockName?: T;
+            };
+        message?:
+          | T
+          | {
+              message?: T;
+              id?: T;
+              blockName?: T;
+            };
+        number?:
+          | T
+          | {
+              name?: T;
+              label?: T;
+              placeholder?: T;
+              width?: T;
+              defaultValue?: T;
+              required?: T;
+              id?: T;
+              blockName?: T;
+            };
+        select?:
+          | T
+          | {
+              name?: T;
+              label?: T;
+              placeholder?: T;
+              width?: T;
+              defaultValue?: T;
+              required?: T;
+              options?:
+                | T
+                | {
+                    label?: T;
+                    value?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        text?:
+          | T
+          | {
+              name?: T;
+              label?: T;
+              placeholder?: T;
+              width?: T;
+              defaultValue?: T;
+              required?: T;
+              id?: T;
+              blockName?: T;
+            };
+        textarea?:
+          | T
+          | {
+              name?: T;
+              label?: T;
+              placeholder?: T;
+              width?: T;
+              defaultValue?: T;
+              required?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  submitButtonLabel?: T;
+  confirmationType?: T;
+  confirmationMessage?: T;
+  redirect?:
+    | T
+    | {
+        url?: T;
+      };
+  emails?:
+    | T
+    | {
+        emailTo?: T;
+        cc?: T;
+        bcc?: T;
+        replyTo?: T;
+        emailFrom?: T;
+        subject?: T;
+        message?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "form-submissions_select".
+ */
+export interface FormSubmissionsSelect<T extends boolean = true> {
+  form?: T;
+  submissionData?:
+    | T
+    | {
+        field?: T;
+        value?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -437,12 +813,63 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "settings".
  */
-export interface Setting {
+export interface Settings {
   id: string;
   company?: {
     name?: string | null;
   };
-  navigation?: {};
+  navigation?: {
+    header?: {
+      links?:
+        | {
+            link: {
+              type?: ('reference' | 'custom') | null;
+              newTab?: boolean | null;
+              reference?: {
+                relationTo: 'page';
+                value: string | Page;
+              } | null;
+              url?: string | null;
+              label: string;
+            };
+            id?: string | null;
+          }[]
+        | null;
+    };
+    footer?: {
+      links?:
+        | {
+            link: {
+              type?: ('reference' | 'custom') | null;
+              newTab?: boolean | null;
+              reference?: {
+                relationTo: 'page';
+                value: string | Page;
+              } | null;
+              url?: string | null;
+              label: string;
+            };
+            id?: string | null;
+          }[]
+        | null;
+      copyText?: string | null;
+      legalLinks?:
+        | {
+            link: {
+              type?: ('reference' | 'custom') | null;
+              newTab?: boolean | null;
+              reference?: {
+                relationTo: 'page';
+                value: string | Page;
+              } | null;
+              url?: string | null;
+              label: string;
+            };
+            id?: string | null;
+          }[]
+        | null;
+    };
+  };
   seo?: {
     title?: string | null;
     description?: string | null;
@@ -460,7 +887,61 @@ export interface SettingsSelect<T extends boolean = true> {
     | {
         name?: T;
       };
-  navigation?: T | {};
+  navigation?:
+    | T
+    | {
+        header?:
+          | T
+          | {
+              links?:
+                | T
+                | {
+                    link?:
+                      | T
+                      | {
+                          type?: T;
+                          newTab?: T;
+                          reference?: T;
+                          url?: T;
+                          label?: T;
+                        };
+                    id?: T;
+                  };
+            };
+        footer?:
+          | T
+          | {
+              links?:
+                | T
+                | {
+                    link?:
+                      | T
+                      | {
+                          type?: T;
+                          newTab?: T;
+                          reference?: T;
+                          url?: T;
+                          label?: T;
+                        };
+                    id?: T;
+                  };
+              copyText?: T;
+              legalLinks?:
+                | T
+                | {
+                    link?:
+                      | T
+                      | {
+                          type?: T;
+                          newTab?: T;
+                          reference?: T;
+                          url?: T;
+                          label?: T;
+                        };
+                    id?: T;
+                  };
+            };
+      };
   seo?:
     | T
     | {
@@ -473,28 +954,212 @@ export interface SettingsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "BannerBlock".
+ * via the `definition` "AccordionBlockType".
  */
-export interface BannerBlock {
-  style: 'info' | 'warning' | 'error' | 'success';
-  content: {
-    root: {
-      type: string;
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
+export interface AccordionBlockType {
+  items?:
+    | {
+        title?: string | null;
+        content?: {
+          root: {
+            type: string;
+            children: {
+              type: string;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        } | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'accordion';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ButtonBlockType".
+ */
+export interface ButtonBlockType {
+  links?:
+    | {
+        link: {
+          type?: ('reference' | 'custom') | null;
+          newTab?: boolean | null;
+          reference?: {
+            relationTo: 'page';
+            value: string | Page;
+          } | null;
+          url?: string | null;
+          label: string;
+          /**
+           * Choose how the link should be rendered
+           */
+          appearance?: ('default' | 'secondary' | 'outline' | 'ghost' | 'link' | 'black' | 'white') | null;
+          size?: ('sm' | 'md' | 'lg' | 'xl') | null;
+          icon?: ('none' | 'arrowRight' | 'arrowLeft') | null;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  settings?: {
+    marginTop?: {
+      mobile?: number | null;
+      tablet?: number | null;
+      desktop?: number | null;
     };
-    [k: string]: unknown;
+    marginBottom?: {
+      mobile?: number | null;
+      tablet?: number | null;
+      desktop?: number | null;
+    };
+    align?: {
+      mobile?: ('none' | 'left' | 'center' | 'right' | 'fullWidth') | null;
+      tablet?: ('none' | 'left' | 'center' | 'right' | 'fullWidth') | null;
+      desktop?: ('none' | 'left' | 'center' | 'right' | 'fullWidth') | null;
+    };
   };
   id?: string | null;
   blockName?: string | null;
-  blockType: 'banner';
+  blockType: 'button';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CardLinkBlockType".
+ */
+export interface CardLinkBlockType {
+  image?: (string | null) | Media;
+  link: {
+    type?: ('reference' | 'custom') | null;
+    newTab?: boolean | null;
+    reference?: {
+      relationTo: 'page';
+      value: string | Page;
+    } | null;
+    url?: string | null;
+    label: string;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'cardLink';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CalloutBlockType".
+ */
+export interface CalloutBlockType {
+  text?: string | null;
+  settings?: {
+    margin?: ('none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl') | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'callout';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "DoubleFormBlockType".
+ */
+export interface DoubleFormBlockType {
+  forms?:
+    | {
+        form: string | Form;
+        link: {
+          type?: ('reference' | 'custom') | null;
+          newTab?: boolean | null;
+          reference?: {
+            relationTo: 'page';
+            value: string | Page;
+          } | null;
+          url?: string | null;
+          label: string;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'doubleForm';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "EmbedBlockType".
+ */
+export interface EmbedBlockType {
+  code: string;
+  landscapeVideo?: boolean | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'embed';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ImageBlockType".
+ */
+export interface ImageBlockType {
+  image?: (string | null) | Media;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'image';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PriceBlockType".
+ */
+export interface PriceBlockType {
+  price?: string | null;
+  text?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'price';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "GridBlockType".
+ */
+export interface GridBlockType {
+  items?:
+    | {
+        content?: {
+          root: {
+            type: string;
+            children: {
+              type: string;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        } | null;
+        settings?: {
+          horizontalAlign?: ('none' | 'left' | 'center' | 'right') | null;
+          verticalAlign?: ('none' | 'top' | 'center' | 'bottom') | null;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  settings?: {
+    margin?: ('none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl') | null;
+    gap?: ('none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl') | null;
+    columns?: {
+      mobile?: ('1' | '2' | '3' | '4' | '6' | '12') | null;
+      tablet?: ('1' | '2' | '3' | '4' | '6' | '12') | null;
+      desktop?: ('1' | '2' | '3' | '4' | '6' | '12') | null;
+    };
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'grid';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
