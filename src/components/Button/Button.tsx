@@ -8,7 +8,7 @@ import { MoveLeft, MoveRight } from 'lucide-react'
 export const buttonVariants = cva(
   [
     'group inline-flex items-center justify-center gap-2 whitespace-nowrap',
-    'text-sm font-medium transition-colors active-class',
+    'text-sm font-semibold transition-colors active-class',
     'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring',
     // '[&_svg]:pointer-events-none [&_svg]:shrink-0',
     // '[&_svg]:transition-transform [&_svg]:duration-200',
@@ -25,7 +25,7 @@ export const buttonVariants = cva(
         ghost: 'hover:bg-accent hover:text-accent-foreground',
         link: 'text-primary underline-offset-4 hover:underline',
         black: [
-          'bg-primary text-primary-foreground border border-transparent',
+          'bg-primary text-primary-foreground font-semibold border border-transparent',
           'hover:bg-background hover:text-primary hover:border-primary',
           'transition-all duration-200 ease-in-out',
         ],
@@ -40,8 +40,8 @@ export const buttonVariants = cva(
       size: {
         sm: 'h-10 px-4 text-xs',
         md: 'h-12 px-8',
-        lg: 'h-14 px-10',
-        xl: 'h-16 px-12',
+        lg: 'h-14 px-16',
+        xl: 'h-20 px-20 font-bold text-[1.25rem]',
         icon: 'h-14 w-14',
       },
       radius: {

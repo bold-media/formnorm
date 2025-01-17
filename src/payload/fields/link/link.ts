@@ -225,7 +225,7 @@ export const link: LinkType = ({ appearances, disableLabel = false, overrides = 
             width: '33.333%',
             description: {
               en: 'Choose how the link should be rendered',
-              ru: 'Выберете, как ссылка будет выглядеть.',
+              ru: 'Выберите, как ссылка будет выглядеть.',
             },
           },
           defaultValue: 'default',

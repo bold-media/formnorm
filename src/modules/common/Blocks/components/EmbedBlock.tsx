@@ -10,10 +10,14 @@ export const EmbedBlock = (props: EmbedBlockType) => {
   if (landscapeVideo) {
     return (
       <AspectRatio ratio={16 / 9} className="w-full">
-        <div dangerouslySetInnerHTML={{ __html: code }} className="h-full w-full" />
+        <div
+          dangerouslySetInnerHTML={{ __html: code }}
+          className="h-full w-full"
+          suppressHydrationWarning={true}
+        />
       </AspectRatio>
     )
   }
 
-  return <div dangerouslySetInnerHTML={{ __html: code }} />
+  return <div dangerouslySetInnerHTML={{ __html: code }} suppressHydrationWarning={true} />
 }

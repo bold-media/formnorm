@@ -32,7 +32,7 @@ export const CardLinkBlock = (props: CardLinkBlockType) => {
         )}
       </div>
 
-      <p className="text-center leading-tight font-medium">
+      <p className="text-center leading-tight font-semibold">
         <span dangerouslySetInnerHTML={{ __html: link?.label }} />
         <MoveRight className="inline size-4 mx-2 transform transition-transform duration-200 group-hover:translate-x-1" />
       </p>

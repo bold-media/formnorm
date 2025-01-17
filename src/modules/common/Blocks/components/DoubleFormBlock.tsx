@@ -20,14 +20,14 @@ export const DoubleFormBlock = (props: DoubleFormBlockType) => {
           <RenderForm
             form={form as Form}
             className={cn(
-              'px-4 xs:px-8 sm:px-12 pt-12 sm:pt-16 pb-8  border border-zinc-200 border-b-0',
+              'px-4 xs:px-8 sm:px-12 pt-12 sm:pt-16 pb-8 border border-zinc-200 border-b-0',
               'md:flex-1 md:flex md:flex-col md:justify-between',
               index === 0 && 'md:border-r-0',
               index === 1 && 'md:bg-zinc-100/70',
             )}
           >
             {typeof form === 'object' && (
-              <h3 className="not-prose mt-0 mb-4 leading-tight font-semibold text-[1.5rem] sm:text-[1.7rem]">
+              <h3 className="not-prose mt-0 mb-4 leading-10 font-bold text-[1.5rem] sm:text-[1.7rem]">
                 {form?.title}
               </h3>
             )}
@@ -35,7 +35,7 @@ export const DoubleFormBlock = (props: DoubleFormBlockType) => {
           <Button
             variant="white"
             size="xl"
-            className={cn('w-full border-zinc-200', index === 0 && 'md:border-r-0')}
+            className={cn('not-prose w-full border-zinc-200', index === 0 && 'md:border-r-0')}
             icon={index === 0 ? 'arrowLeft' : 'arrowRight'}
             asChild
           >

@@ -36,12 +36,14 @@ export const PrimaryHero = (props: NonNullable<PageHero['primary']>) => {
         )}
         <h1 className="absolute left-0 top-16 font-semibold uppercase flex flex-col items-start space-y-4 max-w-[85%]">
           {/* Prefix Section */}
-          <div className="bg-zinc-50 text-muted-foreground px-4 text-[1.375rem] leading-[1] py-3">
+          <div className="bg-zinc-50 text-muted-foreground tracking-[0.125rem] pr-4 pl-14 text-[1.375rem] leading-[1.1] py-3">
             {prefix}
           </div>
 
           {/* Suffix Section */}
-          <div className="bg-zinc-50 px-4 text-[1.75rem] leading-[0.9] py-4">{suffix}</div>
+          <div className="font-bold bg-zinc-50 pr-4 pl-14 text-[2.5rem] leading-[1.1] py-4">
+            {suffix}
+          </div>
         </h1>
       </div>
 
@@ -56,14 +58,14 @@ export const PrimaryHero = (props: NonNullable<PageHero['primary']>) => {
               draggable={false}
             />
           )}
-          <h1 className="absolute left-0 top-16 font-semibold uppercase flex flex-col items-start space-y-4 max-w-[85%]">
+          <h1 className="absolute left-0 top-16 font-semibold uppercase flex flex-col items-start space-y-8 max-w-[85%]">
             {/* Prefix Section */}
-            <div className="bg-zinc-50 text-muted-foreground px-4 text-[1.5rem] lg:text-[2.25rem] leading-[1] py-3">
+            <div className="bg-zinc-50 text-muted-foreground tracking-[0.125rem] px-4 text-[1.5rem] lg:text-[2.25rem] leading-[1] py-3">
               {prefix}
             </div>
 
             {/* Suffix Section */}
-            <div className="bg-zinc-50 px-4 text-[2.25rem] lg:text-[3rem] leading-[0.9] py-4">
+            <div className="font-bold bg-zinc-50 px-4 text-[2.25rem] lg:text-[3rem] leading-[0.9] py-4">
               {suffix}
             </div>
           </h1>
