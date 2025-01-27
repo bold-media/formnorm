@@ -13,8 +13,8 @@ export const DoubleFormBlock = (props: DoubleFormBlockType) => {
   if (!forms || !Array.isArray(forms)) return null
 
   return (
-    <section className="container px-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-0 justify-items-center">
+    <section className="container relative px-0 xs:px-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-0 xs:justify-items-center">
         {forms?.map(({ id, form, link }, index) => (
           <div key={id} className="max-w-lg md:max-w-none md:w-full md:h-full md:flex md:flex-col ">
             <RenderForm

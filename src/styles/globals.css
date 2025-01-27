@@ -170,12 +170,27 @@
 }
 
 @layer base {
+  .container {
+    max-width: calc(74rem + 2rem);
+    margin-left: auto;
+    margin-right: auto;
+    /* padding-inline: 1rem; */
+  }
+
+  .container-post {
+    max-width: calc(62.5rem + 2rem);
+    margin-left: auto;
+    margin-right: auto;
+    padding-inline: 1rem;
+  }
+
   .rich-text-wrapper {
     padding-inline: 1rem;
   }
 
   .rich-text-container {
     width: 100%;
+    padding-inline: 1rem;
 
     & > * {
       max-width: 74rem;
@@ -186,6 +201,7 @@
 
   .rich-text-container-post {
     width: 100%;
+    padding-inline: 1rem;
 
     & > * {
       max-width: 62.5rem;
@@ -196,6 +212,10 @@
 
   .full-width {
     max-width: none;
+    /* margin-left: -1rem;
+    margin-right: -1rem; */
+    /* margin-left: calc(-1rem);
+    margin-right: calc(-1rem); */
     /* padding-inline: calc(-2rem); */
     /* margin-right: calc(-1rem); */
     /* margin-left: calc(-1rem);

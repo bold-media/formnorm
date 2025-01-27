@@ -16,7 +16,8 @@ export const RichText = ({
   if (!data) return
   const Tag = tag || 'div'
   return (
-    <Tag className={cn(container && 'rich-text-wrapper', wrapperClassName)}>
+    // <Tag className={cn(container && 'rich-text-wrapper', wrapperClassName)}>
+    <Tag className={wrapperClassName}>
       <RichTextBase
         converters={jsxConverters}
         data={data}

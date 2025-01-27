@@ -23,7 +23,7 @@ export const PrimaryHero = (props: NonNullable<PageHero['primary']>) => {
     })) || []
 
   return (
-    <div className="container px-0 md:px-4">
+    <div className="container px-0">
       <div className="h-[72vh] relative sm:hidden">
         {cover && typeof cover === 'object' && typeof cover?.url === 'string' && (
           <Image
