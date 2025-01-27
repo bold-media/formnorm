@@ -4,6 +4,7 @@ import type { Config } from 'tailwindcss'
 const config = {
   darkMode: ['class'],
   content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
+  safelist: ['rich-text-container', 'rich-text-container-post', 'full-width'],
   theme: {
     screens: {
       xs: '30em', // 480px

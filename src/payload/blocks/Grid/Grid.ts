@@ -8,6 +8,16 @@ import { selectColumns } from '@/payload/fields/partials/selectColumns'
 export const GridBlock: Block = {
   slug: 'grid',
   interfaceName: 'GridBlockType',
+  labels: {
+    singular: {
+      en: 'Grid',
+      ru: 'Сетка',
+    },
+    plural: {
+      en: 'Grids',
+      ru: 'Сетки',
+    },
+  },
   fields: [
     {
       name: 'items',
@@ -225,6 +235,28 @@ export const GridBlock: Block = {
                       },
                     }),
                   ],
+                },
+              ],
+            },
+            {
+              type: 'group',
+              name: 'fullWidth',
+              label: 'Во весь экран',
+              fields: [
+                {
+                  name: 'mobile',
+                  type: 'checkbox',
+                  defaultValue: false,
+                },
+                {
+                  name: 'tablet',
+                  type: 'checkbox',
+                  defaultValue: false,
+                },
+                {
+                  name: 'desktop',
+                  type: 'checkbox',
+                  defaultValue: false,
                 },
               ],
             },

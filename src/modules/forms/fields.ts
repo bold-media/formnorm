@@ -1,3 +1,4 @@
+import { Radio } from './fields/Radio'
 import { Checkbox } from './fields/Checkbox'
 import { Email } from './fields/Email'
 import { Message } from './fields/Message'
@@ -11,6 +12,7 @@ export type SupportedFieldTypes =
   | 'email'
   | 'message'
   | 'number'
+  | 'radio'
   | 'select'
   | 'text'
   | 'textarea'
@@ -21,6 +23,7 @@ export const fields: Record<SupportedFieldTypes, React.ComponentType<any>> = {
   email: Email,
   message: Message,
   number: Number,
+  radio: Radio,
   select: Select,
   text: Text,
   textarea: Textarea,

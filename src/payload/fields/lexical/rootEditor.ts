@@ -3,6 +3,7 @@ import {
   BlockquoteFeature,
   BlocksFeature,
   BoldFeature,
+  EXPERIMENTAL_TableFeature,
   HeadingFeature,
   HorizontalRuleFeature,
   IndentFeature,
@@ -40,6 +41,7 @@ export const rootEditor = lexicalEditor({
       HorizontalRuleFeature(),
       InlineToolbarFeature(),
       LinkFeature(),
+      EXPERIMENTAL_TableFeature(),
     ]
   },
 })

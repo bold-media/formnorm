@@ -1,8 +1,9 @@
 import { getServerSideURL } from './getURL'
 
 type Args = {
-  collection: 'page' | 'post'
+  collection: 'page' | 'post' | 'service' | 'term' | 'project'
   pathname: string
+  slug?: string
 }
 
 export const generatePreviewPath = ({ collection, pathname }: Args) => {

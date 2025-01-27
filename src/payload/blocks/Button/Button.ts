@@ -8,6 +8,16 @@ import { Block } from 'payload'
 export const ButtonBlock: Block = {
   slug: 'button',
   interfaceName: 'ButtonBlockType',
+  labels: {
+    singular: {
+      en: 'Button',
+      ru: 'Кнопка',
+    },
+    plural: {
+      en: 'Buttons',
+      ru: 'Кнопки',
+    },
+  },
   fields: [
     linkGroup(),
     {

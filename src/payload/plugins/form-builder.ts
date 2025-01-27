@@ -10,7 +10,7 @@ const nameField: Field = {
   required: true,
   label: {
     en: "Name (no special characters, or spaces) i.e. 'firstName'",
-    ru: "Имя (без специальных символов или пробелов), например 'firstName'",
+    ru: "Название (без специальных символов или пробелов), например 'firstName'",
   },
 }
 
@@ -19,7 +19,7 @@ const labelField: Field = {
   type: 'text',
   label: {
     en: 'Label',
-    ru: 'Метка',
+    ru: 'Текст',
   },
 }
 
@@ -106,6 +106,62 @@ const sharedFields: Field[] = [
   },
   requiredField,
 ]
+const radioField = {
+  slug: 'radio',
+  labels: {
+    singular: {
+      en: 'Radio',
+      ru: 'Радиокнопка',
+    },
+    plural: {
+      en: 'Radio Buttons',
+      ru: 'Радиокнопки',
+    },
+  },
+  fields: [
+    ...sharedFields,
+    {
+      name: 'options',
+      type: 'array',
+      required: true,
+      label: {
+        en: 'Options',
+        ru: 'Варианты',
+      },
+      fields: [
+        {
+          type: 'row',
+          fields: [
+            {
+              name: 'label',
+              type: 'text',
+              required: true,
+              admin: {
+                width: '50%',
+              },
+              // label: {
+              //   en: 'Label',
+              //   ru: 'Метка',
+              // },
+            },
+            {
+              name: 'value',
+              type: 'text',
+              required: true,
+              admin: {
+                width: '50%',
+              },
+              label: {
+                en: 'Value',
+                ru: 'Значение',
+              },
+            },
+          ],
+        },
+      ],
+    },
+  ],
+}
 
 export const formBuilder = formBuilderPlugin({
   fields: {
@@ -123,6 +179,7 @@ export const formBuilder = formBuilderPlugin({
       },
       fields: sharedFields,
     },
+
     select: {
       ...fields.select,
       labels: {
@@ -234,11 +291,11 @@ export const formBuilder = formBuilderPlugin({
       labels: {
         singular: {
           en: 'Checkbox',
-          ru: 'Флажок',
+          ru: 'Чекбокс',
         },
         plural: {
           en: 'Checkbox Fields',
-          ru: 'Поля флажков',
+          ru: 'Чекбоксы',
         },
       },
       fields: [
@@ -308,6 +365,7 @@ export const formBuilder = formBuilderPlugin({
         },
       ],
     },
+    radio: radioField,
     country: false,
     payment: false,
     state: false,
@@ -458,7 +516,7 @@ export const formBuilder = formBuilderPlugin({
                     admin: {
                       placeholder: {
                         en: '"Email Sender" <sender@email.com>',
-                        ru: '"Отправитель электронной почты" <sender@email.com>',
+                        ru: '"Отправитель email" <sender@email.com>',
                       },
                       width: '100%',
                     },
@@ -511,13 +569,13 @@ export const formBuilder = formBuilderPlugin({
                     admin: {
                       placeholder: {
                         en: '"Email From" <email-from@email.com>',
-                        ru: '"Электронная почта от" <email-from@email.com>',
+                        ru: '"Email от" <email-from@email.com>',
                       },
                       width: '50%',
                     },
                     label: {
                       en: 'Email From',
-                      ru: 'Электронная почта от',
+                      ru: 'Email от',
                     },
                   },
                 ],
@@ -553,7 +611,10 @@ export const formBuilder = formBuilderPlugin({
         if (baseField.name === 'name') {
           return {
             ...field,
-            label: 'test',
+            label: {
+              en: 'Name',
+              ru: 'Имя',
+            },
           }
         }
 
@@ -575,11 +636,11 @@ export const formBuilder = formBuilderPlugin({
     labels: {
       singular: {
         en: 'Form Submission',
-        ru: 'Отправка формы',
+        ru: 'Полученная форма',
       },
       plural: {
         en: 'Form Submissions',
-        ru: 'Отправки форм',
+        ru: 'Полученные формы',
       },
     },
     access: {

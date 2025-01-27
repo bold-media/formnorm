@@ -1,6 +1,8 @@
 import type { CollectionConfig } from 'payload'
 import { ensureFirstUserIsAdmin } from './hooks/ensureFirstUserIsAdmin'
 import { access, accessField } from '@/payload/access'
+import { en } from '@/payload/i18n/en'
+import { ru } from '@/payload/i18n/ru'
 
 export const User: CollectionConfig = {
   slug: 'user',
@@ -23,7 +25,9 @@ export const User: CollectionConfig = {
   },
   auth: true,
   access: {
-    read: access({ query: (args) => ({ id: { equals: args.req?.user?.id } }) }),
+    read: () => true,
+    update: access({ query: (args) => ({ id: { equals: args.req?.user?.id } }) }),
+    delete: access(),
   },
   fields: [
     {
@@ -39,7 +43,10 @@ export const User: CollectionConfig = {
       hooks: {
         beforeValidate: [ensureFirstUserIsAdmin],
       },
-      access: {},
+      access: {
+        read: accessField({ condition: ({ id, req }) => id === req?.user?.id }),
+        update: accessField(),
+      },
       options: [
         {
           label: {
@@ -56,6 +63,33 @@ export const User: CollectionConfig = {
           value: 'editor',
         },
       ],
+    },
+    {
+      name: 'name',
+      label: {
+        en: en.common.name.person.singular,
+        ru: ru.common.name.person.singular,
+      },
+      type: 'text',
+      required: false,
+    },
+    {
+      name: 'job',
+      label: {
+        en: 'Job',
+        ru: 'Должность',
+      },
+      type: 'text',
+      required: false,
+    },
+    {
+      name: 'picture',
+      label: {
+        en: en.common.image.singular,
+        ru: ru.common.image.singular,
+      },
+      type: 'upload',
+      relationTo: 'media',
     },
   ],
 }

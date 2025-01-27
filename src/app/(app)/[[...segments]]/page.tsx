@@ -9,6 +9,7 @@ import { getPathSegments } from '@/utils/getPathSegments'
 import { getPageByPathname } from '@/modules/common/data'
 import { RichText } from '@/modules/common/RichText'
 import { Hero } from '@/modules/common/Hero'
+import { PageBreadcrumbs } from '@/modules/common/PageBreadcrumbs'
 
 interface Props {
   params: Promise<{
@@ -29,6 +30,7 @@ const Pages = async ({ params }: Props) => {
     <>
       <Hero {...page.hero} />
       <RichText data={page?.content} container={page?.containerSize} />
+      {page?.enableBreadcrumbs && <PageBreadcrumbs breadcrumbs={page.breadcrumbs} />}
     </>
   )
 }

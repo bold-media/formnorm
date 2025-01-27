@@ -16,9 +16,9 @@ interface Props {
 
 export const Footer = ({ className, data }: Props) => {
   return (
-    <footer className={cn('mt-auto default-grid', className)}>
+    <footer className={cn('mt-auto ', className)}>
       <div className="full-width bg-zinc-900">
-        <div className="flex flex-col sm:items-center md:flex-row md:justify-between md:items-start gap-6 py-12">
+        <div className=" container flex flex-col sm:items-center md:flex-row md:justify-between md:items-start gap-6 py-12">
           <Link href="/">
             <Logo className="w-44 md:w-52 text-zinc-50" />
           </Link>
@@ -60,7 +60,7 @@ export const Footer = ({ className, data }: Props) => {
       </div>
 
       <div className="full-width bg-zinc-950 py-4">
-        <div className="flex items-center justify-center">
+        <div className="container flex items-center justify-center">
           <div className="text-zinc-400 text-sm uppercase font-medium">
             Разработка{' '}
             <a

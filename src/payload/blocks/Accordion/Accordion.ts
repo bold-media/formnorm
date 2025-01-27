@@ -6,6 +6,16 @@ import { Block } from 'payload'
 export const AccordionBlock: Block = {
   slug: 'accordion',
   interfaceName: 'AccordionBlockType',
+  labels: {
+    singular: {
+      en: 'Accordion',
+      ru: 'Аккордеон',
+    },
+    plural: {
+      en: 'Double Forms',
+      ru: 'Accordions',
+    },
+  },
   fields: [
     {
       name: 'items',

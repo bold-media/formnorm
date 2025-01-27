@@ -26,11 +26,12 @@ export const Text = ({
 }: Props) => {
   return (
     <Width width={width}>
-      <Label htmlFor={name}>{label}</Label>
+      {/* <Label htmlFor={name}>{label}</Label> */}
       <Input
         defaultValue={defaultValue}
         id={name}
         type="text"
+        placeholder={label}
         {...register(name, { required: requiredFromProps })}
       />
       {requiredFromProps && errors[name] && (

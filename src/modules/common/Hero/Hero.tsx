@@ -11,6 +11,7 @@ export const Hero = (props: PageHero) => {
       return <PrimaryHero {...primaryProps} />
     case 'standard':
       return <DefaultHero {...defaultProps} />
+
     default:
       return null
   }

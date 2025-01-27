@@ -118,6 +118,18 @@ export const Page: CollectionConfig = {
         },
       ],
     },
+    {
+      name: 'enableBreadcrumbs',
+      label: {
+        en: 'Enable Breadcrumbs',
+        ru: 'Включить хлебные крошки',
+      },
+      admin: {
+        position: 'sidebar',
+      },
+      type: 'checkbox',
+      defaultValue: true,
+    },
     createParentField('page', {
       label: { en: en.common.parentPage.singular, ru: ru.common.parentPage.singular },
     }),

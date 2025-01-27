@@ -9,11 +9,11 @@ export const CardLink: Block = {
   labels: {
     singular: {
       en: 'Card Link',
-      ru: '',
+      ru: 'Карточка со ссылкой',
     },
     plural: {
       en: 'Card Links',
-      ru: '',
+      ru: 'Карточки со ссылками',
     },
   },
   fields: [

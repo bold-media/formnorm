@@ -9,10 +9,14 @@ import { TypographyVariantProps } from '@/styles/typography'
 export const richTextVariants = cva(undefined, {
   variants: {
     container: {
-      default: 'mx-auto px-4',
-      post: 'max-w-[62.5rem] mx-auto px-4',
-      true: 'px-4',
-      false: 'max-w-none px-0',
+      default: 'rich-text-container ',
+      post: 'rich-text-container-post ',
+      true: 'rich-text-container',
+      false: '',
+      // default: 'mx-auto px-4',
+      // post: 'max-w-[62.5rem] mx-auto px-4',
+      // true: 'px-4',
+      // false: 'max-w-none px-0',
     },
   },
   defaultVariants: {

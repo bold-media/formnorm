@@ -14,6 +14,11 @@ export interface Config {
     media: Media;
     page: Page;
     user: User;
+    post: Post;
+    category: Category;
+    project: Project;
+    term: Term;
+    service: Service;
     forms: Form;
     'form-submissions': FormSubmission;
     'payload-locked-documents': PayloadLockedDocument;
@@ -25,6 +30,11 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     page: PageSelect<false> | PageSelect<true>;
     user: UserSelect<false> | UserSelect<true>;
+    post: PostSelect<false> | PostSelect<true>;
+    category: CategorySelect<false> | CategorySelect<true>;
+    project: ProjectSelect<false> | ProjectSelect<true>;
+    term: TermSelect<false> | TermSelect<true>;
+    service: ServiceSelect<false> | ServiceSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -153,6 +163,7 @@ export interface Page {
   slug?: string | null;
   pathname?: string | null;
   containerSize?: ('default' | 'post') | null;
+  enableBreadcrumbs?: boolean | null;
   parent?: (string | null) | Page;
   hero?: PageHero;
   title: string;
@@ -228,6 +239,9 @@ export interface PageHero {
 export interface User {
   id: string;
   roles: ('admin' | 'editor')[];
+  name?: string | null;
+  job?: string | null;
+  picture?: (string | null) | Media;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -238,6 +252,190 @@ export interface User {
   loginAttempts?: number | null;
   lockUntil?: string | null;
   password?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "post".
+ */
+export interface Post {
+  id: string;
+  slug?: string | null;
+  publishedAt?: string | null;
+  author?: (string | null) | User;
+  categories?: (string | Category)[] | null;
+  title: string;
+  cover?: (string | null) | Media;
+  /**
+   * A short preview of the content, typically shown in lists and search results.
+   */
+  excerpt?: string | null;
+  article?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (string | null) | Media;
+  };
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "category".
+ */
+export interface Category {
+  id: string;
+  name?: string | null;
+  slug?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "project".
+ */
+export interface Project {
+  id: string;
+  slug?: string | null;
+  title: string;
+  suffix?: string | null;
+  cover?: (string | null) | Media;
+  description?: {
+    title?: string | null;
+    subtitle?: string | null;
+    text?: string | null;
+    planOne?: (string | null) | Media;
+    planTwo?: (string | null) | Media;
+  };
+  /**
+   * A short preview of the content, typically shown in lists and search results.
+   */
+  excerpt?: string | null;
+  article?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (string | null) | Media;
+  };
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "term".
+ */
+export interface Term {
+  id: string;
+  slug?: string | null;
+  title: string;
+  suffix?: string | null;
+  cover?: (string | null) | Media;
+  /**
+   * A short preview of the content, typically shown in lists and search results.
+   */
+  excerpt?: string | null;
+  article?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (string | null) | Media;
+  };
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "service".
+ */
+export interface Service {
+  id: string;
+  slug?: string | null;
+  title: string;
+  suffix?: string | null;
+  cover?: (string | null) | Media;
+  /**
+   * A short preview of the content, typically shown in lists and search results.
+   */
+  excerpt?: string | null;
+  article?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (string | null) | Media;
+  };
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -339,6 +537,22 @@ export interface Form {
             blockName?: string | null;
             blockType: 'textarea';
           }
+        | {
+            name: string;
+            label?: string | null;
+            placeholder?: string | null;
+            width?: number | null;
+            defaultValue?: string | null;
+            required?: boolean | null;
+            options: {
+              label: string;
+              value: string;
+              id?: string | null;
+            }[];
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'radio';
+          }
       )[]
     | null;
   submitButtonLabel?: string | null;
@@ -434,6 +648,26 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'user';
         value: string | User;
+      } | null)
+    | ({
+        relationTo: 'post';
+        value: string | Post;
+      } | null)
+    | ({
+        relationTo: 'category';
+        value: string | Category;
+      } | null)
+    | ({
+        relationTo: 'project';
+        value: string | Project;
+      } | null)
+    | ({
+        relationTo: 'term';
+        value: string | Term;
+      } | null)
+    | ({
+        relationTo: 'service';
+        value: string | Service;
       } | null)
     | ({
         relationTo: 'forms';
@@ -585,6 +819,7 @@ export interface PageSelect<T extends boolean = true> {
   slug?: T;
   pathname?: T;
   containerSize?: T;
+  enableBreadcrumbs?: T;
   parent?: T;
   hero?: T | PageHeroSelect<T>;
   title?: T;
@@ -634,6 +869,9 @@ export interface PageHeroSelect<T extends boolean = true> {
  */
 export interface UserSelect<T extends boolean = true> {
   roles?: T;
+  name?: T;
+  job?: T;
+  picture?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -643,6 +881,115 @@ export interface UserSelect<T extends boolean = true> {
   hash?: T;
   loginAttempts?: T;
   lockUntil?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "post_select".
+ */
+export interface PostSelect<T extends boolean = true> {
+  slug?: T;
+  publishedAt?: T;
+  author?: T;
+  categories?: T;
+  title?: T;
+  cover?: T;
+  excerpt?: T;
+  article?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "category_select".
+ */
+export interface CategorySelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "project_select".
+ */
+export interface ProjectSelect<T extends boolean = true> {
+  slug?: T;
+  title?: T;
+  suffix?: T;
+  cover?: T;
+  description?:
+    | T
+    | {
+        title?: T;
+        subtitle?: T;
+        text?: T;
+        planOne?: T;
+        planTwo?: T;
+      };
+  excerpt?: T;
+  article?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "term_select".
+ */
+export interface TermSelect<T extends boolean = true> {
+  slug?: T;
+  title?: T;
+  suffix?: T;
+  cover?: T;
+  excerpt?: T;
+  article?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "service_select".
+ */
+export interface ServiceSelect<T extends boolean = true> {
+  slug?: T;
+  title?: T;
+  suffix?: T;
+  cover?: T;
+  excerpt?: T;
+  article?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -734,6 +1081,25 @@ export interface FormsSelect<T extends boolean = true> {
               width?: T;
               defaultValue?: T;
               required?: T;
+              id?: T;
+              blockName?: T;
+            };
+        radio?:
+          | T
+          | {
+              name?: T;
+              label?: T;
+              placeholder?: T;
+              width?: T;
+              defaultValue?: T;
+              required?: T;
+              options?:
+                | T
+                | {
+                    label?: T;
+                    value?: T;
+                    id?: T;
+                  };
               id?: T;
               blockName?: T;
             };
@@ -984,6 +1350,16 @@ export interface AccordionBlockType {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ArchiveBlockType".
+ */
+export interface ArchiveBlockType {
+  type?: 'project' | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'archive';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "ButtonBlockType".
  */
 export interface ButtonBlockType {
@@ -1031,6 +1407,25 @@ export interface ButtonBlockType {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CardDownloadBlockType".
+ */
+export interface CardDownloadBlockType {
+  link: {
+    type?: ('reference' | 'custom') | null;
+    newTab?: boolean | null;
+    reference?: {
+      relationTo: 'page';
+      value: string | Page;
+    } | null;
+    url?: string | null;
+    label: string;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'cardDownload';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "CardLinkBlockType".
  */
 export interface CardLinkBlockType {
@@ -1061,6 +1456,93 @@ export interface CalloutBlockType {
   id?: string | null;
   blockName?: string | null;
   blockType: 'callout';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CarouselBlockType".
+ */
+export interface CarouselBlockType {
+  images?: (string | Media)[] | null;
+  settings?: {
+    enableDots?: boolean | null;
+    enableThumbnails?: boolean | null;
+    enableLoop?: boolean | null;
+    enableArrows?: boolean | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'carousel';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CarouselFullBlockType".
+ */
+export interface CarouselFullBlockType {
+  images?: (string | Media)[] | null;
+  settings?: {
+    enableDots?: boolean | null;
+    enableThumbnails?: boolean | null;
+    enableLoop?: boolean | null;
+    enableArrows?: boolean | null;
+    enableGrid?: boolean | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'carouselFull';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ContactInfoBlockType".
+ */
+export interface ContactInfoBlockType {
+  image?: (string | null) | Media;
+  text?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  links?: {
+    whatsapp?: {
+      type?: ('reference' | 'custom') | null;
+      newTab?: boolean | null;
+      reference?: {
+        relationTo: 'page';
+        value: string | Page;
+      } | null;
+      url?: string | null;
+    };
+    telegram?: {
+      type?: ('reference' | 'custom') | null;
+      newTab?: boolean | null;
+      reference?: {
+        relationTo: 'page';
+        value: string | Page;
+      } | null;
+      url?: string | null;
+    };
+    email?: {
+      type?: ('reference' | 'custom') | null;
+      newTab?: boolean | null;
+      reference?: {
+        relationTo: 'page';
+        value: string | Page;
+      } | null;
+      url?: string | null;
+    };
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'contactInfo';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1104,9 +1586,37 @@ export interface EmbedBlockType {
  */
 export interface ImageBlockType {
   image?: (string | null) | Media;
+  aspectRatio?: ('video' | 'square' | 'fourThree') | null;
+  scale?: number | null;
+  alignment?: ('left' | 'centered' | 'right') | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'image';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PartnerBlockType".
+ */
+export interface PartnerBlockType {
+  image?: (string | null) | Media;
+  text?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'partner';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1118,6 +1628,26 @@ export interface PriceBlockType {
   id?: string | null;
   blockName?: string | null;
   blockType: 'price';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ProjectsBlockType".
+ */
+export interface ProjectsBlockType {
+  count?: number | null;
+  link: {
+    type?: ('reference' | 'custom') | null;
+    newTab?: boolean | null;
+    reference?: {
+      relationTo: 'page';
+      value: string | Page;
+    } | null;
+    url?: string | null;
+    label: string;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'projects';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1155,6 +1685,11 @@ export interface GridBlockType {
       mobile?: ('1' | '2' | '3' | '4' | '6' | '12') | null;
       tablet?: ('1' | '2' | '3' | '4' | '6' | '12') | null;
       desktop?: ('1' | '2' | '3' | '4' | '6' | '12') | null;
+    };
+    fullWidth?: {
+      mobile?: boolean | null;
+      tablet?: boolean | null;
+      desktop?: boolean | null;
     };
   };
   id?: string | null;

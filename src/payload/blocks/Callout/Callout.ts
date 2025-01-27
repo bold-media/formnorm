@@ -6,6 +6,16 @@ import { Block } from 'payload'
 export const CalloutBlock: Block = {
   slug: 'callout',
   interfaceName: 'CalloutBlockType',
+  labels: {
+    singular: {
+      en: 'Callout',
+      ru: 'Выделенный блок',
+    },
+    plural: {
+      en: 'Callouts',
+      ru: 'Выделенные блоки',
+    },
+  },
   fields: [
     {
       name: 'text',

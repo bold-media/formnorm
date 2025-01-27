@@ -42,7 +42,9 @@ export const Checkbox = ({
             setValue(props.name, checked)
           }}
         />
-        <Label htmlFor={name}>{label}</Label>
+        <Label className="font-normal" htmlFor={name}>
+          {label}
+        </Label>
       </div>
       {requiredFromProps && errors[name] && <Error />}
     </Width>

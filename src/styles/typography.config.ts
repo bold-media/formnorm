@@ -19,7 +19,28 @@ const em = (px: number, base: number) => `${round(px / base)}em`
 export const typographyConfig = ({ theme }: { theme: Theme }) => ({
   DEFAULT: {
     css: {
-      maxWidth: '75rem',
+      maxWidth: 'inherit',
+      // paddingInline: 'inherit',
+      // '.rich-text-container': {
+      //   width: '100%',
+      //   '& > *': {
+      //     maxWidth: '74rem',
+      //     marginLeft: 'auto',
+      //     marginRight: 'auto',
+      //   },
+      // },
+      // '.rich-text-container-post': {
+      //   width: '100%',
+      //   '& > *': {
+      //     maxWidth: '62.5rem',
+      //     marginLeft: 'auto',
+      //     marginRight: 'auto',
+      //   },
+      // },
+      // '.full-width': {
+      //   maxWidth: 'none',
+      //   paddingInline: 'calc(-1rem)',
+      // },
     },
   },
 })
