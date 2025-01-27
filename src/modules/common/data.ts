@@ -3,6 +3,7 @@ import { Config } from '@payload-types'
 import config from '@payload-config'
 import { draftMode } from 'next/headers'
 import { cache } from '@/utils/cache'
+import { SelectFromCollectionSlug } from 'node_modules/payload/dist/collections/config/types'
 
 export const getSettings = cache(
   async () => {
@@ -67,9 +68,10 @@ export const getArchiveData = async <T extends CollectionSelectKeys>(
 ): Promise<Config['collectionsSelect'][T][]> => {
   const payload = await getPayload({ config })
 
+  // Provide both generic type arguments to payload.find
   const { docs } = await payload.find<
-    T,
-    TransformCollectionWithSelect<T, Config['collectionsSelect'][T]>
+    T, // Collection slug type
+    SelectFromCollectionSlug<T> // Select type
   >({
     collection: collection,
     draft,
@@ -78,7 +80,9 @@ export const getArchiveData = async <T extends CollectionSelectKeys>(
     overrideAccess: draft,
     disableErrors: true,
   })
-  return docs || []
+
+  // Return the docs, cast to the expected type
+  return docs as Config['collectionsSelect'][T][]
 }
 
 export const getCachedArchiveData = cache(
