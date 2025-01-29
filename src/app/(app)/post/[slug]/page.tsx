@@ -112,7 +112,7 @@ const PostPage = async ({ params }: Props) => {
       </div>
       {/* Block "Смотрите также" */}
       <div className="container-post mx-auto mt-16 sm:mt-20">
-        <h2 className="text-xl sm:text-2xl font-semibold mb-12">Смотрите также</h2>
+        <h2 className="text-xl sm:text-2xl font-semibold mb-16">Смотрите также</h2>
         <div className="flex flex-col gap-6">
           {relatedPosts.map((relatedPost) => (
             <Link

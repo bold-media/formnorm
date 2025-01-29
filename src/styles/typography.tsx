@@ -17,6 +17,8 @@ export const typographyVariants = cva(
           'prose-h3:font-semibold prose-h3:leading-snug prose-h3:text-[1.5rem] sm:prose-h3:text-[1.625rem] md:prose-h3:text-[1.75rem]',
           'prose-p:font-light prose-p:text-base sm:prose-p:text-lg md:prose-p:text-xl',
           'prose-ul:font-light prose-ul:leading-8 prose-ul:text-base sm:prose-ul:text-lg md:prose-ul:text-xl',
+          'prose-ol:font-light prose-ol:leading-8 prose-ol:text-base sm:prose-ol:text-lg md:prose-ol:text-xl',
+          'prose-blockquote:font-light prose-blockquote:leading-8 prose-blockquote:text-base sm:prose-blockquote:text-lg md:prose-blockquote:text-xl',
         ],
       },
     },
