@@ -1,8 +1,4 @@
-import {
-  DefaultNodeTypes,
-  SerializedBlockNode,
-  SerializedInlineBlockNode,
-} from '@payloadcms/richtext-lexical'
+import { DefaultNodeTypes, SerializedBlockNode } from '@payloadcms/richtext-lexical'
 import { type JSXConvertersFunction } from '@payloadcms/richtext-lexical/react'
 import { LinkJSXConverter } from './converters/LinkJSXConverter'
 import { internalDocToHref } from '@/utils/internalDocToHref'
@@ -18,6 +14,7 @@ import {
   ContactInfoBlockType,
   DoubleFormBlockType,
   EmbedBlockType,
+  GeographyBlockType,
   GridBlockType,
   ImageBlockType,
   PartnerBlockType,
@@ -42,6 +39,7 @@ import { MutedTextJSXConverter } from './converters/MutedTextJSXConverter'
 import { SerializedMutedTextNode } from '@/payload/fields/lexical/features/MutedText/feature.node'
 import { DoubleFormBlock } from '../Blocks/components/DoubleFormBlock'
 import { ArchiveBlock } from '../Blocks/components/ArchiveBlock'
+import { GeographyBlock } from '../Blocks/components/GeographyBlock'
 
 type NodeTypes =
   | DefaultNodeTypes
@@ -56,6 +54,7 @@ type NodeTypes =
   | SerializedBlockNode<ContactInfoBlockType>
   | SerializedBlockNode<DoubleFormBlockType>
   | SerializedBlockNode<EmbedBlockType>
+  | SerializedBlockNode<GeographyBlockType>
   | SerializedBlockNode<GridBlockType>
   | SerializedBlockNode<ImageBlockType>
   | SerializedBlockNode<PartnerBlockType>
@@ -79,6 +78,7 @@ export const jsxConverters: JSXConvertersFunction<NodeTypes> = ({ defaultConvert
     contactInfo: ({ node }) => <ContactInfoBlock {...node.fields} />,
     doubleForm: ({ node }) => <DoubleFormBlock {...node.fields} />,
     embed: ({ node }) => <EmbedBlock {...node.fields} />,
+    geography: ({ node }) => <GeographyBlock {...node.fields} />,
     grid: ({ node }) => <GridBlock {...node.fields} />,
     image: ({ node }) => <ImageBlock {...node.fields} />,
     partner: ({ node }) => <PartnerBlock {...node.fields} />,

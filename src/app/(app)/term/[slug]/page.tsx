@@ -38,7 +38,7 @@ const TermPage = async ({ params }: Props) => {
               {suffix}
             </p>
           </div>
-          <div className="hidden md:block px-10">
+          <div className="hidden md:flex justify-center items-center px-10">
             <ServiceIcon className="w-48 h-48" />
           </div>
         </div>

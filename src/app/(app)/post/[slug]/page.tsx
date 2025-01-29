@@ -12,6 +12,7 @@ import { typographyVariants } from '@/styles/typography'
 
 import Link from 'next/link'
 import Image from 'next/image'
+import { AspectRatio } from '@/components/AspectRatio'
 
 interface Props {
   params: Promise<{
@@ -38,24 +39,13 @@ const PostPage = async ({ params }: Props) => {
       }).format(new Date(post.publishedAt))
     : null
 
-  // const image = typeof cover === 'object' ? cover : null
+  const image = typeof cover === 'object' ? cover : null
 
   return (
     <div className="mb-16">
       <div className="container-post relative md:mt-header mb-6">
         <PostBreadcrumbs title={title} />
 
-        {/* {image && image?.url && image?.height && image?.width && (
-          <AspectRatio className="relative w-full mb-[3.75rem] h-full" ratio={16 / 9}>
-            <Image
-              src={image?.url}
-              alt={image?.alt}
-              fill={true}
-              className="object-cover rounded-xl select-none"
-              draggable={false}
-            />
-          </AspectRatio>
-        )} */}
         <div className={cn(' mx-auto pt-4 md:pt-12', typographyVariants({ variant: 'post' }))}>
           <h1>{title}</h1>
         </div>
@@ -64,6 +54,19 @@ const PostPage = async ({ params }: Props) => {
       <time className="block text-xs font-semibold text-zinc-400 tracking-[0.094rem] mb-16 container-post  mx-auto">
         {date}
       </time>
+      <div className="container-post relative md:mt-header mb-6 lg:mb-12">
+        {image && image?.url && image?.height && image?.width && (
+          <AspectRatio className="relative w-full mb-[3.75rem] h-full" ratio={16 / 9}>
+            <Image
+              src={image?.url}
+              alt={image?.alt}
+              fill={true}
+              className="object-contain rounded-sm select-none"
+              draggable={false}
+            />
+          </AspectRatio>
+        )}{' '}
+      </div>
 
       <RichText
         data={article}

@@ -9,6 +9,7 @@ import { CarouselFullBlock } from '@/payload/blocks/CarouselFull'
 import { ContactInfoBlock } from '@/payload/blocks/ContactInfo'
 import { DoubleFormBlock } from '@/payload/blocks/DoubleForm'
 import { EmbedBlock } from '@/payload/blocks/Embed'
+import { GeographyBlock } from '@/payload/blocks/Geography'
 import { GridBlock } from '@/payload/blocks/Grid'
 import { ImageBlock } from '@/payload/blocks/Image'
 import { PartnerBlock } from '@/payload/blocks/Partner'
@@ -28,6 +29,7 @@ export const Blocks = {
   contactInfo: ContactInfoBlock,
   doubleForm: DoubleFormBlock,
   embed: EmbedBlock,
+  geography: GeographyBlock,
   grid: GridBlock,
   image: ImageBlock,
   partner: PartnerBlock,

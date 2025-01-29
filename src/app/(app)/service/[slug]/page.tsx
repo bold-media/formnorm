@@ -29,8 +29,8 @@ const ServicePage = async ({ params }: Props) => {
   return (
     <div className="overflow-x-hidden mb-16">
       <div className="container relative mt-8 md:mt-header mb-16">
-        <div className="grid md:grid-cols-[2fr,1fr] gap-10 mb-20">
-          <div className="flex flex-col gap-16">
+        <div className="grid md:grid-cols-[2fr,1fr] gap-10 mb-20 items-center">
+          <div className="flex flex-col gap-4">
             <h1 className="font-semibold md:font-bold text-[3.25rem] md:text-[4rem] leading-[4rem] uppercase mt-4">
               {title}
             </h1>
@@ -38,7 +38,7 @@ const ServicePage = async ({ params }: Props) => {
               {suffix}
             </p>
           </div>
-          <div className="hidden md:block px-10">
+          <div className="hidden md:flex justify-center items-center px-10">
             <ServiceIcon className="w-48 h-48" />
           </div>
         </div>

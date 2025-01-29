@@ -14,10 +14,6 @@ export const ContactInfoBlock = (props: ContactInfoBlockType) => {
   const { image, text, links } = props
   if (!image || typeof image !== 'object' || !image?.url) return null
 
-  const isLink = (link: unknown): link is { id: string | number; label: string } => {
-    return typeof link === 'object' && link !== null && 'id' in link && 'label' in link
-  }
-
   return (
     <div className="flex flex-col w-full gap-10 my-14">
       <div className="flex flex-col sm:flex-row gap-10 items-center">

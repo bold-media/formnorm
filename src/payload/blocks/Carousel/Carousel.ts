@@ -79,14 +79,6 @@ export const CarouselBlock: Block = {
                 ru: 'Стрелочки',
               },
             },
-            // {
-            //   name: 'enablefullWidth',
-            //   type: 'checkbox',
-            //   label: {
-            //     en: 'Enable Full Width',
-            //     ru: 'Во всю ширину экрана',
-            //   },
-            // },
           ],
         },
       ],

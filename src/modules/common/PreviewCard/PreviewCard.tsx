@@ -15,7 +15,6 @@ export const PreviewCard = <T extends keyof DataTypeMap>({ data, type }: Preview
 
   const isPost = (data: any): data is Post => type === 'post' && data !== null
   const isProject = (data: any): boolean => type === 'project' && data !== null
-  console.log(data)
 
   const date =
     isPost(data) && data?.publishedAt
@@ -65,7 +64,9 @@ export const PreviewCard = <T extends keyof DataTypeMap>({ data, type }: Preview
               className={
                 isProject(data)
                   ? 'font-semibold uppercase line-clamp-2 tracking-normal text-base sm:text-lg md:text-xl mt-6'
-                  : 'text-base sm:text-lg md:text-xl font-semibold line-clamp-2 tracking-normal'
+                  : isPost(data)
+                    ? 'text-base sm:text-lg md:text-xl font-semibold line-clamp-2 tracking-normal'
+                    : 'text-base sm:text-lg md:text-xl font-semibold line-clamp-2 tracking-normal uppercase'
               }
             >
               {data?.title}
