@@ -33,7 +33,7 @@ const ServicesPage = async () => {
             ))}
           </div>
         )}
-        <h2 className="uppercase font-semibold text-2xl sm:text-[2.5rem] leading-7 md:leading-[2.925rem] pb-24">
+        <h2 className="uppercase font-semibold text-2xl sm:text-[2.5rem] leading-7 sm:leading-[2.925rem] pb-24">
           Проектирование загородных домов и коттеджей
         </h2>
         {services && Array.isArray(services) && (

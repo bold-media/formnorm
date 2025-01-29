@@ -27,7 +27,7 @@ export const ProjectHero = (props: { project: Project }) => {
 
   return (
     <div className="container px-0 md:px-4 md:py-9">
-      <div className="h-[72vh] relative md:hidden mb-16">
+      <div className="h-[75vh] relative md:hidden mb-16">
         {project?.cover &&
           typeof project?.cover === 'object' &&
           typeof project?.cover?.url === 'string' && (
@@ -43,23 +43,23 @@ export const ProjectHero = (props: { project: Project }) => {
             </div>
           )}
 
-        <h1 className="absolute left-0 top-96 font-semibold uppercase flex flex-col items-start space-y-4 max-w-[85%]">
+        <h1 className="absolute left-0 top-[22.5rem] sm:top-[25rem] font-semibold uppercase flex flex-col items-start space-y-4 ">
           {/* Suffix Section */}
-          <div className="font-semibold text-zinc-50 pr-4 pl-[3rem] text-[1.625rem] leading-[1.17] py-4">
+          <div className="font-semibold text-zinc-50 pr-4 pl-6 text-[1.625rem] leading-[1.17] py-4">
             {project?.suffix}
           </div>
           {/* Prefix Section */}
-          <div className="text-zinc-50 font-light tracking-[0.125rem] pr-4 pl-14 text-xl leading-[1.1]">
+          <div className="text-zinc-50 font-light tracking-[0.125rem] pr-4 pl-6 text-xl leading-[1.1]">
             {project?.title}
           </div>
         </h1>
         <div
           className="relative flex justify-center items-center bottom-10 cursor-pointer"
-          onClick={() => window.scrollBy({ top: window.innerHeight, behavior: 'smooth' })}
+          onClick={() => window.scrollBy({ top: window.innerHeight / 1.5, behavior: 'smooth' })}
         >
           <div className="animate-bounce">
             <div className="flex justify-center items-center">
-              <ArrowDown className="w-10 h-5 text-zinc-50" style={{ fill: 'currentColor' }} />
+              <ArrowDown className="w-8 h-4 text-zinc-50" style={{ fill: 'currentColor' }} />
             </div>
           </div>
         </div>

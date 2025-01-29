@@ -35,13 +35,16 @@ export const ContactInfoBlock = (props: ContactInfoBlockType) => {
         {links &&
           Object.entries(links).map(([type, link]) =>
             link ? (
-              <Button key={type} variant="outline" className="w-full sm:flex-1 border-zinc-900">
-                <Link {...getLinkProps(link)}>
+              <Link key={type} {...getLinkProps(link)} className="w-full sm:flex-1">
+                <Button
+                  variant="outline"
+                  className="w-full border-zinc-900 flex items-center justify-center gap-2"
+                >
                   {type === 'whatsapp' && <WhatsappIcon className="w-6 h-6" />}
                   {type === 'telegram' && <TelegramIcon className="w-6 h-6" />}
                   {type === 'email' && <EmailIcon className="w-6 h-6" />}
-                </Link>
-              </Button>
+                </Button>
+              </Link>
             ) : null,
           )}
       </div>

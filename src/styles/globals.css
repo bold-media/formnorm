@@ -178,7 +178,7 @@
   }
 
   .container-post {
-    max-width: calc(62.5rem + 2rem);
+    max-width: calc(47.5rem + 2rem);
     margin-left: auto;
     margin-right: auto;
     padding-inline: 1rem;
@@ -204,7 +204,7 @@
     padding-inline: 1rem;
 
     & > * {
-      max-width: 62.5rem;
+      max-width: 47.5rem;
       margin-left: auto;
       margin-right: auto;
     }

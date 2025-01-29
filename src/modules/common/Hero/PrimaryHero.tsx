@@ -34,9 +34,9 @@ export const PrimaryHero = (props: NonNullable<PageHero['primary']>) => {
             draggable={false}
           />
         )}
-        <h1 className="absolute left-0 top-16 font-semibold uppercase flex flex-col items-start space-y-4 max-w-[85%]">
+        <h1 className="absolute left-0 top-16 font-semibold uppercase flex flex-col items-start space-y-4 max-w-[90%] min-w-[85%]">
           {/* Prefix Section */}
-          <div className="bg-zinc-50 text-muted-foreground tracking-[0.125rem] pr-4 pl-14 text-[1.375rem] leading-[1.1] py-3">
+          <div className="bg-zinc-50 text-muted-foreground tracking-[0.125rem] pr-4 pl-14 text-[1.375rem] leading-[1.1] py-3 ">
             {prefix}
           </div>
 

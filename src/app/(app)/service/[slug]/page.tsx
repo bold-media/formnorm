@@ -29,9 +29,9 @@ const ServicePage = async ({ params }: Props) => {
   return (
     <div className="overflow-x-hidden mb-16">
       <div className="container relative mt-8 md:mt-header mb-16">
-        <div className="grid md:grid-cols-[2fr,1fr] gap-10 mb-20 items-center">
-          <div className="flex flex-col gap-4">
-            <h1 className="font-semibold md:font-bold text-[3.25rem] md:text-[4rem] leading-[4rem] uppercase mt-4">
+        <div className="grid md:grid-cols-[2fr,1fr] gap-10 mb-10 md:mb-20 items-center">
+          <div className="flex flex-col gap-10">
+            <h1 className="font-semibold md:font-bold text-4xl sm:text-5xl md:text-[4rem] leading-light md:leading-[4rem] uppercase mt-4">
               {title}
             </h1>
             <p className="text-zinc-400/80 text-base md:text-xl uppercase font-semibold md:leading-8">
@@ -49,7 +49,7 @@ const ServicePage = async ({ params }: Props) => {
         data={article}
         container={'default'}
         prose={{ variant: 'default' }}
-        className="pb-8 xs:pb-12 sm:pb-20 mx-auto !overflow-x-visible"
+        className="pb-8 xs:pb-12 sm:pb-20 mx-auto !overflow-x-visible "
         tag="article"
       />
       <ServiceBreadcrumbs title={title} />

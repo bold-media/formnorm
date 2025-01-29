@@ -119,12 +119,12 @@ export const CarouselFullBlock = (props: CarouselFullBlockType & ComponentPropsW
           </CarouselContent>
           {settings?.enableArrows && (
             <>
-              <CarouselPrevious className="hidden sm:flex md:left-40 lg:left-80" absolute />
-              <CarouselNext className="hidden sm:flex md:right-40 lg:right-80" absolute />
+              <CarouselPrevious className="flex left-0 md:left-40 lg:left-80" absolute />
+              <CarouselNext className="flex right-0 md:right-40 lg:right-80" absolute />
             </>
           )}
           {settings?.enableDots && images && Array.isArray(images) && images?.length > 0 && (
-            <div className="flex justify-center space-x-2 mt-2 lg:mt-6">
+            <div className="flex justify-center space-x-2 mt-4 lg:mt-6">
               {images.map((image, index) =>
                 image && typeof image === 'object' && image.url ? (
                   <button

@@ -7,9 +7,11 @@ export const typographyVariants = cva(
       variant: {
         default: [
           'prose-h1:uppercase prose-h1:font-semibold prose-h1:text-[2.375rem] sm:prose-h1:text-[3rem] md:prose-h1:text-[4rem] md:prose-h1:leading-tight',
-          'prose-h2:uppercase prose-h2:font-semibold prose-h2:text-[2rem] sm:prose-h2:text-[2.5rem]',
+          'prose-h2:uppercase prose-h2:font-semibold prose-h2:text-[2rem] sm:prose-h2:text-[2.5rem] sm:prose-h2:leading-1.875rem',
           'prose-h3:uppercase prose-h3:font-semibold prose-h3:text-[1.5rem] sm:prose-h3:text-[1.7rem]',
           'prose-p:leading-relaxed',
+          'prose-a:text-[#ff8562] prose-a:font-normal prose-a:no-underline',
+          'prose-li:marker:text-zinc-900',
         ],
         post: [
           'prose-h1:font-semibold prose-h1:leading-tight prose-h1:text-[1.75rem] sm:prose-h1:text-[2rem] md:prose-h1:text-[2.25rem]',
@@ -17,8 +19,10 @@ export const typographyVariants = cva(
           'prose-h3:font-semibold prose-h3:leading-snug prose-h3:text-[1.5rem] sm:prose-h3:text-[1.625rem] md:prose-h3:text-[1.75rem]',
           'prose-p:font-light prose-p:text-base sm:prose-p:text-lg md:prose-p:text-xl',
           'prose-ul:font-light prose-ul:leading-8 prose-ul:text-base sm:prose-ul:text-lg md:prose-ul:text-xl',
+          'prose-li:marker:text-zinc-900',
           'prose-ol:font-light prose-ol:leading-8 prose-ol:text-base sm:prose-ol:text-lg md:prose-ol:text-xl',
           'prose-blockquote:font-light prose-blockquote:leading-8 prose-blockquote:text-base sm:prose-blockquote:text-lg md:prose-blockquote:text-xl',
+          'prose-a:text-[#ff8562] prose-a:font-light prose-a:no-underline',
         ],
       },
     },

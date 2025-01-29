@@ -1663,8 +1663,15 @@ export interface PartnerBlockType {
  * via the `definition` "PriceBlockType".
  */
 export interface PriceBlockType {
-  price?: string | null;
-  text?: string | null;
+  title?: string | null;
+  prices?:
+    | {
+        price?: string | null;
+        text?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  button?: string | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'price';

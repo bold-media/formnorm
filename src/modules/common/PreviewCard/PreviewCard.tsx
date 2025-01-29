@@ -29,7 +29,7 @@ export const PreviewCard = <T extends keyof DataTypeMap>({ data, type }: Preview
     <NextLink href={`/${type}/${data?.slug}`} className="no-underline">
       <Card
         className={`group border-none rounded-sm shadow-none bg-zinc-100/50 hover:bg-background-light/100 transition-colors duration-300 overflow-hidden ${
-          isProject(data) ? 'flex-col sm:flex md:flex-col' : 'flex flex-col'
+          isProject(data) ? 'flex flex-col sm:flex-row md:flex-col' : 'flex flex-col'
         }`}
       >
         <div className={isProject(data) ? 'w-full sm:w-1/2 md:w-full' : ''}>
@@ -63,7 +63,7 @@ export const PreviewCard = <T extends keyof DataTypeMap>({ data, type }: Preview
             <CardTitle
               className={
                 isProject(data)
-                  ? 'font-semibold uppercase line-clamp-2 tracking-normal text-base sm:text-lg md:text-xl mt-6'
+                  ? 'font-semibold uppercase line-clamp-2 tracking-normal text-base mt-6'
                   : isPost(data)
                     ? 'text-base sm:text-lg md:text-xl font-semibold line-clamp-2 tracking-normal'
                     : 'text-base sm:text-lg md:text-xl font-semibold line-clamp-2 tracking-normal uppercase'

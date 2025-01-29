@@ -1,16 +1,31 @@
+import { Button } from '@/components/Button'
 import { PriceBlockType } from '@payload-types'
 import React from 'react'
 
-export const PriceBlock = (props: PriceBlockType) => {
-  const { price, text } = props
+export const PriceBlock = ({ title, prices, button }: PriceBlockType) => {
+  if (!prices || prices.length === 0) return null
+
   return (
-    <div className="not-prose w-full flex flex-col gap-4">
-      <h3 className="font-bold text-2xl sm:text-3xl text-zinc-900">{price}</h3>
-      <hr className="border-t-[0.225rem] rounded-lg border-zinc-900" />
-      <p
-        className="font-medium uppercase tracking-normal leading-7 text-zinc-600"
-        dangerouslySetInnerHTML={{ __html: text || '' }}
-      />
+    <div className="flex flex-col gap-6 mb-32">
+      <h2 className="font-bold text-4xl pb-5">{title}</h2>
+
+      <div className="flex flex-col sm:flex-row sm:row-span-3 gap-16 pt-2 pb-8 md:pb-20 md:pt-10">
+        {prices.map((item, index) => (
+          <div key={index} className="not-prose max-w-lg w-full flex flex-col gap-4">
+            <h3 className="font-bold text-2xl sm:text-3xl text-zinc-900">{item.price}</h3>
+            <hr className="border-t-[0.225rem] rounded-lg border-zinc-900" />
+            <p
+              className="font-medium uppercase tracking-normal leading-7 text-zinc-600"
+              dangerouslySetInnerHTML={{ __html: item.text || '' }}
+            />
+          </div>
+        ))}
+      </div>
+      <div className="flex flex-col items-start gap-6">
+        <Button variant={'black'} size={'lg'} className="w-auto ml-0">
+          {button}
+        </Button>
+      </div>
     </div>
   )
 }
