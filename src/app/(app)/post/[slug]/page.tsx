@@ -13,6 +13,8 @@ import { typographyVariants } from '@/styles/typography'
 import Link from 'next/link'
 import Image from 'next/image'
 import { AspectRatio } from '@/components/AspectRatio'
+import { Icon } from '@/components/Icon'
+import { ImageIcon } from 'lucide-react'
 
 interface Props {
   params: Promise<{
@@ -120,8 +122,8 @@ const PostPage = async ({ params }: Props) => {
               href={`/blog/${relatedPost.slug}`}
               className="flex gap-4 items-start group"
             >
-              {typeof relatedPost?.cover === 'object' && relatedPost?.cover?.url && (
-                <div className="relative w-20 h-16 sm:w-28 sm:h-20 flex-shrink-0 overflow-hidden rounded-sm">
+              <div className="relative w-20 h-16 sm:w-28 sm:h-20 flex-shrink-0 overflow-hidden rounded-sm">
+                {typeof relatedPost?.cover === 'object' && relatedPost?.cover?.url ? (
                   <Image
                     src={relatedPost.cover.url}
                     alt={relatedPost.cover.alt || relatedPost.title}
@@ -129,12 +131,16 @@ const PostPage = async ({ params }: Props) => {
                     className="object-cover"
                     draggable={false}
                   />
-                </div>
-              )}
+                ) : (
+                  <div className="bg-gradient-to-br from-background-light/80 to-background-light/10 h-full w-full flex items-center justify-center">
+                    <Icon size="xl" className="opacity-80 stroke-1 size-12">
+                      <ImageIcon />
+                    </Icon>
+                  </div>
+                )}
+              </div>
 
-              {/* Контент */}
               <div className="flex-1">
-                {/* Категория */}
                 {relatedPost?.categories &&
                   Array.isArray(relatedPost?.categories) &&
                   relatedPost?.categories?.length > 0 &&
@@ -144,10 +150,8 @@ const PostPage = async ({ params }: Props) => {
                     </span>
                   )}
 
-                {/* Заголовок */}
                 <h3 className="font-semibold text-sm sm:text-md mb-1 ">{relatedPost.title}</h3>
 
-                {/* Краткое описание */}
                 {relatedPost.excerpt && (
                   <p className="text-xs sm:text-sm text-zinc-600">{relatedPost.excerpt}</p>
                 )}

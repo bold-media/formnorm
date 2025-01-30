@@ -14,11 +14,11 @@ const BlogPage = async () => {
 
   return (
     <div className="overflow-x-hidden">
-      <div className={cn('container mt-8 sm:mt-16 min-h-svh')}>
+      <div className={cn('container mt-8 sm:mt-16 min-h-svh mb-20 sm:mb-32')}>
         <h1 className="uppercase font-semibold text-[2.375rem] sm:text-[3rem] mb-4">Блог</h1>
         <PostCategories categories={categories} />
         {posts && Array.isArray(posts) && (
-          <div className="grid sm:grid-cols-3 gap-10">
+          <div className="grid xs:grid-cols-2 md:grid-cols-3 gap-10">
             {posts.map((post: any) => (
               <PreviewCard key={post.id} data={post} type="post" />
             ))}

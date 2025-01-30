@@ -8,14 +8,6 @@ import Image from 'next/image'
 export const PartnerBlock = (props: PartnerBlockType) => {
   const { image, text } = props
   if (!image || typeof image !== 'object' || !image?.url) return null
-  useEffect(() => {
-    document.querySelectorAll('.prose a').forEach((el) => {
-      const textContent = el.textContent?.trim()
-      if (textContent && textContent.includes('сайт Росстро-Велокс ')) {
-        el.classList.add('underline', 'underline-offset-4')
-      }
-    })
-  }, [])
 
   const isLink = (link: unknown): link is { id: string | number; label: string } => {
     return typeof link === 'object' && link !== null && 'id' in link && 'label' in link

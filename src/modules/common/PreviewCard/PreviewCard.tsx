@@ -1,3 +1,4 @@
+'use client'
 import { AspectRatio } from '@/components/AspectRatio'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/Card'
 import { Icon } from '@/components/Icon'
@@ -5,14 +6,35 @@ import { Post } from '@payload-types'
 import { ImageIcon } from 'lucide-react'
 import Image from 'next/image'
 import NextLink from 'next/link'
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import type { DataTypeMap, PreviewCardProps } from './types'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/Tooltip/Tooltip'
 
 export const PreviewCard = <T extends keyof DataTypeMap>({ data, type }: PreviewCardProps<T>) => {
   if (typeof data !== 'object') {
     throw new Error('PreviewCard did not receive data.')
   }
+  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 })
+  const titleRef = useRef<HTMLHeadingElement | null>(null)
+  const [isTruncated, setIsTruncated] = useState(false)
 
+  useEffect(() => {
+    if (titleRef.current) {
+      setIsTruncated(titleRef.current.scrollHeight > titleRef.current.clientHeight)
+    }
+  }, [data?.title])
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    setTooltipPosition({
+      x: e.clientX,
+      y: e.clientY,
+    })
+  }
   const isPost = (data: any): data is Post => type === 'post' && data !== null
   const isProject = (data: any): boolean => type === 'project' && data !== null
 
@@ -60,24 +82,37 @@ export const PreviewCard = <T extends keyof DataTypeMap>({ data, type }: Preview
           }
         >
           <CardHeader className={isProject(data) ? 'px-8 pb-0 pt-0' : 'p-6 pb-2'}>
-            <CardTitle
-              className={
-                isProject(data)
-                  ? 'font-semibold uppercase line-clamp-2 tracking-normal text-base mt-6'
-                  : isPost(data)
-                    ? 'text-base sm:text-lg md:text-xl font-semibold line-clamp-2 tracking-normal'
-                    : 'text-base sm:text-lg md:text-xl font-semibold line-clamp-2 tracking-normal uppercase'
-              }
-            >
-              {data?.title}
-            </CardTitle>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <CardTitle
+                    ref={titleRef}
+                    className={
+                      isProject(data)
+                        ? 'not-prose font-semibold uppercase line-clamp-2 tracking-normal text-xl mt-6 pb-2'
+                        : isPost(data)
+                          ? 'text-base sm:text-lg md:text-xl font-semibold line-clamp-2 tracking-normal'
+                          : 'text-base sm:text-lg md:text-xl font-semibold line-clamp-2 tracking-normal uppercase'
+                    }
+                  >
+                    {data?.title}
+                  </CardTitle>
+                </TooltipTrigger>
+
+                {isTruncated && (
+                  <TooltipContent className="text-left max-w-80">
+                    <p>{data?.title}</p>
+                  </TooltipContent>
+                )}
+              </Tooltip>
+            </TooltipProvider>
           </CardHeader>
           <CardContent className={isProject(data) ? 'text-base p-8 pt-0' : 'px-6 pb-4 pt-0'}>
             <p
               className={
                 isProject(data)
-                  ? 'line-clamp-3 text-base font-light text-zinc-500 leading-6 my-0'
-                  : 'line-clamp-3 text-sm font-light leading-5 pb-2'
+                  ? 'line-clamp-3 text-base font-light text-zinc-500 leading-[1.5] overflow-hidden text-ellipsis my-0'
+                  : 'line-clamp-3 text-sm font-light text-zinc-500 leading-[1.5] overflow-hidden text-ellipsis pb-2'
               }
             >
               {data?.excerpt}

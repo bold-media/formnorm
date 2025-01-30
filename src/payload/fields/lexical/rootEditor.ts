@@ -40,7 +40,34 @@ export const rootEditor = lexicalEditor({
       BlockquoteFeature(),
       HorizontalRuleFeature(),
       InlineToolbarFeature(),
-      LinkFeature(),
+      LinkFeature({
+        fields: ({ defaultFields }) => {
+          return [
+            ...defaultFields,
+            {
+              name: 'variant',
+              type: 'select',
+              defaultValue: 'orange',
+              options: [
+                {
+                  label: {
+                    en: 'Black',
+                    ru: 'Черная',
+                  },
+                  value: 'black',
+                },
+                {
+                  label: {
+                    en: 'Orange',
+                    ru: 'Оранжевая',
+                  },
+                  value: 'orange',
+                },
+              ],
+            },
+          ]
+        },
+      }),
       EXPERIMENTAL_TableFeature(),
     ]
   },

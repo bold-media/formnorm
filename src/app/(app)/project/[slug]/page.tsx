@@ -1,4 +1,3 @@
-import { resolvePathname } from '@/utils/resolvePathname'
 import { getPayload } from 'payload'
 import React from 'react'
 import config from '@payload-config'
@@ -6,7 +5,7 @@ import { notFound } from 'next/navigation'
 import { Metadata, ResolvingMetadata } from 'next'
 import { generateMeta } from '@/utils/generateMeta'
 import { getPathSegments } from '@/utils/getPathSegments'
-import { getPageByPathname } from '@/modules/common/data'
+
 import { RichText } from '@/modules/common/RichText'
 import { PageBreadcrumbs } from '@/modules/common/PageBreadcrumbs'
 import { ProjectHero } from '@/modules/project/ProjectHero'

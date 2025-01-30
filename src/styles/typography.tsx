@@ -10,7 +10,7 @@ export const typographyVariants = cva(
           'prose-h2:uppercase prose-h2:font-semibold prose-h2:text-[2rem] sm:prose-h2:text-[2.5rem] sm:prose-h2:leading-1.875rem',
           'prose-h3:uppercase prose-h3:font-semibold prose-h3:text-[1.5rem] sm:prose-h3:text-[1.7rem]',
           'prose-p:leading-relaxed',
-          'prose-a:text-[#ff8562] prose-a:font-normal prose-a:no-underline',
+          'prose-a:font-normal prose-a:no-underline',
           'prose-li:marker:text-zinc-900',
         ],
         post: [
@@ -22,7 +22,7 @@ export const typographyVariants = cva(
           'prose-li:marker:text-zinc-900',
           'prose-ol:font-light prose-ol:leading-8 prose-ol:text-base sm:prose-ol:text-lg md:prose-ol:text-xl',
           'prose-blockquote:font-light prose-blockquote:leading-8 prose-blockquote:text-base sm:prose-blockquote:text-lg md:prose-blockquote:text-xl',
-          'prose-a:text-[#ff8562] prose-a:font-light prose-a:no-underline',
+          'prose-a:font-light prose-a:no-underline',
         ],
       },
     },

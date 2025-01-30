@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { SerializedAutoLinkNode, SerializedLinkNode } from '@payloadcms/richtext-lexical'
 import { JSXConverters } from '@payloadcms/richtext-lexical/react'
+import { cn } from '@/utils/cn'
 
 export const LinkJSXConverter: (args: {
   internalDocToHref?: (args: { linkNode: SerializedLinkNode }) => string
@@ -14,7 +15,11 @@ export const LinkJSXConverter: (args: {
     const target: string | undefined = node.fields.newTab ? '_blank' : undefined
 
     return (
-      <a href={node.fields.url} {...{ rel, target }}>
+      <a
+        href={node.fields.url}
+        {...{ rel, target }}
+        className={cn(node.fields?.variant === 'orange' && 'text-[#ff8562]')}
+      >
         {children}
       </a>
     )
@@ -40,7 +45,11 @@ export const LinkJSXConverter: (args: {
     }
 
     return (
-      <Link href={href} {...{ rel, target }}>
+      <Link
+        href={href}
+        className={cn(node.fields?.variant === 'orange' && 'text-[#ff8562]')}
+        {...{ rel, target }}
+      >
         {children}
       </Link>
     )
