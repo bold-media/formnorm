@@ -92,7 +92,7 @@ export const PreviewCard = <T extends keyof DataTypeMap>({ data, type }: Preview
                         ? 'not-prose font-semibold uppercase line-clamp-2 tracking-normal text-xl mt-6 pb-2'
                         : isPost(data)
                           ? 'text-base sm:text-lg md:text-xl font-semibold line-clamp-2 tracking-normal'
-                          : 'text-base sm:text-lg md:text-xl font-semibold line-clamp-2 tracking-normal uppercase'
+                          : 'text-lg md:text-xl font-semibold line-clamp-2 tracking-normal uppercase'
                     }
                   >
                     {data?.title}

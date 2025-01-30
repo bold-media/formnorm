@@ -42,8 +42,8 @@ export const ProjectHero = (props: { project: Project }) => {
               <div className="absolute inset-0 bg-black bg-opacity-50"></div> {/* Overlay */}
             </div>
           )}
-
-        <h1 className="absolute left-0 top-[22.5rem] sm:top-[25rem] font-semibold uppercase flex flex-col items-start space-y-4 ">
+        {/* top-[22.5rem] sm:top-[25rem] */}
+        <h1 className="absolute left-0 bottom-20 font-semibold uppercase flex flex-col items-start space-y-4 ">
           {/* Suffix Section */}
           <div className="font-semibold text-zinc-50 pr-4 pl-6 text-[1.625rem] leading-[1.17] py-4">
             {project?.suffix}
@@ -55,7 +55,7 @@ export const ProjectHero = (props: { project: Project }) => {
         </h1>
         <div
           className="relative flex justify-center items-center bottom-10 cursor-pointer"
-          onClick={() => window.scrollBy({ top: window.innerHeight / 1.5, behavior: 'smooth' })}
+          onClick={() => window.scrollBy({ top: window.innerHeight / 1.2, behavior: 'smooth' })}
         >
           <div className="animate-bounce">
             <div className="flex justify-center items-center">

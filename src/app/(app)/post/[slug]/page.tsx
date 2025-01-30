@@ -119,7 +119,7 @@ const PostPage = async ({ params }: Props) => {
           {relatedPosts.map((relatedPost) => (
             <Link
               key={relatedPost.id}
-              href={`/blog/${relatedPost.slug}`}
+              href={`/post/${relatedPost.slug}`}
               className="flex gap-4 items-start group"
             >
               <div className="relative w-20 h-16 sm:w-28 sm:h-20 flex-shrink-0 overflow-hidden rounded-sm">
