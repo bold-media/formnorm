@@ -11,6 +11,8 @@ import { cn } from '@/utils/cn'
 import { Header } from '@/modules/layout/Header'
 import { Footer } from '@/modules/layout/Footer'
 import { Toaster } from '@/components/Sonner'
+import CookieConsent from '@/modules/layout/Cookies'
+import { ClientCookieConsent } from '@/modules/layout/ClientCookies'
 
 const montserrat = Montserrat({
   subsets: ['cyrillic'],
@@ -43,6 +45,7 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
           <Footer className="flex-shrink-0" data={settings?.navigation?.footer} />
         </div>
         <Toaster />
+        <ClientCookieConsent />
       </body>
     </html>
   )

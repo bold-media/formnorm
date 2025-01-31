@@ -15,6 +15,7 @@ import { ImageBlock } from '@/payload/blocks/Image'
 import { PartnerBlock } from '@/payload/blocks/Partner'
 import { PriceBlock } from '@/payload/blocks/Price'
 import { ProjectsBlock } from '@/payload/blocks/Projects'
+import { TableBlock } from '@/payload/blocks/Table'
 import { Block } from 'payload'
 
 export const Blocks = {
@@ -35,6 +36,7 @@ export const Blocks = {
   partner: PartnerBlock,
   price: PriceBlock,
   projects: ProjectsBlock,
+  table: TableBlock,
 } satisfies Record<string, Block>
 
 export type BlockKey = keyof typeof Blocks

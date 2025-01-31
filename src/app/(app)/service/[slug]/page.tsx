@@ -28,7 +28,7 @@ const ServicePage = async ({ params }: Props) => {
 
   return (
     <div className="overflow-x-hidden mb-16">
-      <div className="container relative mt-8 md:mt-header mb-16">
+      <div className="container relative mt-4 md:mt-header mb-16">
         <div className="grid md:grid-cols-[2fr,1fr] gap-10 mb-10 md:mb-20 items-center">
           <div className="flex flex-col gap-10">
             <div className="w-full flex justify-center overflow-hidden">

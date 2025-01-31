@@ -20,6 +20,7 @@ import {
   PartnerBlockType,
   PriceBlockType,
   ProjectsBlockType,
+  TableBlockType,
 } from '@payload-types'
 import { AccordionBlock } from '../Blocks/components/AccordionBlock'
 import { CalloutBlock } from '../Blocks/components/CalloutBlock'
@@ -40,6 +41,7 @@ import { SerializedMutedTextNode } from '@/payload/fields/lexical/features/Muted
 import { DoubleFormBlock } from '../Blocks/components/DoubleFormBlock'
 import { ArchiveBlock } from '../Blocks/components/ArchiveBlock'
 import { GeographyBlock } from '../Blocks/components/GeographyBlock'
+import { TableBlock } from '../Blocks/components/TableBlock'
 
 type NodeTypes =
   | DefaultNodeTypes
@@ -60,6 +62,7 @@ type NodeTypes =
   | SerializedBlockNode<PartnerBlockType>
   | SerializedBlockNode<PriceBlockType>
   | SerializedBlockNode<ProjectsBlockType>
+  | SerializedBlockNode<TableBlockType>
   | SerializedMutedTextNode
 
 export const jsxConverters: JSXConvertersFunction<NodeTypes> = ({ defaultConverters }) => ({
@@ -84,5 +87,6 @@ export const jsxConverters: JSXConvertersFunction<NodeTypes> = ({ defaultConvert
     partner: ({ node }) => <PartnerBlock {...node.fields} />,
     price: ({ node }) => <PriceBlock {...node.fields} />,
     projects: ({ node }) => <ProjectsBlock {...node.fields} />,
+    table: ({ node }) => <TableBlock {...node.fields} />,
   },
 })

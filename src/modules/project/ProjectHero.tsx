@@ -26,7 +26,7 @@ export const ProjectHero = (props: { project: Project }) => {
     }))
 
   return (
-    <div className="container px-0 md:px-4 md:py-9">
+    <div className="container px-0 md:px-4 md:pb-9 md:pt-4">
       <div className="h-[75vh] relative md:hidden mb-16">
         {project?.cover &&
           typeof project?.cover === 'object' &&
@@ -42,7 +42,7 @@ export const ProjectHero = (props: { project: Project }) => {
               <div className="absolute inset-0 bg-black bg-opacity-50"></div> {/* Overlay */}
             </div>
           )}
-        {/* top-[22.5rem] sm:top-[25rem] */}
+
         <h1 className="absolute left-0 bottom-20 font-semibold uppercase flex flex-col items-start space-y-4 ">
           {/* Suffix Section */}
           <div className="font-semibold text-zinc-50 pr-4 pl-6 text-[1.625rem] leading-[1.17] py-4">
