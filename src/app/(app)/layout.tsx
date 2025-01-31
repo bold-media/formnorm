@@ -11,7 +11,6 @@ import { cn } from '@/utils/cn'
 import { Header } from '@/modules/layout/Header'
 import { Footer } from '@/modules/layout/Footer'
 import { Toaster } from '@/components/Sonner'
-import CookieConsent from '@/modules/layout/Cookies'
 import { ClientCookieConsent } from '@/modules/layout/ClientCookies'
 
 const montserrat = Montserrat({
