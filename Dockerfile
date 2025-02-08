@@ -1,13 +1,13 @@
-# From https://github.com/vercel/next.js/blob/canary/examples/with-docker/Dockerfile
-
+# Use official Node.js 22 Alpine image
 FROM node:22-alpine AS base
 
 # Install dependencies only when needed
 FROM base AS deps
-# Install required system dependencies
+
+# Install required dependencies
 RUN apk add --no-cache libc6-compat
 
-# Explicitly install pnpm
+# Explicitly install pnpm globally
 RUN npm install -g pnpm@8.15.9
 
 WORKDIR /app
@@ -23,11 +23,15 @@ RUN \
 
 # Rebuild the source code only when needed
 FROM base AS builder
+
+# Ensure pnpm is available in builder stage
+RUN npm install -g pnpm@8.15.9
+
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Disable telemetry during the build.
+# Disable telemetry during build.
 ENV NEXT_TELEMETRY_DISABLED 1
 
 RUN \
