@@ -1710,7 +1710,16 @@ export interface PriceBlockType {
         id?: string | null;
       }[]
     | null;
-  button?: string | null;
+  link: {
+    type?: ('reference' | 'custom') | null;
+    newTab?: boolean | null;
+    reference?: {
+      relationTo: 'page';
+      value: string | Page;
+    } | null;
+    url?: string | null;
+    label: string;
+  };
   id?: string | null;
   blockName?: string | null;
   blockType: 'price';

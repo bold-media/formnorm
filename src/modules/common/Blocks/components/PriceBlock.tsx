@@ -1,8 +1,10 @@
 import { Button } from '@/components/Button'
+import { getLinkProps } from '@/utils/getLinkProps'
 import { PriceBlockType } from '@payload-types'
+import Link from 'next/link'
 import React from 'react'
 
-export const PriceBlock = ({ title, prices, button }: PriceBlockType) => {
+export const PriceBlock = ({ title, prices, link }: PriceBlockType) => {
   if (!prices || prices.length === 0) return null
 
   return (
@@ -23,7 +25,7 @@ export const PriceBlock = ({ title, prices, button }: PriceBlockType) => {
       </div>
       <div className="flex flex-col items-start gap-6">
         <Button variant={'black'} size={'lg'} className="w-auto ml-0">
-          {button}
+          <Link {...getLinkProps(link)}>{link.label}</Link>
         </Button>
       </div>
     </div>

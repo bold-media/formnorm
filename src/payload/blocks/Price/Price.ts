@@ -1,3 +1,4 @@
+import { link } from '@/payload/fields/link'
 import { en } from '@/payload/i18n/en'
 import { ru } from '@/payload/i18n/ru'
 import { Block } from 'payload'
@@ -53,13 +54,16 @@ export const PriceBlock: Block = {
       ],
     },
 
-    {
-      name: 'button',
-      label: {
-        en: 'Buttons text',
-        ru: 'Текст кнопки',
-      },
-      type: 'text',
-    },
+    // {
+    //   name: 'button',
+    //   label: {
+    //     en: 'Buttons text',
+    //     ru: 'Текст кнопки',
+    //   },
+    //   type: 'text',
+    // },
+    link({
+      appearances: false,
+    }),
   ],
 }
