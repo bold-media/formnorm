@@ -1,36 +1,43 @@
-# From https://github.com/vercel/next.js/blob/canary/examples/with-docker/Dockerfile
-
+# Use official Node.js 22 Alpine image
 FROM node:22-alpine AS base
 
 # Install dependencies only when needed
 FROM base AS deps
-# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
+
+# Install required dependencies
 RUN apk add --no-cache libc6-compat
+
+# Explicitly install pnpm globally
+RUN npm install -g pnpm@8.15.9
+
 WORKDIR /app
 
-# Install dependencies based on the preferred package manager
+# Install dependencies based on the lockfile
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
 RUN \
   if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
   elif [ -f package-lock.json ]; then npm ci; \
-  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm i --frozen-lockfile; \
+  elif [ -f pnpm-lock.yaml ]; then pnpm install --frozen-lockfile; \
   else echo "Lockfile not found." && exit 1; \
   fi
 
-
 # Rebuild the source code only when needed
 FROM base AS builder
+
+# Ensure pnpm is available in builder stage
+RUN npm install -g pnpm@8.15.9
+
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# disable telemetry during the build.
+# Disable telemetry during build.
 ENV NEXT_TELEMETRY_DISABLED 1
 
 RUN \
   if [ -f yarn.lock ]; then yarn run build; \
   elif [ -f package-lock.json ]; then npm run build; \
-  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run build; \
+  elif [ -f pnpm-lock.yaml ]; then pnpm run build; \
   else echo "Lockfile not found." && exit 1; \
   fi
 
@@ -42,7 +49,7 @@ WORKDIR /app
 RUN apk add --no-cache curl
 
 ENV NODE_ENV production
-# disable telemetry during runtime.
+# Disable telemetry during runtime.
 ENV NEXT_TELEMETRY_DISABLED 1
 
 RUN addgroup --system --gid 1001 nodejs
