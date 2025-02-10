@@ -7,7 +7,7 @@ export const PriceBlock = ({ title, prices, button }: PriceBlockType) => {
 
   return (
     <div className="flex flex-col gap-6 mb-32">
-      <h2 className="font-bold text-4xl pb-5">{title}</h2>
+      {title && <h2 className="font-bold text-4xl pb-5">{title}</h2>}
 
       <div className="flex flex-col sm:flex-row sm:row-span-3 gap-16 pt-2 pb-8 md:pb-20 md:pt-10">
         {prices.map((item, index) => (

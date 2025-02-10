@@ -12,6 +12,7 @@ import {
   CarouselBlockType,
   CarouselFullBlockType,
   ContactInfoBlockType,
+  ContainerBlockType,
   DoubleFormBlockType,
   EmbedBlockType,
   GeographyBlockType,
@@ -42,6 +43,7 @@ import { DoubleFormBlock } from '../Blocks/components/DoubleFormBlock'
 import { ArchiveBlock } from '../Blocks/components/ArchiveBlock'
 import { GeographyBlock } from '../Blocks/components/GeographyBlock'
 import { TableBlock } from '../Blocks/components/TableBlock'
+import { ContainerBlock } from '../Blocks/components/ContainerBlock'
 
 type NodeTypes =
   | DefaultNodeTypes
@@ -54,6 +56,7 @@ type NodeTypes =
   | SerializedBlockNode<CarouselBlockType>
   | SerializedBlockNode<CarouselFullBlockType>
   | SerializedBlockNode<ContactInfoBlockType>
+  | SerializedBlockNode<ContainerBlockType>
   | SerializedBlockNode<DoubleFormBlockType>
   | SerializedBlockNode<EmbedBlockType>
   | SerializedBlockNode<GeographyBlockType>
@@ -79,6 +82,7 @@ export const jsxConverters: JSXConvertersFunction<NodeTypes> = ({ defaultConvert
     carousel: ({ node }) => <CarouselBlock {...node.fields} />,
     carouselFull: ({ node }) => <CarouselFullBlock {...node.fields} />,
     contactInfo: ({ node }) => <ContactInfoBlock {...node.fields} />,
+    container: ({ node }) => <ContainerBlock {...node.fields} />,
     doubleForm: ({ node }) => <DoubleFormBlock {...node.fields} />,
     embed: ({ node }) => <EmbedBlock {...node.fields} />,
     geography: ({ node }) => <GeographyBlock {...node.fields} />,

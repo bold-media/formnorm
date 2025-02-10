@@ -1546,6 +1546,46 @@ export interface ContactInfoBlockType {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ContainerBlockType".
+ */
+export interface ContainerBlockType {
+  textLeft?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  textRight?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  enableSize?: ('half' | 'twothirds' | 'threefourths' | 'fourfifths' | 'fivesixths') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'container';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "DoubleFormBlockType".
  */
 export interface DoubleFormBlockType {
@@ -1628,7 +1668,6 @@ export interface ImageBlockType {
   image?: (string | null) | Media;
   aspectRatio?: ('video' | 'square' | 'fourThree') | null;
   scale?: number | null;
-  alignment?: ('left' | 'centered' | 'right') | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'image';

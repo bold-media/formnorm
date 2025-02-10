@@ -53,32 +53,5 @@ export const ImageBlock: Block = {
       min: 1,
       max: 100,
     },
-    {
-      name: 'alignment',
-      type: 'select',
-      options: [
-        {
-          label: {
-            en: 'Left',
-            ru: 'По левому краю',
-          },
-          value: 'left',
-        },
-        {
-          label: {
-            en: 'Centered',
-            ru: 'По центру',
-          },
-          value: 'centered',
-        },
-        {
-          label: {
-            en: 'Right',
-            ru: 'По правому краю',
-          },
-          value: 'right',
-        },
-      ],
-    },
   ],
 }

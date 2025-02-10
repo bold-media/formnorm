@@ -26,7 +26,7 @@ export const GridBlock: Block = {
         {
           name: 'content',
           type: 'richText',
-          editor: nestedEditor({ removeBlocks: ['grid'], headings: ['h2', 'h3'] }),
+          editor: nestedEditor({ removeBlocks: ['grid', 'container'], headings: ['h2', 'h3'] }),
         },
         {
           type: 'collapsible',

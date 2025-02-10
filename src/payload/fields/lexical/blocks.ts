@@ -7,6 +7,7 @@ import { CardLink } from '@/payload/blocks/CardLink/CardLink'
 import { CarouselBlock } from '@/payload/blocks/Carousel'
 import { CarouselFullBlock } from '@/payload/blocks/CarouselFull'
 import { ContactInfoBlock } from '@/payload/blocks/ContactInfo'
+import { ContainerBlock } from '@/payload/blocks/Container'
 import { DoubleFormBlock } from '@/payload/blocks/DoubleForm'
 import { EmbedBlock } from '@/payload/blocks/Embed'
 import { GeographyBlock } from '@/payload/blocks/Geography'
@@ -28,6 +29,7 @@ export const Blocks = {
   carousel: CarouselBlock,
   carouselFull: CarouselFullBlock,
   contactInfo: ContactInfoBlock,
+  container: ContainerBlock,
   doubleForm: DoubleFormBlock,
   embed: EmbedBlock,
   geography: GeographyBlock,
