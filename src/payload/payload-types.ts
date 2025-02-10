@@ -1191,10 +1191,23 @@ export interface Settings {
             link: {
               type?: ('reference' | 'custom') | null;
               newTab?: boolean | null;
-              reference?: {
-                relationTo: 'page';
-                value: string | Page;
-              } | null;
+              reference?:
+                | ({
+                    relationTo: 'page';
+                    value: string | Page;
+                  } | null)
+                | ({
+                    relationTo: 'service';
+                    value: string | Service;
+                  } | null)
+                | ({
+                    relationTo: 'term';
+                    value: string | Term;
+                  } | null)
+                | ({
+                    relationTo: 'post';
+                    value: string | Post;
+                  } | null);
               url?: string | null;
               label: string;
             };
@@ -1208,10 +1221,23 @@ export interface Settings {
             link: {
               type?: ('reference' | 'custom') | null;
               newTab?: boolean | null;
-              reference?: {
-                relationTo: 'page';
-                value: string | Page;
-              } | null;
+              reference?:
+                | ({
+                    relationTo: 'page';
+                    value: string | Page;
+                  } | null)
+                | ({
+                    relationTo: 'service';
+                    value: string | Service;
+                  } | null)
+                | ({
+                    relationTo: 'term';
+                    value: string | Term;
+                  } | null)
+                | ({
+                    relationTo: 'post';
+                    value: string | Post;
+                  } | null);
               url?: string | null;
               label: string;
             };
@@ -1224,10 +1250,23 @@ export interface Settings {
             link: {
               type?: ('reference' | 'custom') | null;
               newTab?: boolean | null;
-              reference?: {
-                relationTo: 'page';
-                value: string | Page;
-              } | null;
+              reference?:
+                | ({
+                    relationTo: 'page';
+                    value: string | Page;
+                  } | null)
+                | ({
+                    relationTo: 'service';
+                    value: string | Service;
+                  } | null)
+                | ({
+                    relationTo: 'term';
+                    value: string | Term;
+                  } | null)
+                | ({
+                    relationTo: 'post';
+                    value: string | Post;
+                  } | null);
               url?: string | null;
               label: string;
             };
@@ -1368,10 +1407,23 @@ export interface ButtonBlockType {
         link: {
           type?: ('reference' | 'custom') | null;
           newTab?: boolean | null;
-          reference?: {
-            relationTo: 'page';
-            value: string | Page;
-          } | null;
+          reference?:
+            | ({
+                relationTo: 'page';
+                value: string | Page;
+              } | null)
+            | ({
+                relationTo: 'service';
+                value: string | Service;
+              } | null)
+            | ({
+                relationTo: 'term';
+                value: string | Term;
+              } | null)
+            | ({
+                relationTo: 'post';
+                value: string | Post;
+              } | null);
           url?: string | null;
           label: string;
           /**
@@ -1413,10 +1465,23 @@ export interface CardDownloadBlockType {
   link: {
     type?: ('reference' | 'custom') | null;
     newTab?: boolean | null;
-    reference?: {
-      relationTo: 'page';
-      value: string | Page;
-    } | null;
+    reference?:
+      | ({
+          relationTo: 'page';
+          value: string | Page;
+        } | null)
+      | ({
+          relationTo: 'service';
+          value: string | Service;
+        } | null)
+      | ({
+          relationTo: 'term';
+          value: string | Term;
+        } | null)
+      | ({
+          relationTo: 'post';
+          value: string | Post;
+        } | null);
     url?: string | null;
     label: string;
   };
@@ -1433,10 +1498,23 @@ export interface CardLinkBlockType {
   link: {
     type?: ('reference' | 'custom') | null;
     newTab?: boolean | null;
-    reference?: {
-      relationTo: 'page';
-      value: string | Page;
-    } | null;
+    reference?:
+      | ({
+          relationTo: 'page';
+          value: string | Page;
+        } | null)
+      | ({
+          relationTo: 'service';
+          value: string | Service;
+        } | null)
+      | ({
+          relationTo: 'term';
+          value: string | Term;
+        } | null)
+      | ({
+          relationTo: 'post';
+          value: string | Post;
+        } | null);
     url?: string | null;
     label: string;
   };
@@ -1515,28 +1593,67 @@ export interface ContactInfoBlockType {
     whatsapp?: {
       type?: ('reference' | 'custom') | null;
       newTab?: boolean | null;
-      reference?: {
-        relationTo: 'page';
-        value: string | Page;
-      } | null;
+      reference?:
+        | ({
+            relationTo: 'page';
+            value: string | Page;
+          } | null)
+        | ({
+            relationTo: 'service';
+            value: string | Service;
+          } | null)
+        | ({
+            relationTo: 'term';
+            value: string | Term;
+          } | null)
+        | ({
+            relationTo: 'post';
+            value: string | Post;
+          } | null);
       url?: string | null;
     };
     telegram?: {
       type?: ('reference' | 'custom') | null;
       newTab?: boolean | null;
-      reference?: {
-        relationTo: 'page';
-        value: string | Page;
-      } | null;
+      reference?:
+        | ({
+            relationTo: 'page';
+            value: string | Page;
+          } | null)
+        | ({
+            relationTo: 'service';
+            value: string | Service;
+          } | null)
+        | ({
+            relationTo: 'term';
+            value: string | Term;
+          } | null)
+        | ({
+            relationTo: 'post';
+            value: string | Post;
+          } | null);
       url?: string | null;
     };
     email?: {
       type?: ('reference' | 'custom') | null;
       newTab?: boolean | null;
-      reference?: {
-        relationTo: 'page';
-        value: string | Page;
-      } | null;
+      reference?:
+        | ({
+            relationTo: 'page';
+            value: string | Page;
+          } | null)
+        | ({
+            relationTo: 'service';
+            value: string | Service;
+          } | null)
+        | ({
+            relationTo: 'term';
+            value: string | Term;
+          } | null)
+        | ({
+            relationTo: 'post';
+            value: string | Post;
+          } | null);
       url?: string | null;
     };
   };
@@ -1595,10 +1712,23 @@ export interface DoubleFormBlockType {
         link: {
           type?: ('reference' | 'custom') | null;
           newTab?: boolean | null;
-          reference?: {
-            relationTo: 'page';
-            value: string | Page;
-          } | null;
+          reference?:
+            | ({
+                relationTo: 'page';
+                value: string | Page;
+              } | null)
+            | ({
+                relationTo: 'service';
+                value: string | Service;
+              } | null)
+            | ({
+                relationTo: 'term';
+                value: string | Term;
+              } | null)
+            | ({
+                relationTo: 'post';
+                value: string | Post;
+              } | null);
           url?: string | null;
           label: string;
         };
@@ -1713,10 +1843,23 @@ export interface PriceBlockType {
   link: {
     type?: ('reference' | 'custom') | null;
     newTab?: boolean | null;
-    reference?: {
-      relationTo: 'page';
-      value: string | Page;
-    } | null;
+    reference?:
+      | ({
+          relationTo: 'page';
+          value: string | Page;
+        } | null)
+      | ({
+          relationTo: 'service';
+          value: string | Service;
+        } | null)
+      | ({
+          relationTo: 'term';
+          value: string | Term;
+        } | null)
+      | ({
+          relationTo: 'post';
+          value: string | Post;
+        } | null);
     url?: string | null;
     label: string;
   };
@@ -1733,10 +1876,23 @@ export interface ProjectsBlockType {
   link: {
     type?: ('reference' | 'custom') | null;
     newTab?: boolean | null;
-    reference?: {
-      relationTo: 'page';
-      value: string | Page;
-    } | null;
+    reference?:
+      | ({
+          relationTo: 'page';
+          value: string | Page;
+        } | null)
+      | ({
+          relationTo: 'service';
+          value: string | Service;
+        } | null)
+      | ({
+          relationTo: 'term';
+          value: string | Term;
+        } | null)
+      | ({
+          relationTo: 'post';
+          value: string | Post;
+        } | null);
     url?: string | null;
     label: string;
   };

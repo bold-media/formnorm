@@ -15,6 +15,12 @@ export const internalDocToHref = ({
       return `${value?.pathname}`
     case 'post':
       return `/post/${value?.slug}`
+    case 'term':
+      return `/term/${value?.slug}`
+    case 'service':
+      return `/service/${value?.slug}`
+    case 'post':
+      return `/post/${value?.slug}`
     default:
       return '/'
   }

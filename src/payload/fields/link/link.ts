@@ -147,7 +147,7 @@ export const link: LinkType = ({ appearances, disableLabel = false, overrides = 
         en: 'Document to link to',
         ru: 'Ссылка на',
       },
-      relationTo: ['page'],
+      relationTo: ['page', 'service', 'term', 'post'],
       required: true,
     },
     {
