@@ -1,12 +1,12 @@
 import { internalDocToHref } from './internalDocToHref'
-import { Page } from '@payload-types'
+import { Page, Post, Service, Term } from '@payload-types'
 
 interface LinkProps {
   type?: ('reference' | 'custom') | null | undefined
   newTab?: boolean | null
   reference?: {
-    relationTo: 'page'
-    value: string | Page
+    relationTo: 'page' | 'term' | 'service' | 'post'
+    value: string | Page | Term | Service | Post
   } | null
   url?: string | null
   label?: string

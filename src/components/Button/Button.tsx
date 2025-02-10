@@ -40,7 +40,7 @@ export const buttonVariants = cva(
       size: {
         sm: 'h-10 px-4 text-xs',
         md: 'h-12 px-8',
-        lg: 'h-14 px-16',
+        lg: 'h-16 px-16 font-bold text-base',
         xl: 'h-20 px-20 font-bold text-[1.25rem]',
         icon: 'h-14 w-14',
       },
