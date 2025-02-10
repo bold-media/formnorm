@@ -7,8 +7,8 @@ FROM base AS deps
 # Install required dependencies
 RUN apk add --no-cache libc6-compat
 
-# Explicitly install pnpm globally
-RUN npm install -g pnpm@8.15.9
+RUN corepack enable && \
+    corepack prepare pnpm@8.15.9 --activate
 
 WORKDIR /app
 
@@ -24,8 +24,8 @@ RUN \
 # Rebuild the source code only when needed
 FROM base AS builder
 
-# Ensure pnpm is available in builder stage
-RUN npm install -g pnpm@8.15.9
+RUN corepack enable && \
+    corepack prepare pnpm@8.15.9 --activate
 
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
