@@ -32,7 +32,7 @@ export const ImageBlock = (props: ImageBlockType) => {
           alt={image.alt}
           fill={true}
           draggable={false}
-          className="select-none object-contain object-center"
+          className="select-none object-cover object-center"
         />
       </AspectRatio>
     </div>
