@@ -33,7 +33,7 @@ export class MutedTextNode extends TextNode {
     return dom
   }
 
-  updateDOM(prevNode: TextNode, dom: HTMLElement, config: EditorConfig): boolean {
+  updateDOM(prevNode: this, dom: HTMLElement, config: EditorConfig): boolean {
     const updated = super.updateDOM(prevNode, dom, config)
     dom.style.color = 'gray'
     return updated
