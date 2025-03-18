@@ -133,7 +133,13 @@ export const CarouselBlock = (props: CarouselBlockType & ComponentPropsWithRef<'
                     <Image
                       src={image.url}
                       alt={image.alt || `Thumbnail ${index + 1}`}
-                      className="w-full h-full object-cover"
+                      className={cn(
+                        'w-full h-full select-none object-center',
+                        {
+                          cover: 'object-cover',
+                          contain: 'object-contain',
+                        }[settings.format ?? 'cover'],
+                      )}
                       width={64}
                       height={64}
                     />

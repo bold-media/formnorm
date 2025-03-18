@@ -44,6 +44,21 @@ export const ImageBlock: Block = {
       ],
     },
     {
+      name: 'format',
+      type: 'select',
+      defaultValue: 'cover',
+      options: [
+        {
+          label: 'Cover',
+          value: 'cover',
+        },
+        {
+          label: 'Contain',
+          value: 'contain',
+        },
+      ],
+    },
+    {
       name: 'scale',
       type: 'number',
       label: {
@@ -52,6 +67,11 @@ export const ImageBlock: Block = {
       },
       min: 1,
       max: 100,
+    },
+    {
+      name: 'lightbox',
+      type: 'checkbox',
+      defaultValue: false,
     },
   ],
 }

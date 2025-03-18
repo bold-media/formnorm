@@ -54,7 +54,7 @@ export const CarouselFullBlock = (props: CarouselFullBlockType & ComponentPropsW
                 <Image
                   src={image?.url}
                   alt={image?.alt}
-                  className="object-cover select-none rounded-sm"
+                  className="object-contain select-none rounded-sm"
                   draggable={false}
                   fill
                 />
@@ -70,12 +70,37 @@ export const CarouselFullBlock = (props: CarouselFullBlockType & ComponentPropsW
   return (
     <div className={cn('not-prose w-full relative full-width', className)}>
       {settings?.enableGrid ? (
-        <div className="hidden md:grid grid-flow-col auto-cols-fr gap-4">
+        // <div className="hidden md:grid grid-flow-col auto-cols-fr gap-4">
+        <div
+          className={cn(
+            // "hidden md:grid grid-flow-col auto-cols-fr gap-4"
+            'grid',
+            {
+              1: 'grid-cols-1',
+              2: 'grid-cols-2',
+            }[settings?.gridConfig?.mobileColumns ?? 1],
+            {
+              2: 'sm:grid-cols-2',
+              3: 'sm:grid-cols-3',
+            }[settings?.gridConfig?.tabletColumns ?? 2],
+            {
+              2: 'md:grid-cols-2',
+              3: 'md:grid-cols-3',
+              4: 'md:grid-cols-4',
+            }[settings?.gridConfig?.desktopColumns ?? 2],
+            {
+              none: '',
+              two: 'gap-2',
+              four: 'gap-4',
+              eight: 'gap-8',
+            }[settings?.gridConfig?.gap ?? 'none'],
+          )}
+        >
           {images?.map((image, index) => renderImage(image, index))}
         </div>
       ) : null}
 
-      <div className={cn(settings?.enableGrid ? 'md:hidden' : '')}>
+      <div className={cn(settings?.enableGrid ? 'hidden' : '')}>
         <BaseCarousel
           setApi={setApi}
           loop={Boolean(settings?.enableLoop)}

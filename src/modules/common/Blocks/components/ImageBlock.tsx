@@ -1,11 +1,17 @@
+'use client'
+
 import { AspectRatio } from '@/components/AspectRatio'
 import { cn } from '@/utils/cn'
 import { ImageBlockType } from '@payload-types'
 import Image from 'next/image'
-import React from 'react'
+import React, { ComponentPropsWithRef, useState } from 'react'
+import Lightbox from 'yet-another-react-lightbox'
+import 'yet-another-react-lightbox/styles.css'
+import Zoom from 'yet-another-react-lightbox/plugins/zoom'
 
-export const ImageBlock = (props: ImageBlockType) => {
-  const { image, aspectRatio, scale } = props
+export const ImageBlock = (props: ImageBlockType & ComponentPropsWithRef<'div'>) => {
+  const { image, aspectRatio, scale, format, lightbox } = props
+  const [open, setOpen] = useState(false)
 
   if (!image || typeof image !== 'object' || !image?.url) return null
 
@@ -32,9 +38,51 @@ export const ImageBlock = (props: ImageBlockType) => {
           alt={image.alt}
           fill={true}
           draggable={false}
-          className="select-none object-cover object-center"
+          onClick={() => {
+            if (!lightbox) {
+              return
+            } else {
+              setOpen(true)
+            }
+          }}
+          className={cn(
+            'select-none object-center',
+            {
+              cover: 'object-cover',
+              contain: 'object-contain',
+            }[format ?? 'cover'],
+            {
+              'cursor-zoom-in': lightbox,
+            },
+          )}
         />
       </AspectRatio>
+      {lightbox && typeof image === 'object' && (
+        <Lightbox
+          open={open}
+          close={() => setOpen(false)}
+          slides={[{ src: image.url, alt: image.alt }]}
+          controller={{ closeOnBackdropClick: true }}
+          plugins={[Zoom]}
+          toolbar={{ buttons: ['close'] }}
+          carousel={{ finite: true }}
+          render={{
+            buttonPrev: () => null,
+            buttonNext: () => null,
+            slide: ({ slide }) => (
+              <div className="w-full h-full relative">
+                <Image
+                  src={slide.src || ''}
+                  alt={slide.alt || 'Image'}
+                  layout="fill"
+                  objectFit="contain"
+                  className="rounded-sm"
+                />
+              </div>
+            ),
+          }}
+        />
+      )}
     </div>
   )
 }

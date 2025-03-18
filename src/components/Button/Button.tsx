@@ -25,7 +25,7 @@ export const buttonVariants = cva(
         ghost: 'hover:bg-accent hover:text-accent-foreground',
         link: 'text-primary underline-offset-4 hover:underline',
         black: [
-          'bg-primary text-primary-foreground font-semibold border border-transparent',
+          'bg-primary text-primary-foreground font-bold border border-transparent',
           'hover:bg-background hover:text-primary hover:border-primary',
           'transition-all duration-200 ease-in-out',
         ],

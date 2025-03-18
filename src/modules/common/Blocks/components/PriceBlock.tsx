@@ -24,7 +24,7 @@ export const PriceBlock = ({ title, prices, link }: PriceBlockType) => {
         ))}
       </div>
       <div className="flex flex-col items-start gap-6">
-        <Button variant={'black'} size={'lg'} asChild>
+        <Button variant={'black'} size={'lg'} className="font-bold" asChild>
           <Link {...getLinkProps(link)} className="w-auto font-bold">
             {link.label}
           </Link>

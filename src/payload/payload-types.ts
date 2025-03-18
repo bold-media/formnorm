@@ -1546,6 +1546,7 @@ export interface CarouselBlockType {
     enableThumbnails?: boolean | null;
     enableLoop?: boolean | null;
     enableArrows?: boolean | null;
+    format?: ('cover' | 'contain') | null;
   };
   id?: string | null;
   blockName?: string | null;
@@ -1563,6 +1564,12 @@ export interface CarouselFullBlockType {
     enableLoop?: boolean | null;
     enableArrows?: boolean | null;
     enableGrid?: boolean | null;
+    gridConfig?: {
+      desktopColumns: '2' | '3' | '4';
+      tabletColumns: '2' | '3';
+      mobileColumns: '1' | '2';
+      gap?: ('none' | 'two' | 'four' | 'eight') | null;
+    };
   };
   id?: string | null;
   blockName?: string | null;
@@ -1797,7 +1804,9 @@ export interface GeographyBlockType {
 export interface ImageBlockType {
   image?: (string | null) | Media;
   aspectRatio?: ('video' | 'square' | 'fourThree') | null;
+  format?: ('cover' | 'contain') | null;
   scale?: number | null;
+  lightbox?: boolean | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'image';

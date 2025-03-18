@@ -79,13 +79,87 @@ export const CarouselFullBlock: Block = {
                 ru: 'Стрелочки',
               },
             },
+            // {
+            //   name: 'enableGrid',
+            //   type: 'checkbox',
+            //   label: {
+            //     en: 'Enable Grid',
+            //     ru: 'Сетка на десктопе',
+            //   },
+            // },
             {
               name: 'enableGrid',
               type: 'checkbox',
               label: {
                 en: 'Enable Grid',
-                ru: 'Сетка на десктопе',
+                ru: 'Сетка',
               },
+            },
+            {
+              name: 'gridConfig',
+              type: 'group',
+              label: {
+                en: 'Grid Settings',
+                ru: 'Настройки сетки',
+              },
+              admin: {
+                condition: (_, siblingData) => siblingData?.enableGrid,
+              },
+              fields: [
+                {
+                  name: 'desktopColumns',
+                  type: 'select',
+                  required: true,
+                  defaultValue: '3',
+                  options: [
+                    { label: '2 колонки', value: '2' },
+                    { label: '3 колонки', value: '3' },
+                    { label: '4 колонки', value: '4' },
+                  ],
+                },
+                {
+                  name: 'tabletColumns',
+                  type: 'select',
+                  required: true,
+                  defaultValue: '2',
+                  options: [
+                    { label: '2 колонки', value: '2' },
+                    { label: '3 колонки', value: '3' },
+                  ],
+                },
+                {
+                  name: 'mobileColumns',
+                  type: 'select',
+                  required: true,
+                  defaultValue: '1',
+                  options: [
+                    { label: '1 колонка', value: '1' },
+                    { label: '2 колонки', value: '2' },
+                  ],
+                },
+                {
+                  name: 'gap',
+                  type: 'select',
+                  options: [
+                    {
+                      label: 'Нет',
+                      value: 'none',
+                    },
+                    {
+                      label: '2',
+                      value: 'two',
+                    },
+                    {
+                      label: '4',
+                      value: 'four',
+                    },
+                    {
+                      label: '8',
+                      value: 'eight',
+                    },
+                  ],
+                },
+              ],
             },
           ],
         },

@@ -79,6 +79,21 @@ export const CarouselBlock: Block = {
                 ru: 'Стрелочки',
               },
             },
+            {
+              name: 'format',
+              type: 'select',
+              defaultValue: 'cover',
+              options: [
+                {
+                  label: 'Cover',
+                  value: 'cover',
+                },
+                {
+                  label: 'Contain',
+                  value: 'contain',
+                },
+              ],
+            },
           ],
         },
       ],
