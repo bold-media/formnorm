@@ -96,6 +96,28 @@ export const CarouselFullBlock: Block = {
               },
             },
             {
+              name: 'aspectRatio',
+              type: 'select',
+              label: {
+                en: 'Aspect ratio',
+                ru: 'Соотношение сторон изображения',
+              },
+              options: [
+                {
+                  label: 'Video',
+                  value: 'video',
+                },
+                {
+                  label: 'Square',
+                  value: 'square',
+                },
+                {
+                  label: '4/3',
+                  value: 'fourThree',
+                },
+              ],
+            },
+            {
               name: 'gridConfig',
               type: 'group',
               label: {

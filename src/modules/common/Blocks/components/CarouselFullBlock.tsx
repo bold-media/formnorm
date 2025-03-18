@@ -50,11 +50,21 @@ export const CarouselFullBlock = (props: CarouselFullBlockType & ComponentPropsW
         >
           <div className="flex items-center justify-center h-full">
             <div className="w-full ">
-              <AspectRatio ratio={3 / 2}>
+              <AspectRatio
+                ratio={
+                  settings?.aspectRatio
+                    ? {
+                        video: 16 / 9,
+                        square: 1 / 1,
+                        fourThree: 4 / 3,
+                      }[settings?.aspectRatio] || Number(image.width) / Number(image.height)
+                    : Number(image.width) / Number(image.height)
+                }
+              >
                 <Image
                   src={image?.url}
                   alt={image?.alt}
-                  className="object-contain select-none rounded-sm"
+                  className="object-cover select-none "
                   draggable={false}
                   fill
                 />

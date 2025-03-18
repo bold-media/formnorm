@@ -1564,6 +1564,7 @@ export interface CarouselFullBlockType {
     enableLoop?: boolean | null;
     enableArrows?: boolean | null;
     enableGrid?: boolean | null;
+    aspectRatio?: ('video' | 'square' | 'fourThree') | null;
     gridConfig?: {
       desktopColumns: '2' | '3' | '4';
       tabletColumns: '2' | '3';
