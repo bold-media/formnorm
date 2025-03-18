@@ -1,5 +1,5 @@
 # Use official Node.js 22 Alpine image
-FROM node:22-alpine AS base
+FROM node:22.12.0-alpine AS base
 
 # Install dependencies only when needed
 FROM base AS deps
@@ -8,7 +8,7 @@ FROM base AS deps
 RUN apk add --no-cache libc6-compat
 
 RUN corepack enable && \
-    corepack prepare pnpm@8.15.9 --activate
+    corepack prepare pnpm@10.3.0 --activate
 
 WORKDIR /app
 
@@ -25,7 +25,7 @@ RUN \
 FROM base AS builder
 
 RUN corepack enable && \
-    corepack prepare pnpm@8.15.9 --activate
+    corepack prepare pnpm@10.3.0 --activate
 
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
