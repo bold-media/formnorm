@@ -1,5 +1,7 @@
 import { textEditor } from '@/payload/fields/lexical/textEditor'
 import { Block } from 'payload'
+import { TableBlockType } from '@/payload/payload-types'
+import { findBlockById } from '@/payload/utils/findBlockById'
 
 export const TableBlock: Block = {
   slug: 'table',
@@ -29,7 +31,6 @@ export const TableBlock: Block = {
         },
       },
     },
-    // В первом файле добавим после поля columns:
     {
       name: 'withHeader',
       type: 'checkbox',
@@ -40,91 +41,50 @@ export const TableBlock: Block = {
       defaultValue: false,
     },
     {
-      name: 'header',
-      type: 'array',
-      label: {
-        en: 'Header Cells',
-        ru: 'Ячейки заголовка',
-      },
+      name: 'headerColOne',
+      type: 'text',
       admin: {
-        condition: (data) => data?.withHeader === true,
+        condition: (_, siblingData) => siblingData?.withHeader === true,
       },
-      maxRows: 1,
-      fields: [
-        {
-          name: 'col1',
-          type: 'text',
-          label: {
-            en: 'Header 1',
-            ru: 'Заголовок 1',
-          },
-        },
-        {
-          name: 'col2',
-          type: 'text',
-          label: {
-            en: 'Header 2',
-            ru: 'Заголовок 2',
-          },
-          admin: {
-            condition: (data) => {
-              return data?.columns >= 2
-            },
-          },
-        },
-        {
-          name: 'col3',
-          type: 'text',
-          label: {
-            en: 'Header 3',
-            ru: 'Заголовок 3',
-          },
-          admin: {
-            condition: (data) => {
-              return data?.columns >= 3
-            },
-          },
-        },
-        {
-          name: 'col4',
-          type: 'text',
-          label: {
-            en: 'Header 4',
-            ru: 'Заголовок 4',
-          },
-          admin: {
-            condition: (data) => {
-              return data?.columns >= 4
-            },
-          },
-        },
-        {
-          name: 'col5',
-          type: 'text',
-          label: {
-            en: 'Header 5',
-            ru: 'Заголовок 5',
-          },
-          admin: {
-            condition: (data) => {
-              return data?.columns >= 5
-            },
-          },
-        },
-      ],
+    },
+    {
+      name: 'headerColTwo',
+      type: 'text',
+      admin: {
+        condition: (_, siblingData) =>
+          siblingData?.withHeader === true && siblingData?.columns >= 2,
+      },
+    },
+    {
+      name: 'headerColThree',
+      type: 'text',
+      admin: {
+        condition: (_, siblingData) =>
+          siblingData?.withHeader === true && siblingData?.columns >= 3,
+      },
+    },
+    {
+      name: 'headerColFour',
+      type: 'text',
+      admin: {
+        condition: (_, siblingData) =>
+          siblingData?.withHeader === true && siblingData?.columns >= 4,
+      },
+    },
+    {
+      name: 'headerColFive',
+      type: 'text',
+      admin: {
+        condition: (_, siblingData) =>
+          siblingData?.withHeader === true && siblingData?.columns >= 5,
+      },
     },
     {
       name: 'rows',
       type: 'array',
       label: {
-        en: 'Table Rows',
-        ru: 'Строки таблицы',
-      },
-      admin: {
-        description: {
-          en: 'Add rows to your table',
-          ru: 'Добавьте строки в таблицу',
-        },
+        en: 'Rows',
+        ru: 'Строки',
       },
       fields: [
         {
@@ -145,8 +105,13 @@ export const TableBlock: Block = {
             ru: 'Колонка 2',
           },
           admin: {
-            condition: (data) => {
-              return data?.columns >= 2
+            condition: (data, siblingData) => {
+              const block = findBlockById<TableBlockType>({
+                richText: data?.article,
+                targetId: siblingData?.id,
+                path: ['rows', 'id'],
+              })
+              return block !== null && block.columns >= 2
             },
           },
         },
@@ -159,8 +124,13 @@ export const TableBlock: Block = {
             ru: 'Колонка 3',
           },
           admin: {
-            condition: (data) => {
-              return data?.columns >= 3
+            condition: (data, siblingData) => {
+              const block = findBlockById<TableBlockType>({
+                richText: data?.article,
+                targetId: siblingData?.id,
+                path: ['rows', 'id'],
+              })
+              return block !== null && block.columns >= 3
             },
           },
         },
@@ -173,8 +143,13 @@ export const TableBlock: Block = {
             ru: 'Колонка 4',
           },
           admin: {
-            condition: (data) => {
-              return data?.columns >= 4
+            condition: (data, siblingData) => {
+              const block = findBlockById<TableBlockType>({
+                richText: data?.article,
+                targetId: siblingData?.id,
+                path: ['rows', 'id'],
+              })
+              return block !== null && block.columns >= 4
             },
           },
         },
@@ -187,8 +162,13 @@ export const TableBlock: Block = {
             ru: 'Колонка 5',
           },
           admin: {
-            condition: (data) => {
-              return data?.columns >= 5
+            condition: (data, siblingData) => {
+              const block = findBlockById<TableBlockType>({
+                richText: data?.article,
+                targetId: siblingData?.id,
+                path: ['rows', 'id'],
+              })
+              return block !== null && block.columns >= 5
             },
           },
         },

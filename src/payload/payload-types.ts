@@ -1975,19 +1975,11 @@ export interface TableBlockType {
    */
   columns: number;
   withHeader?: boolean | null;
-  header?:
-    | {
-        col1?: string | null;
-        col2?: string | null;
-        col3?: string | null;
-        col4?: string | null;
-        col5?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  /**
-   * Add rows to your table
-   */
+  headerColOne?: string | null;
+  headerColTwo?: string | null;
+  headerColThree?: string | null;
+  headerColFour?: string | null;
+  headerColFive?: string | null;
   rows?:
     | {
         col1?: {
