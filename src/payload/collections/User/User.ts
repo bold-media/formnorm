@@ -38,7 +38,7 @@ export const User: CollectionConfig = {
       },
       type: 'select',
       hasMany: true,
-      defaultValue: 'editor',
+      defaultValue: ['editor'],
       required: true,
       hooks: {
         beforeValidate: [ensureFirstUserIsAdmin],
