@@ -84,8 +84,17 @@ export const Service: CollectionConfig = {
             {
               name: 'title',
               label: {
-                en: en.common.title.singular,
-                ru: ru.common.title.singular,
+                en: 'Page Title',
+                ru: 'Заголовок страницы',
+              },
+              type: 'text',
+              required: true,
+            },
+            {
+              name: 'cardTitle',
+              label: {
+                en: 'Card Title',
+                ru: 'Заголовок карточки',
               },
               type: 'text',
               required: true,
