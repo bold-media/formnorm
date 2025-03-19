@@ -1,6 +1,7 @@
 import { textEditor } from '@/payload/fields/lexical/textEditor'
 import { Block } from 'payload'
 import { ButtonBlock } from '../Button'
+import { ImageBlock } from '../Image'
 
 export const ContainerBlock: Block = {
   slug: 'container',
@@ -32,7 +33,11 @@ export const ContainerBlock: Block = {
         ru: 'Контент справа',
       },
       type: 'richText',
-      editor: textEditor({ headings: ['h2', 'h3'], align: false, blocks: [ButtonBlock] }),
+      editor: textEditor({
+        headings: ['h2', 'h3'],
+        align: false,
+        blocks: [ButtonBlock, ImageBlock],
+      }),
     },
     {
       name: 'enableSize',

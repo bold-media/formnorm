@@ -1726,6 +1726,20 @@ export interface ContactInfoBlockType {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ImageBlockType".
+ */
+export interface ImageBlockType {
+  image?: (string | null) | Media;
+  aspectRatio?: ('video' | 'square' | 'fourThree') | null;
+  format?: ('cover' | 'contain') | null;
+  scale?: number | null;
+  lightbox?: boolean | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'image';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "ContainerBlockType".
  */
 export interface ContainerBlockType {
@@ -1852,20 +1866,6 @@ export interface GeographyBlockType {
   id?: string | null;
   blockName?: string | null;
   blockType: 'geography';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ImageBlockType".
- */
-export interface ImageBlockType {
-  image?: (string | null) | Media;
-  aspectRatio?: ('video' | 'square' | 'fourThree') | null;
-  format?: ('cover' | 'contain') | null;
-  scale?: number | null;
-  lightbox?: boolean | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'image';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

@@ -59,7 +59,7 @@ export const ContainerBlock = (props: ContainerBlockType) => {
           <RichText
             data={textLeft}
             container={false}
-            className="prose-h2:font-semibold sm:prose-h2:font-semibold md:prose-h2:font-semibold prose-h2:text-xl sm:prose-h2:text-xl lg:prose-h2:text-[2.5rem] prose-h2:leading-10 md:prose-h2:leading-[3.7rem]"
+            className="prose-h2:font-semibold sm:prose-h2:font-semibold md:prose-h2:font-semibold prose-h2:text-xl sm:prose-h2:text-xl lg:prose-h2:text-[2.5rem] prose-h2:leading-10 md:prose-h2:leading-[3rem]"
           />
         </div>
 
