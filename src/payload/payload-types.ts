@@ -418,6 +418,7 @@ export interface Term {
   id: string;
   slug?: string | null;
   title: string;
+  cardTitle: string;
   suffix?: string | null;
   cover?: (string | null) | Media;
   /**
@@ -1010,6 +1011,7 @@ export interface ProjectSelect<T extends boolean = true> {
 export interface TermSelect<T extends boolean = true> {
   slug?: T;
   title?: T;
+  cardTitle?: T;
   suffix?: T;
   cover?: T;
   excerpt?: T;

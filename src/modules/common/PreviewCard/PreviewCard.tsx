@@ -95,7 +95,7 @@ export const PreviewCard = <T extends keyof DataTypeMap>({ data, type }: Preview
                         : 'text-lg md:text-xl font-semibold line-clamp-2 tracking-normal uppercase'
                     }
                   >
-                    {type === 'service' && data && 'cardTitle' in data
+                    {(type === 'service' || type === 'term') && data && 'cardTitle' in data
                       ? data.cardTitle
                       : data?.title}
                   </CardTitle>
