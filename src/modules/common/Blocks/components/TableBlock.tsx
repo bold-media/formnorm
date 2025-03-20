@@ -91,7 +91,7 @@ export const TableBlock = (props: TableBlockType) => {
   return (
     <div className="relative w-full">
       <div className="w-full overflow-x-auto">
-        <table className="min-w-full divide-y divide-zinc-200 ">
+        <table className="min-w-full divide-y divide-zinc-200 table-fixed">
           {withHeader && headerCells.length > 0 && (
             <thead>
               <tr>
@@ -100,7 +100,7 @@ export const TableBlock = (props: TableBlockType) => {
                     key={index}
                     className={`
                       px-6 py-5 bg-zinc-900 text-zinc-50 font-semibold
-                      text-sm md:text-base
+                      text-sm md:text-base align-top
                       ${
                         index === 0
                           ? 'sticky left-0 z-10 bg-zinc-900 max-w-[40vw] md:max-w-none'
@@ -108,9 +108,7 @@ export const TableBlock = (props: TableBlockType) => {
                       }
                     `}
                   >
-                    <div className="md:whitespace-nowrap whitespace-normal">
-                      {headerText as string}
-                    </div>
+                    <div className="whitespace-normal">{headerText as string}</div>
                   </th>
                 ))}
               </tr>
@@ -139,7 +137,7 @@ export const TableBlock = (props: TableBlockType) => {
                         }
                       `}
                     >
-                      <div className="md:whitespace-nowrap whitespace-normal">
+                      <div className="whitespace-normal">
                         <RichText
                           data={data as any}
                           className="text-sm md:text-base leading-tight"
