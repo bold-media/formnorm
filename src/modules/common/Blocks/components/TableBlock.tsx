@@ -91,7 +91,7 @@ export const TableBlock = (props: TableBlockType) => {
   return (
     <div className="relative w-full">
       <div className="w-full overflow-x-auto">
-        <table className="min-w-full divide-y divide-zinc-200 table-fixed">
+        <table className="min-w-full divide-y divide-zinc-200">
           {withHeader && headerCells.length > 0 && (
             <thead>
               <tr>
