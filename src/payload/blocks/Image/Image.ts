@@ -73,5 +73,37 @@ export const ImageBlock: Block = {
       type: 'checkbox',
       defaultValue: false,
     },
+    {
+      name: 'alignment',
+      type: 'select',
+      defaultValue: 'center',
+      label: {
+        en: 'Alignment',
+        ru: 'Выравнивание',
+      },
+      options: [
+        {
+          label: {
+            en: 'Left',
+            ru: 'По левому краю',
+          },
+          value: 'left',
+        },
+        {
+          label: {
+            en: 'Center',
+            ru: 'По центру',
+          },
+          value: 'center',
+        },
+        {
+          label: {
+            en: 'Right',
+            ru: 'По правому краю',
+          },
+          value: 'right',
+        },
+      ],
+    },
   ],
 }

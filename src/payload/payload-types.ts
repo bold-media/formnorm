@@ -1739,6 +1739,7 @@ export interface ImageBlockType {
   format?: ('cover' | 'contain') | null;
   scale?: number | null;
   lightbox?: boolean | null;
+  alignment?: ('left' | 'center' | 'right') | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'image';
