@@ -2074,6 +2074,43 @@ export interface TableBlockType {
  * via the `definition` "GridBlockType".
  */
 export interface GridBlockType {
+  useTabs?: boolean | null;
+  /**
+   * Add tabs to organize your content
+   */
+  tabs?:
+    | {
+        label: string;
+        /**
+         * Add items to this tab
+         */
+        items?:
+          | {
+              content?: {
+                root: {
+                  type: string;
+                  children: {
+                    type: string;
+                    version: number;
+                    [k: string]: unknown;
+                  }[];
+                  direction: ('ltr' | 'rtl') | null;
+                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                  indent: number;
+                  version: number;
+                };
+                [k: string]: unknown;
+              } | null;
+              settings?: {
+                horizontalAlign?: ('none' | 'left' | 'center' | 'right') | null;
+                verticalAlign?: ('none' | 'top' | 'center' | 'bottom') | null;
+              };
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
   items?:
     | {
         content?: {

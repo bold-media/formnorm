@@ -20,8 +20,178 @@ export const GridBlock: Block = {
   },
   fields: [
     {
+      name: 'useTabs',
+      type: 'checkbox',
+      defaultValue: false,
+      label: {
+        en: 'Use Tabs',
+        ru: 'Использовать табы',
+      },
+    },
+    {
+      name: 'tabs',
+      type: 'array',
+      admin: {
+        condition: (_, siblingData) => siblingData?.useTabs === true,
+        description: {
+          en: 'Add tabs to organize your content',
+          ru: 'Добавьте табы для организации контента',
+        },
+      },
+      minRows: 1,
+      maxRows: 10,
+      fields: [
+        {
+          name: 'label',
+          type: 'text',
+          required: true,
+          label: {
+            en: 'Tab Label',
+            ru: 'Название таба',
+          },
+        },
+        {
+          name: 'items',
+          type: 'array',
+          admin: {
+            description: {
+              en: 'Add items to this tab',
+              ru: 'Добавьте элементы в этот таб',
+            },
+          },
+          fields: [
+            {
+              name: 'content',
+              type: 'richText',
+              editor: nestedEditor({
+                removeBlocks: ['grid', 'container'],
+                headings: ['h2', 'h3'],
+              }),
+            },
+            {
+              type: 'collapsible',
+              label: {
+                en: en.common.setting.plural,
+                ru: ru.common.setting.plural,
+              },
+              admin: {
+                initCollapsed: true,
+                style: {
+                  marginBottom: 0,
+                },
+              },
+              fields: [
+                {
+                  name: 'settings',
+                  label: false,
+                  type: 'group',
+                  admin: {
+                    hideGutter: true,
+                  },
+                  fields: [
+                    {
+                      type: 'row',
+                      fields: [
+                        {
+                          name: 'horizontalAlign',
+                          type: 'select',
+                          defaultValue: 'none',
+                          label: {
+                            en: 'Horizontal Alignment',
+                            ru: 'Горизонтальное выравнивание',
+                          },
+                          admin: {
+                            width: '50%',
+                          },
+                          options: [
+                            {
+                              label: {
+                                en: 'None',
+                                ru: 'Нет',
+                              },
+                              value: 'none',
+                            },
+                            {
+                              label: {
+                                en: 'Left',
+                                ru: 'Слева',
+                              },
+                              value: 'left',
+                            },
+                            {
+                              label: {
+                                en: 'Center',
+                                ru: 'По центру',
+                              },
+                              value: 'center',
+                            },
+                            {
+                              label: {
+                                en: 'Right',
+                                ru: 'Справа',
+                              },
+                              value: 'right',
+                            },
+                          ],
+                        },
+                        {
+                          name: 'verticalAlign',
+                          type: 'select',
+                          label: {
+                            en: 'Vertical Alignment',
+                            ru: 'Вертикальное выравнивание',
+                          },
+                          defaultValue: 'none',
+                          admin: {
+                            width: '50%',
+                          },
+                          options: [
+                            {
+                              label: {
+                                en: 'None',
+                                ru: 'Нет',
+                              },
+                              value: 'none',
+                            },
+                            {
+                              label: {
+                                en: 'Top',
+                                ru: 'Сверху',
+                              },
+                              value: 'top',
+                            },
+                            {
+                              label: {
+                                en: 'Center',
+                                ru: 'По центру',
+                              },
+                              value: 'center',
+                            },
+                            {
+                              label: {
+                                en: 'Bottom',
+                                ru: 'Снизу',
+                              },
+                              value: 'bottom',
+                            },
+                          ],
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+    {
       name: 'items',
       type: 'array',
+      admin: {
+        condition: (_, siblingData) => siblingData?.useTabs !== true,
+      },
       fields: [
         {
           name: 'content',
