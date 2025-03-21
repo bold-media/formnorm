@@ -191,6 +191,45 @@ export const GridBlock: Block = {
               ],
             },
             {
+              name: 'verticalAlign',
+              type: 'select',
+              defaultValue: 'none',
+              label: {
+                en: 'Grid Vertical Alignment',
+                ru: 'Вертикальное выравнивание сетки',
+              },
+              options: [
+                {
+                  label: {
+                    en: 'None',
+                    ru: 'Нет',
+                  },
+                  value: 'none',
+                },
+                {
+                  label: {
+                    en: 'Top',
+                    ru: 'По верхнему краю',
+                  },
+                  value: 'top',
+                },
+                {
+                  label: {
+                    en: 'Center',
+                    ru: 'По центру',
+                  },
+                  value: 'center',
+                },
+                {
+                  label: {
+                    en: 'Bottom',
+                    ru: 'По нижнему краю',
+                  },
+                  value: 'bottom',
+                },
+              ],
+            },
+            {
               name: 'columns',
               type: 'group',
               label: {

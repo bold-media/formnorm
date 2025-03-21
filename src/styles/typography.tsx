@@ -11,7 +11,8 @@ export const typographyVariants = cva(
           'prose-h3:uppercase prose-h3:font-semibold prose-h3:text-[1.5rem] sm:prose-h3:text-[1.7rem]',
           'prose-p:leading-relaxed',
           'prose-a:font-normal prose-a:no-underline',
-          'prose-li:marker:text-zinc-900',
+          'prose-li:marker:text-zinc-900 prose-li:my-1',
+          'prose-ul:font-normal prose-ul:leading-6 prose-ul:text-base ',
         ],
         post: [
           'prose-h1:font-semibold prose-h1:leading-tight prose-h1:text-[1.75rem] sm:prose-h1:text-[2rem] md:prose-h1:text-[2.25rem]',

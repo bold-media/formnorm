@@ -51,12 +51,19 @@ const gridVariants = cva('grid', {
       true: 'lg:full-width',
       false: 'reset-full-width',
     },
+    verticalAlign: {
+      none: '',
+      top: 'items-start',
+      center: 'items-center',
+      bottom: 'items-end',
+    },
   },
   defaultVariants: {
     gap: 'md',
     mobile: '1',
     tablet: '2',
     desktop: '3',
+    verticalAlign: 'none',
   },
 })
 
@@ -94,6 +101,7 @@ export const GridBlock = (props: GridBlockType) => {
           mobileFullWidth: settings?.fullWidth?.mobile,
           tabletFullWidth: settings?.fullWidth?.tablet,
           desktopFullWidth: settings?.fullWidth?.desktop,
+          verticalAlign: settings?.verticalAlign,
         }),
         sectionMarginVariants({ size: settings?.margin }),
       )}
@@ -106,16 +114,13 @@ export const GridBlock = (props: GridBlockType) => {
             key={item.id}
             className={cn(
               gridItemVariants({
-                horizontalAlign: item?.settings?.horizontalAlign || 'center', // Добавлено центрирование по умолчанию
-                verticalAlign: item?.settings?.verticalAlign || 'center', // Добавлено центрирование по умолчанию
+                horizontalAlign: item?.settings?.horizontalAlign || 'none',
+                verticalAlign: item?.settings?.verticalAlign || 'none',
               }),
-              'flex', // Убедимся, что flex применяется для центрирования
+              'flex',
             )}
           >
-            <RichText
-              data={item.content}
-              wrapperClassName="w-full" // Убедитесь, что контент занимает всю ширину
-            />
+            <RichText data={item.content} wrapperClassName="w-full " />
           </div>
         ))}
     </section>

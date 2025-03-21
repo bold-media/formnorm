@@ -2100,6 +2100,7 @@ export interface GridBlockType {
   settings?: {
     margin?: ('none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl') | null;
     gap?: ('none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl') | null;
+    verticalAlign?: ('none' | 'top' | 'center' | 'bottom') | null;
     columns?: {
       mobile?: ('1' | '2' | '3' | '4' | '6' | '12') | null;
       tablet?: ('1' | '2' | '3' | '4' | '6' | '12') | null;
