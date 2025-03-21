@@ -78,7 +78,10 @@ export const CarouselBlock = (props: CarouselBlockType & ComponentPropsWithRef<'
                       <Image
                         src={image?.url}
                         alt={image?.alt}
-                        className="object-cover select-none rounded-sm"
+                        className={cn('object-cover select-none rounded-sm', {
+                          'object-cover': settings?.mainImageFormat === 'cover',
+                          'object-contain': settings?.mainImageFormat === 'contain',
+                        })}
                         draggable={false}
                         fill
                       />

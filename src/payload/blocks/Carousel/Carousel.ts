@@ -83,6 +83,29 @@ export const CarouselBlock: Block = {
               name: 'format',
               type: 'select',
               defaultValue: 'cover',
+              label: {
+                en: 'Thumbnail Format',
+                ru: 'Формат миниатюр',
+              },
+              options: [
+                {
+                  label: 'Cover',
+                  value: 'cover',
+                },
+                {
+                  label: 'Contain',
+                  value: 'contain',
+                },
+              ],
+            },
+            {
+              name: 'mainImageFormat',
+              type: 'select',
+              defaultValue: 'cover',
+              label: {
+                en: 'Main Image Format',
+                ru: 'Формат основного изображения',
+              },
               options: [
                 {
                   label: 'Cover',

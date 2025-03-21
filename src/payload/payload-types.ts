@@ -1606,6 +1606,7 @@ export interface CarouselBlockType {
     enableLoop?: boolean | null;
     enableArrows?: boolean | null;
     format?: ('cover' | 'contain') | null;
+    mainImageFormat?: ('cover' | 'contain') | null;
   };
   id?: string | null;
   blockName?: string | null;
