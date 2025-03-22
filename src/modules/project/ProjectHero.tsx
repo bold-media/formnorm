@@ -36,7 +36,7 @@ export const ProjectHero = (props: { project: Project }) => {
                 src={project?.cover?.url}
                 alt={project?.cover?.alt}
                 fill={true}
-                className="h-full object-cover object-bottom"
+                className="h-full object-cover object-center"
                 draggable={false}
               />
               <div className="absolute inset-0 bg-black bg-opacity-50"></div> {/* Overlay */}
@@ -74,7 +74,7 @@ export const ProjectHero = (props: { project: Project }) => {
                 src={project?.cover?.url}
                 alt={project?.cover?.alt}
                 fill={true}
-                className="object-cover object-bottom"
+                className="object-cover object-center"
                 draggable={false}
               />
             )}

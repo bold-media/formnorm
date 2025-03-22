@@ -2,7 +2,7 @@
 import { AspectRatio } from '@/components/AspectRatio'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/Card'
 import { Icon } from '@/components/Icon'
-import { Post } from '@payload-types'
+import { Post, Project } from '@payload-types'
 import { ImageIcon } from 'lucide-react'
 import Image from 'next/image'
 import NextLink from 'next/link'
@@ -36,7 +36,7 @@ export const PreviewCard = <T extends keyof DataTypeMap>({ data, type }: Preview
     })
   }
   const isPost = (data: any): data is Post => type === 'post' && data !== null
-  const isProject = (data: any): boolean => type === 'project' && data !== null
+  const isProject = (data: any): data is Project => type === 'project' && data !== null
 
   const date =
     isPost(data) && data?.publishedAt
@@ -56,9 +56,20 @@ export const PreviewCard = <T extends keyof DataTypeMap>({ data, type }: Preview
       >
         <div className={isProject(data) ? 'w-full sm:w-1/2 md:w-full' : ''}>
           <AspectRatio ratio={isProject(data) ? 1.54 / 1 : 4 / 3}>
-            {data?.cover &&
-            typeof data?.cover === 'object' &&
-            typeof data?.cover?.url === 'string' ? (
+            {isProject(data) &&
+            data.cardCover &&
+            typeof data.cardCover === 'object' &&
+            typeof data.cardCover.url === 'string' ? (
+              <Image
+                src={data.cardCover.url}
+                alt={data.cardCover.alt}
+                fill={true}
+                className="not-prose object-cover object-center"
+                draggable={false}
+              />
+            ) : data?.cover &&
+              typeof data?.cover === 'object' &&
+              typeof data?.cover?.url === 'string' ? (
               <Image
                 src={data?.cover.url}
                 alt={data?.cover?.alt}

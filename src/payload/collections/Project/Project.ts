@@ -107,6 +107,7 @@ export const Project: CollectionConfig = {
               type: 'upload',
               relationTo: 'media',
             },
+
             {
               type: 'group',
               name: 'description',
@@ -147,6 +148,21 @@ export const Project: CollectionConfig = {
                   relationTo: 'media',
                 },
               ],
+            },
+            {
+              name: 'cardCover',
+              label: {
+                en: 'Card Cover',
+                ru: 'Обложка для карточки',
+              },
+              type: 'upload',
+              relationTo: 'media',
+              admin: {
+                description: {
+                  en: 'Cover image for project card preview',
+                  ru: 'Изображение обложки для предпросмотра карточки проекта',
+                },
+              },
             },
             {
               name: 'excerpt',

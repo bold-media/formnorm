@@ -380,6 +380,10 @@ export interface Project {
     planTwo?: (string | null) | Media;
   };
   /**
+   * Cover image for project card preview
+   */
+  cardCover?: (string | null) | Media;
+  /**
    * A short preview of the content, typically shown in lists and search results.
    */
   excerpt?: string | null;
@@ -991,6 +995,7 @@ export interface ProjectSelect<T extends boolean = true> {
         planOne?: T;
         planTwo?: T;
       };
+  cardCover?: T;
   excerpt?: T;
   article?: T;
   meta?:
