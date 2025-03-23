@@ -17,6 +17,49 @@ export const CarouselFullBlock: Block = {
   },
   fields: [
     {
+      name: 'useTabs',
+      type: 'checkbox',
+      defaultValue: false,
+      label: {
+        en: 'Use Tabs',
+        ru: 'Использовать табы',
+      },
+    },
+    {
+      name: 'tabs',
+      type: 'array',
+      admin: {
+        condition: (_, siblingData) => siblingData?.useTabs === true,
+        description: {
+          en: 'Add tabs to organize your content',
+          ru: 'Добавьте табы для организации контента',
+        },
+      },
+      minRows: 1,
+      maxRows: 10,
+      fields: [
+        {
+          name: 'label',
+          type: 'text',
+          required: true,
+          label: {
+            en: 'Tab Label',
+            ru: 'Название таба',
+          },
+        },
+        {
+          name: 'images',
+          label: {
+            en: en.common.image.singular,
+            ru: ru.common.image.singular,
+          },
+          type: 'upload',
+          relationTo: 'media',
+          hasMany: true,
+        },
+      ],
+    },
+    {
       name: 'images',
       label: {
         en: en.common.image.singular,
@@ -25,6 +68,9 @@ export const CarouselFullBlock: Block = {
       type: 'upload',
       relationTo: 'media',
       hasMany: true,
+      admin: {
+        condition: (_, siblingData) => siblingData?.useTabs !== true,
+      },
     },
     {
       type: 'collapsible',

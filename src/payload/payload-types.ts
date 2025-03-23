@@ -1622,6 +1622,17 @@ export interface CarouselBlockType {
  * via the `definition` "CarouselFullBlockType".
  */
 export interface CarouselFullBlockType {
+  useTabs?: boolean | null;
+  /**
+   * Add tabs to organize your content
+   */
+  tabs?:
+    | {
+        label: string;
+        images?: (string | Media)[] | null;
+        id?: string | null;
+      }[]
+    | null;
   images?: (string | Media)[] | null;
   settings?: {
     enableDots?: boolean | null;
