@@ -28,7 +28,11 @@ export const ContainerBlock: Block = {
         ru: 'Контент слева',
       },
       type: 'richText',
-      editor: textEditor({ headings: ['h2', 'h3'], align: false }),
+      editor: textEditor({
+        headings: ['h2', 'h3'],
+        align: false,
+        blocks: [ButtonBlock, ImageBlock, CarouselBlock],
+      }),
     },
     {
       name: 'textRight',
