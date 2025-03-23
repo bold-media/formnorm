@@ -44,6 +44,10 @@ export const textEditor = ({ admin, headings = true, align = true, blocks = [] }
           })
         }
 
+        // if (featureName === 'blocks' && blocks && Array.isArray(blocks) && blocks.length > 0) {
+        //   return BlocksFeature({ blocks })
+        // }
+
         return feature
       })
 

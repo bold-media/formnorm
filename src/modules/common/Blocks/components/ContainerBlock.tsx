@@ -1,9 +1,25 @@
 import React from 'react'
 import { RichText } from '@/modules/common/RichText'
 import { ContainerBlockType } from '@payload-types'
+import { cn } from '@/utils/cn'
+import { cva } from 'class-variance-authority'
+
+const containerVariants = cva('flex flex-col sm:flex-row', {
+  variants: {
+    verticalAlign: {
+      none: '',
+      top: 'items-start',
+      center: 'items-center',
+      bottom: 'items-end',
+    },
+  },
+  defaultVariants: {
+    verticalAlign: 'none',
+  },
+})
 
 export const ContainerBlock = (props: ContainerBlockType) => {
-  const { textRight, textLeft, enableSize } = props
+  const { textRight, textLeft, enableSize, settings } = props
 
   const getWidthClasses = () => {
     switch (enableSize) {
@@ -11,6 +27,11 @@ export const ContainerBlock = (props: ContainerBlockType) => {
         return {
           left: 'w-full sm:w-1/3',
           right: 'w-full sm:w-1/3',
+        }
+      case 'twofifths':
+        return {
+          left: 'w-full sm:w-2/5',
+          right: 'w-full sm:w-2/5',
         }
       case 'half':
         return {
@@ -59,7 +80,9 @@ export const ContainerBlock = (props: ContainerBlockType) => {
 
   return (
     <div className="w-full my-14">
-      <div className="flex flex-col sm:flex-row md:items-center relative">
+      <div
+        className={cn(containerVariants({ verticalAlign: settings?.verticalAlign }), 'relative')}
+      >
         <div className={widthClasses.left}>
           <RichText
             data={textLeft}

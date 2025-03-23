@@ -57,6 +57,13 @@ export const ContainerBlock: Block = {
         },
         {
           label: {
+            en: '2/5',
+            ru: '2/5',
+          },
+          value: 'twofifths',
+        },
+        {
+          label: {
             en: '1/2',
             ru: '1/2',
           },
@@ -104,6 +111,70 @@ export const ContainerBlock: Block = {
         //   },
         //   value: 'seveneights',
         // },
+      ],
+    },
+    {
+      type: 'collapsible',
+      label: {
+        en: 'Settings',
+        ru: 'Настройки',
+      },
+      admin: {
+        initCollapsed: true,
+        style: {
+          marginBottom: 0,
+        },
+      },
+      fields: [
+        {
+          name: 'settings',
+          label: false,
+          type: 'group',
+          admin: {
+            hideGutter: true,
+          },
+          fields: [
+            {
+              name: 'verticalAlign',
+              type: 'select',
+              defaultValue: 'none',
+              label: {
+                en: 'Vertical Alignment',
+                ru: 'Вертикальное выравнивание',
+              },
+              options: [
+                {
+                  label: {
+                    en: 'None',
+                    ru: 'Нет',
+                  },
+                  value: 'none',
+                },
+                {
+                  label: {
+                    en: 'Top',
+                    ru: 'По верхнему краю',
+                  },
+                  value: 'top',
+                },
+                {
+                  label: {
+                    en: 'Center',
+                    ru: 'По центру',
+                  },
+                  value: 'center',
+                },
+                {
+                  label: {
+                    en: 'Bottom',
+                    ru: 'По нижнему краю',
+                  },
+                  value: 'bottom',
+                },
+              ],
+            },
+          ],
+        },
       ],
     },
   ],

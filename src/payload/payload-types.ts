@@ -1784,7 +1784,10 @@ export interface ContainerBlockType {
     };
     [k: string]: unknown;
   } | null;
-  enableSize?: ('third' | 'half' | 'twothirds' | 'threefourths' | 'fourfifths' | 'fivesixths') | null;
+  enableSize?: ('third' | 'twofifths' | 'half' | 'twothirds' | 'threefourths' | 'fourfifths' | 'fivesixths') | null;
+  settings?: {
+    verticalAlign?: ('none' | 'top' | 'center' | 'bottom') | null;
+  };
   id?: string | null;
   blockName?: string | null;
   blockType: 'container';
