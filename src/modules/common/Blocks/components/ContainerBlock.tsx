@@ -7,6 +7,11 @@ export const ContainerBlock = (props: ContainerBlockType) => {
 
   const getWidthClasses = () => {
     switch (enableSize) {
+      case 'third':
+        return {
+          left: 'w-full sm:w-1/3',
+          right: 'w-full sm:w-1/3',
+        }
       case 'half':
         return {
           left: 'w-full sm:w-1/2',

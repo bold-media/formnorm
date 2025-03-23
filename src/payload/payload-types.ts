@@ -1784,7 +1784,7 @@ export interface ContainerBlockType {
     };
     [k: string]: unknown;
   } | null;
-  enableSize?: ('half' | 'twothirds' | 'threefourths' | 'fourfifths' | 'fivesixths') | null;
+  enableSize?: ('third' | 'half' | 'twothirds' | 'threefourths' | 'fourfifths' | 'fivesixths') | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'container';

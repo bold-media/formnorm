@@ -2,6 +2,7 @@ import { textEditor } from '@/payload/fields/lexical/textEditor'
 import { Block } from 'payload'
 import { ButtonBlock } from '../Button'
 import { ImageBlock } from '../Image'
+import { CarouselBlock } from '../Carousel'
 
 export const ContainerBlock: Block = {
   slug: 'container',
@@ -36,7 +37,7 @@ export const ContainerBlock: Block = {
       editor: textEditor({
         headings: ['h2', 'h3'],
         align: false,
-        blocks: [ButtonBlock, ImageBlock],
+        blocks: [ButtonBlock, ImageBlock, CarouselBlock],
       }),
     },
     {
@@ -47,6 +48,13 @@ export const ContainerBlock: Block = {
       },
       type: 'select',
       options: [
+        {
+          label: {
+            en: '1/3',
+            ru: '1/3',
+          },
+          value: 'third',
+        },
         {
           label: {
             en: '1/2',
