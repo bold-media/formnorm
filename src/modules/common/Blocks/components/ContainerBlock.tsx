@@ -12,9 +12,18 @@ const containerVariants = cva('flex flex-col sm:flex-row', {
       center: 'items-center',
       bottom: 'items-end',
     },
+    gap: {
+      none: 'gap-0',
+      xs: 'gap-1',
+      sm: 'gap-2',
+      md: 'gap-4',
+      lg: 'gap-8',
+      xl: 'gap-16',
+    },
   },
   defaultVariants: {
     verticalAlign: 'none',
+    gap: 'md',
   },
 })
 
@@ -26,12 +35,12 @@ export const ContainerBlock = (props: ContainerBlockType) => {
       case 'third':
         return {
           left: 'w-full sm:w-1/3',
-          right: 'w-full sm:w-1/3',
+          right: 'w-full sm:w-2/3',
         }
       case 'twofifths':
         return {
           left: 'w-full sm:w-2/5',
-          right: 'w-full sm:w-2/5',
+          right: 'w-full sm:w-3/5',
         }
       case 'half':
         return {
@@ -77,11 +86,18 @@ export const ContainerBlock = (props: ContainerBlockType) => {
   }
 
   const widthClasses = getWidthClasses()
+  console.log(JSON.stringify(textRight))
 
   return (
     <div className="w-full my-14">
       <div
-        className={cn(containerVariants({ verticalAlign: settings?.verticalAlign }), 'relative')}
+        className={cn(
+          containerVariants({
+            verticalAlign: settings?.verticalAlign,
+            gap: settings?.gap,
+          }),
+          'relative',
+        )}
       >
         <div className={widthClasses.left}>
           <RichText
@@ -91,13 +107,11 @@ export const ContainerBlock = (props: ContainerBlockType) => {
           />
         </div>
 
-        <div
-          className={`${widthClasses.right} flex md:items-center md:justify-center pt-8 sm:pt-0`}
-        >
+        <div className={widthClasses.right}>
           <RichText
             data={textRight}
             container={false}
-            className="md:text-center prose-h2:font-semibold sm:prose-h2:font-semibold md:prose-h2:font-semibold prose-h2:text-base sm:prose-h2:text-base prose-p:font-normal"
+            className="prose-h2:font-semibold sm:prose-h2:font-semibold md:prose-h2:font-semibold prose-h2:text-base sm:prose-h2:text-base prose-p:font-normal"
           />
         </div>
       </div>

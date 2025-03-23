@@ -3,6 +3,9 @@ import { Block } from 'payload'
 import { ButtonBlock } from '../Button'
 import { ImageBlock } from '../Image'
 import { CarouselBlock } from '../Carousel'
+import { selectSize } from '@/payload/fields/partials/selectSize'
+import { en } from '@/payload/i18n/en'
+import { ru } from '@/payload/i18n/ru'
 
 export const ContainerBlock: Block = {
   slug: 'container',
@@ -135,41 +138,59 @@ export const ContainerBlock: Block = {
           },
           fields: [
             {
-              name: 'verticalAlign',
-              type: 'select',
-              defaultValue: 'none',
-              label: {
-                en: 'Vertical Alignment',
-                ru: 'Вертикальное выравнивание',
-              },
-              options: [
-                {
-                  label: {
-                    en: 'None',
-                    ru: 'Нет',
+              type: 'row',
+              fields: [
+                selectSize({
+                  overrides: {
+                    name: 'gap',
+                    defaultValue: 'md',
+                    label: {
+                      en: en.common.gap.singular,
+                      ru: ru.common.gap.singular,
+                    },
                   },
-                  value: 'none',
-                },
+                }),
                 {
+                  name: 'verticalAlign',
+                  type: 'select',
+                  defaultValue: 'none',
                   label: {
-                    en: 'Top',
-                    ru: 'По верхнему краю',
+                    en: 'Vertical Alignment',
+                    ru: 'Вертикальное выравнивание',
                   },
-                  value: 'top',
-                },
-                {
-                  label: {
-                    en: 'Center',
-                    ru: 'По центру',
+                  admin: {
+                    width: '50%',
                   },
-                  value: 'center',
-                },
-                {
-                  label: {
-                    en: 'Bottom',
-                    ru: 'По нижнему краю',
-                  },
-                  value: 'bottom',
+                  options: [
+                    {
+                      label: {
+                        en: 'None',
+                        ru: 'Нет',
+                      },
+                      value: 'none',
+                    },
+                    {
+                      label: {
+                        en: 'Top',
+                        ru: 'По верхнему краю',
+                      },
+                      value: 'top',
+                    },
+                    {
+                      label: {
+                        en: 'Center',
+                        ru: 'По центру',
+                      },
+                      value: 'center',
+                    },
+                    {
+                      label: {
+                        en: 'Bottom',
+                        ru: 'По нижнему краю',
+                      },
+                      value: 'bottom',
+                    },
+                  ],
                 },
               ],
             },

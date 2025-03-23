@@ -1786,6 +1786,7 @@ export interface ContainerBlockType {
   } | null;
   enableSize?: ('third' | 'twofifths' | 'half' | 'twothirds' | 'threefourths' | 'fourfifths' | 'fivesixths') | null;
   settings?: {
+    gap?: ('none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl') | null;
     verticalAlign?: ('none' | 'top' | 'center' | 'bottom') | null;
   };
   id?: string | null;
