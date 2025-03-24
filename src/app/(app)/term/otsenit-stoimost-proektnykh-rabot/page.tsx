@@ -4,8 +4,7 @@ import React from 'react'
 import { RichText } from '@/modules/common/RichText'
 import { Metadata, ResolvingMetadata } from 'next'
 import { generateMeta } from '@/utils/generateMeta'
-import { getPayload } from 'payload'
-import config from '@payload-config'
+
 import { getTermBySlug } from '@/modules/term/data'
 
 interface Props {
