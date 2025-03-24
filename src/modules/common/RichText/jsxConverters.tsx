@@ -44,6 +44,8 @@ import { ArchiveBlock } from '../Blocks/components/ArchiveBlock'
 import { GeographyBlock } from '../Blocks/components/GeographyBlock'
 import { TableBlock } from '../Blocks/components/TableBlock'
 import { ContainerBlock } from '../Blocks/components/ContainerBlock'
+import { SingleFormBlock } from '../Blocks/components/SingleFormBlock'
+import { SingleFormBlockType } from '@payload-types'
 
 type NodeTypes =
   | DefaultNodeTypes
@@ -84,6 +86,9 @@ export const jsxConverters: JSXConvertersFunction<NodeTypes> = ({ defaultConvert
     contactInfo: ({ node }) => <ContactInfoBlock {...node.fields} />,
     container: ({ node }) => <ContainerBlock {...node.fields} />,
     doubleForm: ({ node }) => <DoubleFormBlock {...node.fields} />,
+    singleForm: ({ node }: { node: { fields: SingleFormBlockType } }) => (
+      <SingleFormBlock {...node.fields} />
+    ),
     embed: ({ node }) => <EmbedBlock {...node.fields} />,
     geography: ({ node }) => <GeographyBlock {...node.fields} />,
     grid: ({ node }) => <GridBlock {...node.fields} />,

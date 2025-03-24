@@ -1844,6 +1844,16 @@ export interface DoubleFormBlockType {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SingleFormBlockType".
+ */
+export interface SingleFormBlockType {
+  form: string | Form;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'singleForm';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "EmbedBlockType".
  */
 export interface EmbedBlockType {
