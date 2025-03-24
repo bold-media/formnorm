@@ -18,6 +18,7 @@ type CheckboxProps = CheckboxField & {
   getValues: any
   register: UseFormRegister<FieldValues>
   setValue: any
+  isGrouped?: boolean
 }
 
 export const Checkbox = ({
@@ -28,13 +29,16 @@ export const Checkbox = ({
   register,
   required: requiredFromProps,
   width,
+  isGrouped = false,
 }: CheckboxProps) => {
   const props = register(name, { required: requiredFromProps })
   const { setValue } = useFormContext()
 
   return (
     <Width width={width}>
-      <div className="flex items-center gap-3 py-2">
+      <label
+        className={`flex items-center cursor-pointer ${isGrouped ? 'gap-2 py-0' : 'gap-3 py-2'}`}
+      >
         <CheckboxUI
           defaultChecked={defaultValue}
           {...props}
@@ -42,10 +46,8 @@ export const Checkbox = ({
             setValue(props.name, checked)
           }}
         />
-        <Label className="font-normal" htmlFor={name}>
-          {label}
-        </Label>
-      </div>
+        <span className="font-normal">{label}</span>
+      </label>
       {requiredFromProps && errors[name] && <Error />}
     </Width>
   )

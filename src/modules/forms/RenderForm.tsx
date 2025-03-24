@@ -107,6 +107,29 @@ export const RenderForm = ({
     [router, id, redirect, confirmationType, confirmationMessage, formMethods],
   )
 
+  // Helper function to check if a field is a checkbox
+  const isCheckbox = (field: any) => field.blockType === 'checkbox'
+
+  // Helper function to check if a field is part of a checkbox group
+  const isPartOfCheckboxGroup = (fields: any[], currentIndex: number) => {
+    if (!isCheckbox(fields[currentIndex])) return false
+
+    // Check if there are other checkboxes before or after this one
+    const hasCheckboxBefore = currentIndex > 0 && isCheckbox(fields[currentIndex - 1])
+    const hasCheckboxAfter =
+      currentIndex < fields.length - 1 && isCheckbox(fields[currentIndex + 1])
+
+    return hasCheckboxBefore || hasCheckboxAfter
+  }
+
+  // Helper function to check if this is the last checkbox in a group
+  const isLastInCheckboxGroup = (fields: any[], currentIndex: number) => {
+    if (!isCheckbox(fields[currentIndex])) return false
+
+    // If there's no checkbox after this one, it's the last in the group
+    return currentIndex === fields.length - 1 || !isCheckbox(fields[currentIndex + 1])
+  }
+
   return (
     <FormProvider {...formMethods}>
       <form id={id} onSubmit={handleSubmit(onSubmit)} className={cn(className)}>
@@ -117,8 +140,16 @@ export const RenderForm = ({
             form.fields?.map((field, index) => {
               const Field = fields[field.blockType as SupportedFieldTypes]
               if (Field) {
+                const isGroupedCheckbox = isPartOfCheckboxGroup(form.fields || [], index)
+                const isLastInGroup = isLastInCheckboxGroup(form.fields || [], index)
                 return (
-                  <div className="mb-4 last:mb-0" key={index}>
+                  <div
+                    className={cn(
+                      'last:mb-0',
+                      isGroupedCheckbox ? (isLastInGroup ? 'mb-4' : 'mb-1') : 'mb-4',
+                    )}
+                    key={index}
+                  >
                     <Field
                       form={form}
                       {...field}
@@ -126,6 +157,7 @@ export const RenderForm = ({
                       control={control}
                       errors={errors}
                       register={register}
+                      isGrouped={isGroupedCheckbox}
                     />
                   </div>
                 )
