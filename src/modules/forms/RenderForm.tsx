@@ -134,7 +134,7 @@ export const RenderForm = ({
     <FormProvider {...formMethods}>
       <form id={id} onSubmit={handleSubmit(onSubmit)} className={cn(className)}>
         {children}
-        <div className="mb-4 last:mb-0">
+        <div>
           {form &&
             form.fields &&
             form.fields?.map((field, index) => {
@@ -144,10 +144,7 @@ export const RenderForm = ({
                 const isLastInGroup = isLastInCheckboxGroup(form.fields || [], index)
                 return (
                   <div
-                    className={cn(
-                      'last:mb-0',
-                      isGroupedCheckbox ? (isLastInGroup ? 'mb-4' : 'mb-1') : 'mb-4',
-                    )}
+                    className={cn(isGroupedCheckbox ? (isLastInGroup ? 'mb-4' : 'mb-1') : 'mb-4')}
                     key={index}
                   >
                     <Field
@@ -166,9 +163,11 @@ export const RenderForm = ({
             })}
         </div>
 
-        <Button form={id} type="submit" variant="default" className="w-full" loading={isLoading}>
-          {submitButtonLabel}
-        </Button>
+        <div className="mt-8">
+          <Button form={id} type="submit" variant="default" className="w-full" loading={isLoading}>
+            {submitButtonLabel}
+          </Button>
+        </div>
       </form>
     </FormProvider>
   )
