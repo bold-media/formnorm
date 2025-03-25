@@ -329,6 +329,10 @@ export interface Post {
    */
   showHeaderImage?: boolean | null;
   /**
+   * Choose how the header image should be displayed.
+   */
+  headerImageMode?: ('cover' | 'contain') | null;
+  /**
    * A short preview of the content, typically shown in lists and search results.
    */
   excerpt?: string | null;
@@ -974,6 +978,7 @@ export interface PostSelect<T extends boolean = true> {
   cover?: T;
   headerImage?: T;
   showHeaderImage?: T;
+  headerImageMode?: T;
   excerpt?: T;
   article?: T;
   meta?:

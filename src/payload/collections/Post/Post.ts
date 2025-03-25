@@ -165,6 +165,37 @@ export const Post: CollectionConfig = {
               },
             },
             {
+              name: 'headerImageMode',
+              label: {
+                en: 'Header Image Display Mode',
+                ru: 'Режим отображения изображения в шапке',
+              },
+              type: 'select',
+              defaultValue: 'cover',
+              options: [
+                {
+                  label: {
+                    en: 'Cover',
+                    ru: 'Обложка',
+                  },
+                  value: 'cover',
+                },
+                {
+                  label: {
+                    en: 'Contain',
+                    ru: 'Вместить',
+                  },
+                  value: 'contain',
+                },
+              ],
+              admin: {
+                description: {
+                  en: 'Choose how the header image should be displayed.',
+                  ru: 'Выберите, как должно отображаться изображение в шапке.',
+                },
+              },
+            },
+            {
               name: 'excerpt',
               label: {
                 en: en.common.excerpt,

@@ -42,9 +42,9 @@ const PostPage = async ({ params }: Props) => {
     : null
 
   const image = post?.showHeaderImage
-    ? typeof post?.headerImage === 'object'
+    ? typeof post?.headerImage === 'object' && post?.headerImage?.url
       ? post?.headerImage
-      : typeof cover === 'object'
+      : typeof cover === 'object' && cover?.url
       ? cover
       : null
     : null
@@ -69,7 +69,9 @@ const PostPage = async ({ params }: Props) => {
               src={image?.url}
               alt={image?.alt}
               fill={true}
-              className="object-cover rounded-sm select-none"
+              className={`rounded-sm select-none ${
+                post?.headerImageMode === 'contain' ? 'object-contain' : 'object-cover'
+              }`}
               draggable={false}
             />
           </AspectRatio>
