@@ -25,6 +25,7 @@ export const DoubleFormBlock = (props: DoubleFormBlockType) => {
                 index === 0 && 'md:border-r-0',
                 index === 1 && 'md:bg-zinc-100/70',
               )}
+              buttonClassName="mt-2"
             >
               {typeof form === 'object' && (
                 <h3 className="not-prose mt-0 mb-4 leading-10 text-center md:text-left font-semibold md:font-bold text-[1.5rem] sm:text-[1.7rem]">

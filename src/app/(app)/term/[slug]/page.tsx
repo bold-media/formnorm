@@ -24,25 +24,30 @@ const TermPage = async ({ params }: Props) => {
     notFound()
   }
 
-  const { title, article, suffix } = term
+  const { title, article, suffix, showHero } = term
 
   return (
     <div className="overflow-x-hidden mb-16">
       <div className="container relative mt-8 md:mt-header mb-16">
-        <div className="grid md:grid-cols-[2fr,1fr] gap-10 mb-10 md:mb-20 items-center">
-          <div className="flex flex-col gap-10">
-            <h1 className="font-semibold md:font-bold text-3xl sm:text-5xl md:text-[4rem] leading-light md:leading-[4rem] uppercase mt-4">
-              {title}
-            </h1>
-            <p className="text-zinc-400/80 text-base md:text-xl uppercase font-semibold md:leading-8">
-              {suffix}
-            </p>
+        {showHero ? (
+          <div className="grid md:grid-cols-[2fr,1fr] gap-10 mb-10 md:mb-20 items-center">
+            <div className="flex flex-col gap-10">
+              <h1 className="font-semibold md:font-bold text-3xl sm:text-5xl md:text-[4rem] leading-light md:leading-[4rem] uppercase mt-4">
+                {title}
+              </h1>
+              <p className="text-zinc-400/80 text-base md:text-xl uppercase font-semibold md:leading-8">
+                {suffix}
+              </p>
+            </div>
+            <div className="hidden md:flex justify-center items-center px-10">
+              <ServiceIcon className="w-48 h-48" />
+            </div>
           </div>
-          <div className="hidden md:flex justify-center items-center px-10">
-            <ServiceIcon className="w-48 h-48" />
-          </div>
-        </div>
-        <div className="relative w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] h-px bg-zinc-200" />
+        ) : (
+          <h1 className="text-center text-3xl md:text-4xl font-semibold mt-8">{title}</h1>
+        )}
+
+        {/* <div className="relative w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] h-px bg-zinc-200" /> */}
       </div>
 
       <RichText

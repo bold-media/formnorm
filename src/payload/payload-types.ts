@@ -421,6 +421,7 @@ export interface Project {
 export interface Term {
   id: string;
   slug?: string | null;
+  showHero?: boolean | null;
   title: string;
   cardTitle: string;
   suffix?: string | null;
@@ -514,6 +515,11 @@ export interface Form {
             width?: number | null;
             defaultValue?: boolean | null;
             required?: boolean | null;
+            options: {
+              label: string;
+              value: string;
+              id?: string | null;
+            }[];
             id?: string | null;
             blockName?: string | null;
             blockType: 'checkbox';
@@ -671,6 +677,10 @@ export interface Form {
         id?: string | null;
       }[]
     | null;
+  /**
+   * This can be overridden when placing the form on a page
+   */
+  showTitle?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1015,6 +1025,7 @@ export interface ProjectSelect<T extends boolean = true> {
  */
 export interface TermSelect<T extends boolean = true> {
   slug?: T;
+  showHero?: T;
   title?: T;
   cardTitle?: T;
   suffix?: T;
@@ -1073,6 +1084,13 @@ export interface FormsSelect<T extends boolean = true> {
               width?: T;
               defaultValue?: T;
               required?: T;
+              options?:
+                | T
+                | {
+                    label?: T;
+                    value?: T;
+                    id?: T;
+                  };
               id?: T;
               blockName?: T;
             };
@@ -1188,6 +1206,7 @@ export interface FormsSelect<T extends boolean = true> {
         message?: T;
         id?: T;
       };
+  showTitle?: T;
   updatedAt?: T;
   createdAt?: T;
 }

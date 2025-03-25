@@ -35,10 +35,14 @@ export const RenderForm = ({
   form,
   className,
   children,
+  showTitle = true,
+  buttonClassName = 'mt-8',
 }: {
   form: Form
   className?: string
   children?: React.ReactNode
+  showTitle?: boolean
+  buttonClassName?: string
 }) => {
   const {
     id,
@@ -114,26 +118,34 @@ export const RenderForm = ({
   const isPartOfCheckboxGroup = (fields: any[], currentIndex: number) => {
     if (!isCheckbox(fields[currentIndex])) return false
 
-    // Check if there are other checkboxes before or after this one
-    const hasCheckboxBefore = currentIndex > 0 && isCheckbox(fields[currentIndex - 1])
-    const hasCheckboxAfter =
-      currentIndex < fields.length - 1 && isCheckbox(fields[currentIndex + 1])
+    // Find the start of the current group
+    let groupStartIndex = currentIndex
+    while (groupStartIndex > 0 && isCheckbox(fields[groupStartIndex - 1])) {
+      groupStartIndex--
+    }
 
-    return hasCheckboxBefore || hasCheckboxAfter
+    // If this is not the first checkbox in the group, it's part of a group
+    return currentIndex > groupStartIndex
   }
 
-  // Helper function to check if this is the last checkbox in a group
-  const isLastInCheckboxGroup = (fields: any[], currentIndex: number) => {
-    if (!isCheckbox(fields[currentIndex])) return false
+  // Helper function to get group title for a checkbox
+  const getCheckboxGroupTitle = (fields: any[], currentIndex: number) => {
+    if (!isCheckbox(fields[currentIndex])) return undefined
 
-    // If there's no checkbox after this one, it's the last in the group
-    return currentIndex === fields.length - 1 || !isCheckbox(fields[currentIndex + 1])
+    // Find the start of the current group
+    let groupStartIndex = currentIndex
+    while (groupStartIndex > 0 && isCheckbox(fields[groupStartIndex - 1])) {
+      groupStartIndex--
+    }
+
+    // If this is the first checkbox in the group, use its label as the group title
+    return currentIndex === groupStartIndex ? fields[currentIndex].label : undefined
   }
 
   return (
     <FormProvider {...formMethods}>
       <form id={id} onSubmit={handleSubmit(onSubmit)} className={cn(className)}>
-        {children}
+        {showTitle && children}
         <div>
           {form &&
             form.fields &&
@@ -141,12 +153,11 @@ export const RenderForm = ({
               const Field = fields[field.blockType as SupportedFieldTypes]
               if (Field) {
                 const isGroupedCheckbox = isPartOfCheckboxGroup(form.fields || [], index)
-                const isLastInGroup = isLastInCheckboxGroup(form.fields || [], index)
+                const groupTitle = isGroupedCheckbox
+                  ? getCheckboxGroupTitle(form.fields || [], index)
+                  : undefined
                 return (
-                  <div
-                    className={cn(isGroupedCheckbox ? (isLastInGroup ? 'mb-4' : 'mb-1') : 'mb-4')}
-                    key={index}
-                  >
+                  <div className={cn('mb-4')} key={index}>
                     <Field
                       form={form}
                       {...field}
@@ -155,6 +166,7 @@ export const RenderForm = ({
                       errors={errors}
                       register={register}
                       isGrouped={isGroupedCheckbox}
+                      groupTitle={groupTitle}
                     />
                   </div>
                 )
@@ -163,7 +175,7 @@ export const RenderForm = ({
             })}
         </div>
 
-        <div className="mt-8">
+        <div className={buttonClassName}>
           <Button form={id} type="submit" variant="default" className="w-full" loading={isLoading}>
             {submitButtonLabel}
           </Button>

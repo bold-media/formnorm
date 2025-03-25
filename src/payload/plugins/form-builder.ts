@@ -340,6 +340,46 @@ export const formBuilder = formBuilderPlugin({
           ],
         },
         requiredField,
+        {
+          name: 'options',
+          type: 'array',
+          required: true,
+          label: {
+            en: 'Options',
+            ru: 'Варианты',
+          },
+          fields: [
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'label',
+                  type: 'text',
+                  required: true,
+                  admin: {
+                    width: '50%',
+                  },
+                  label: {
+                    en: 'Label',
+                    ru: 'Метка',
+                  },
+                },
+                {
+                  name: 'value',
+                  type: 'text',
+                  required: true,
+                  admin: {
+                    width: '50%',
+                  },
+                  label: {
+                    en: 'Value',
+                    ru: 'Значение',
+                  },
+                },
+              ],
+            },
+          ],
+        },
       ],
     },
     message: {
@@ -406,6 +446,7 @@ export const formBuilder = formBuilderPlugin({
               en: 'Title',
               ru: 'Заголовок',
             },
+            required: true,
           }
         }
 
@@ -623,7 +664,21 @@ export const formBuilder = formBuilderPlugin({
 
       return [
         ...fields,
-        //more custom fields
+        {
+          name: 'showTitle',
+          type: 'checkbox',
+          defaultValue: true,
+          label: {
+            en: 'Show title by default',
+            ru: 'Показывать заголовок по умолчанию',
+          },
+          admin: {
+            description: {
+              en: 'This can be overridden when placing the form on a page',
+              ru: 'Это можно переопределить при размещении формы на странице',
+            },
+          },
+        },
       ]
     },
   },

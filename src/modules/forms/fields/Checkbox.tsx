@@ -19,6 +19,9 @@ type CheckboxProps = CheckboxField & {
   register: UseFormRegister<FieldValues>
   setValue: any
   isGrouped?: boolean
+  groupTitle?: string
+  options?: { label: string; value: string }[]
+  form?: any
 }
 
 export const Checkbox = ({
@@ -30,17 +33,58 @@ export const Checkbox = ({
   required: requiredFromProps,
   width,
   isGrouped = false,
+  groupTitle,
+  options,
+  form,
 }: CheckboxProps) => {
-  const props = register(name, { required: requiredFromProps })
   const { setValue } = useFormContext()
+  const isDoubleForm = form?.name === 'double-form'
 
+  const renderCheckbox = (option: { label: string; value: string }, index: number) => {
+    const optionName = `${name}_${index}`
+    const props = register(optionName, { required: requiredFromProps })
+
+    return (
+      <label key={index} className="flex items-center cursor-pointer gap-2 py-0">
+        <CheckboxUI
+          defaultChecked={defaultValue === true}
+          {...props}
+          onCheckedChange={(checked) => {
+            setValue(optionName, checked)
+          }}
+        />
+        <span className="font-normal">{option.label}</span>
+      </label>
+    )
+  }
+
+  if (options && options.length > 0) {
+    return (
+      <Width width={width}>
+        <div className="space-y-1">
+          <div
+            className={`font-medium text-zinc-900 mt-5 mb-2 ${
+              !isDoubleForm ? 'text-base sm:text-lg md:text-xl' : ''
+            }`}
+          >
+            {label}
+          </div>
+          <div className="space-y-1">
+            {options.map((option, index) => renderCheckbox(option, index))}
+          </div>
+        </div>
+        {requiredFromProps && errors[name] && <Error />}
+      </Width>
+    )
+  }
+
+  // Fallback for single checkbox without options
+  const props = register(name, { required: requiredFromProps })
   return (
     <Width width={width}>
-      <label
-        className={`flex items-center cursor-pointer ${isGrouped ? 'gap-2 py-0' : 'gap-3 py-2'}`}
-      >
+      <label className="flex items-center cursor-pointer gap-3 py-2">
         <CheckboxUI
-          defaultChecked={defaultValue}
+          defaultChecked={defaultValue === true}
           {...props}
           onCheckedChange={(checked) => {
             setValue(props.name, checked)

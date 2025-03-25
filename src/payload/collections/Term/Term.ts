@@ -71,7 +71,15 @@ export const Term: CollectionConfig = {
   },
   fields: [
     slug(),
-
+    {
+      name: 'showHero',
+      label: {
+        en: 'Show Hero Section',
+        ru: 'Показать секцию Hero',
+      },
+      type: 'checkbox',
+      required: false,
+    },
     {
       type: 'tabs',
       tabs: [
