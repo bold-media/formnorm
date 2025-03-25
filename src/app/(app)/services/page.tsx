@@ -50,11 +50,21 @@ const ServicesPage = async () => {
 }
 
 export const generateMetadata = async ({}, parentPromise: ResolvingMetadata): Promise<Metadata> => {
-  const settings = await getSettings()
+  // const settings = await getSettings()
 
   const fallback = await parentPromise
 
-  return {} //TODO
+  return generateMeta({
+    meta: {
+      title: 'Услуги и условия по проектированию частных домов и коттеджей',
+      description:
+        'Наша команда предоставляет услуги по индивидуально проектированию частных домов и коттеджей под ключ. Проектирование домов с участками.',
+    },
+    fallback,
+    pathname: '/services',
+  })
+
+  //TODO
   // return generateMeta({
   //   meta: categorySlug
   //     ? { title: `Posts in ${categorySlug}`, description: `Browse posts in ${categorySlug}` }
