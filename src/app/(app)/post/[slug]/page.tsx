@@ -48,22 +48,22 @@ const PostPage = async ({ params }: Props) => {
       <div className="container-post relative md:mt-header mb-6 ">
         <PostBreadcrumbs title={title} />
 
-        <div className={cn(' mx-auto pt-4 md:pt-12', typographyVariants({ variant: 'post' }))}>
+        <div className={cn('prose mx-auto pt-4 md:pt-12', typographyVariants({ variant: 'post' }))}>
           <h1>{title}</h1>
         </div>
       </div>
 
-      <time className="block text-xs font-semibold text-zinc-400 tracking-[0.094rem] mb-16 container-post  mx-auto">
+      <time className="block text-xs font-semibold text-zinc-400 tracking-[0.094rem] mb-0 container-post  mx-auto">
         {date}
       </time>
-      <div className="container-post relative md:mt-header mb-6 lg:mb-12">
+      <div className="container-post relative md:mt-12 mb-6 lg:mb-12">
         {image && image?.url && image?.height && image?.width && (
-          <AspectRatio className="relative w-full mb-[3.75rem] h-full" ratio={16 / 9}>
+          <AspectRatio className="relative w-full mb-[3.75rem] h-full" ratio={4 / 3}>
             <Image
               src={image?.url}
               alt={image?.alt}
               fill={true}
-              className="object-contain rounded-sm select-none"
+              className="object-cover rounded-sm select-none"
               draggable={false}
             />
           </AspectRatio>
