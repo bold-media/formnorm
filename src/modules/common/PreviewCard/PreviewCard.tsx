@@ -50,7 +50,7 @@ export const PreviewCard = <T extends keyof DataTypeMap>({ data, type }: Preview
   return (
     <NextLink href={`/${type}/${data?.slug}`} className="no-underline">
       <Card
-        className={`group border-none rounded-sm shadow-none bg-zinc-100/50 hover:bg-background-light/100 transition-colors duration-300 overflow-hidden ${
+        className={`group border-none rounded-sm shadow-none bg-zinc-100/50 hover:bg-background-light/100 transition-colors duration-300 overflow-hidden h-full ${
           isProject(data) ? 'flex flex-col sm:flex-row md:flex-col' : 'flex flex-col'
         }`}
       >
@@ -89,7 +89,9 @@ export const PreviewCard = <T extends keyof DataTypeMap>({ data, type }: Preview
 
         <div
           className={
-            isProject(data) ? 'w-full sm:w-1/2 sm:flex sm:flex-col sm:justify-center md:w-full' : ''
+            isProject(data)
+              ? 'w-full sm:w-1/2 sm:flex sm:flex-col sm:justify-start md:w-full flex-1'
+              : 'flex-1'
           }
         >
           <CardHeader className={isProject(data) ? 'px-8 pb-0 pt-0' : 'p-6 pb-2'}>
@@ -103,7 +105,7 @@ export const PreviewCard = <T extends keyof DataTypeMap>({ data, type }: Preview
                         ? 'not-prose font-semibold uppercase line-clamp-2 tracking-normal text-xl mt-6 pb-2'
                         : isPost(data)
                         ? 'text-base sm:text-lg md:text-xl font-semibold line-clamp-2 tracking-normal'
-                        : 'text-lg md:text-xl font-semibold line-clamp-2 tracking-normal uppercase'
+                        : 'text-lg md:text-xl font-semibold line-clamp-3 tracking-normal uppercase'
                     }
                   >
                     {(type === 'service' || type === 'term') && data && 'cardTitle' in data
