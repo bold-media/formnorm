@@ -41,7 +41,13 @@ const PostPage = async ({ params }: Props) => {
       }).format(new Date(post.publishedAt))
     : null
 
-  const image = typeof cover === 'object' ? cover : null
+  const image = post?.showHeaderImage
+    ? typeof post?.headerImage === 'object'
+      ? post?.headerImage
+      : typeof cover === 'object'
+      ? cover
+      : null
+    : null
 
   return (
     <div className="mb-20">
@@ -67,7 +73,7 @@ const PostPage = async ({ params }: Props) => {
               draggable={false}
             />
           </AspectRatio>
-        )}{' '}
+        )}
       </div>
 
       <RichText

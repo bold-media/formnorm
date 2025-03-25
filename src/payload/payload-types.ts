@@ -321,6 +321,14 @@ export interface Post {
   title: string;
   cover?: (string | null) | Media;
   /**
+   * Image that will be displayed at the top of the post page. If not set, the cover image will be used.
+   */
+  headerImage?: (string | null) | Media;
+  /**
+   * If unchecked, no image will be displayed at the top of the post page.
+   */
+  showHeaderImage?: boolean | null;
+  /**
    * A short preview of the content, typically shown in lists and search results.
    */
   excerpt?: string | null;
@@ -964,6 +972,8 @@ export interface PostSelect<T extends boolean = true> {
   categories?: T;
   title?: T;
   cover?: T;
+  headerImage?: T;
+  showHeaderImage?: T;
   excerpt?: T;
   article?: T;
   meta?:

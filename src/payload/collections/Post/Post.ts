@@ -135,6 +135,36 @@ export const Post: CollectionConfig = {
               relationTo: 'media',
             },
             {
+              name: 'headerImage',
+              label: {
+                en: 'Header Image',
+                ru: 'Изображение в шапке',
+              },
+              type: 'upload',
+              relationTo: 'media',
+              admin: {
+                description: {
+                  en: 'Image that will be displayed at the top of the post page. If not set, the cover image will be used.',
+                  ru: 'Изображение, которое будет отображаться в верхней части страницы поста. Если не задано, будет использовано изображение обложки.',
+                },
+              },
+            },
+            {
+              name: 'showHeaderImage',
+              label: {
+                en: 'Show Header Image',
+                ru: 'Показывать изображение в шапке',
+              },
+              type: 'checkbox',
+              defaultValue: true,
+              admin: {
+                description: {
+                  en: 'If unchecked, no image will be displayed at the top of the post page.',
+                  ru: 'Если не отмечено, изображение в верхней части страницы поста отображаться не будет.',
+                },
+              },
+            },
+            {
               name: 'excerpt',
               label: {
                 en: en.common.excerpt,
