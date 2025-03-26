@@ -16,34 +16,55 @@ type RadioProps = RadioField & {
       [x: string]: any
     }>
   >
+  form?: any
 }
 
-export const Radio = ({ name, control, errors, label, options, required, width }: RadioProps) => {
+export const Radio = ({
+  name,
+  control,
+  errors,
+  label,
+  options,
+  required,
+  width,
+  form,
+}: RadioProps) => {
+  const isDoubleForm = form?.name === 'double-form'
+
   return (
     <Width width={width}>
-      <div className="mb-4">
-        <Label htmlFor={name} className="text-base font-normal">
+      <div className="space-y-1">
+        <div
+          className={`text-zinc-900 mt-5 mb-2 ${
+            !isDoubleForm ? 'font-medium text-base sm:text-lg md:text-xl' : 'font-normal'
+          }`}
+        >
           {label}
-        </Label>
+        </div>
+        <Controller
+          control={control}
+          defaultValue=""
+          name={name}
+          render={({ field: { onChange, value } }) => (
+            <RadioGroup
+              className="gap-3"
+              defaultValue={value}
+              onValueChange={onChange}
+              value={value}
+            >
+              {options.map(({ label, value }) => (
+                <div key={value} className="flex items-center space-x-2">
+                  <RadioGroupItem id={`${name}-${value}`} value={value} />
+                  <Label className="font-normal" htmlFor={`${name}-${value}`}>
+                    {label}
+                  </Label>
+                </div>
+              ))}
+            </RadioGroup>
+          )}
+          rules={{ required }}
+        />
       </div>
-      <Controller
-        control={control}
-        defaultValue=""
-        name={name}
-        render={({ field: { onChange, value } }) => (
-          <RadioGroup className="gap-3" defaultValue={value} onValueChange={onChange} value={value}>
-            {options.map(({ label, value }) => (
-              <div key={value} className="flex items-center space-x-2">
-                <RadioGroupItem id={`${name}-${value}`} value={value} />
-                <Label className="font-normal" htmlFor={`${name}-${value}`}>
-                  {label}
-                </Label>
-              </div>
-            ))}
-          </RadioGroup>
-        )}
-        rules={{ required }}
-      />
       {required && errors[name] && <Error />}
     </Width>
   )

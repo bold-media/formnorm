@@ -37,12 +37,14 @@ export const RenderForm = ({
   children,
   showTitle = true,
   buttonClassName = 'mt-8',
+  formType = 'single',
 }: {
   form: Form
   className?: string
   children?: React.ReactNode
   showTitle?: boolean
   buttonClassName?: string
+  formType?: 'single' | 'double'
 }) => {
   const {
     id,
@@ -88,8 +90,6 @@ export const RenderForm = ({
           })
 
           setIsLoading(false)
-
-          console.log(`confirmationType: ${confirmationType}`)
 
           if (confirmationType === 'redirect' && redirect) {
             const { url } = redirect
@@ -159,7 +159,7 @@ export const RenderForm = ({
                 return (
                   <div className={cn('mb-4')} key={index}>
                     <Field
-                      form={form}
+                      form={{ name: formType === 'double' ? 'double-form' : 'single-form' }}
                       {...field}
                       {...formMethods}
                       control={control}

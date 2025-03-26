@@ -19,6 +19,7 @@ export const DoubleFormBlock = (props: DoubleFormBlockType) => {
           <div key={id} className="max-w-lg md:max-w-none md:w-full md:h-full md:flex md:flex-col ">
             <RenderForm
               form={form as Form}
+              formType="double"
               className={cn(
                 'px-4 xs:px-8 sm:px-12 pt-12 sm:pt-16 pb-8 border border-zinc-200 border-b-0',
                 'md:flex-1 md:flex md:flex-col md:justify-between',

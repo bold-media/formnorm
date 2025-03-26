@@ -99,7 +99,7 @@ export const TableBlock = (props: TableBlockType) => {
                   <th
                     key={index}
                     className={`
-                      px-6 py-5 bg-zinc-900 text-zinc-50 font-semibold
+                      px-2 sm:px-6 py-5 bg-zinc-900 text-zinc-50 font-semibold
                       text-sm md:text-base align-top
                       ${
                         index === 0
@@ -123,7 +123,7 @@ export const TableBlock = (props: TableBlockType) => {
                     <td
                       key={index}
                       className={`
-                        px-6 py-5
+                        px-2 sm:px-6 py-5
                         not-prose 
                         ${
                           index === 0

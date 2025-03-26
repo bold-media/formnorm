@@ -15,27 +15,25 @@ type NumberProps = TextField & {
     }>
   >
   register: UseFormRegister<FieldValues>
+  form?: any
 }
 
-export const Number = ({
-  name,
-  defaultValue,
-  errors,
-  label,
-  register,
-  required: requiredFromProps,
-  width,
-}: NumberProps) => {
+export const Number = ({ name, label, required, width, register, errors, form }: NumberProps) => {
+  const isDoubleForm = form?.name === 'double-form'
+
   return (
     <Width width={width}>
-      <Label htmlFor={name}>{label}</Label>
-      <Input
-        defaultValue={defaultValue}
-        id={name}
-        type="number"
-        {...register(name, { required: requiredFromProps })}
-      />
-      {requiredFromProps && errors[name] && <Error />}
+      <div className="space-y-1">
+        <div
+          className={`text-zinc-900 mt-5 mb-0 ${
+            !isDoubleForm ? 'font-medium text-base sm:text-lg md:text-xl' : 'font-normal'
+          }`}
+        >
+          {label}
+        </div>
+        <Input type="number" {...register(name, { required })} className="w-full mt-0 pt-0" />
+      </div>
+      {required && errors[name] && <Error />}
     </Width>
   )
 }

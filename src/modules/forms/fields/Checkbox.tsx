@@ -53,7 +53,9 @@ export const Checkbox = ({
             setValue(optionName, checked)
           }}
         />
-        <span className="font-normal">{option.label}</span>
+        <span className={`font-normal ${isDoubleForm ? 'text-sm' : 'text-base'}`}>
+          {option.label}
+        </span>
       </label>
     )
   }
@@ -64,7 +66,7 @@ export const Checkbox = ({
         <div className="space-y-1">
           <div
             className={`font-medium text-zinc-900 mt-5 mb-2 ${
-              !isDoubleForm ? 'text-base sm:text-lg md:text-xl' : ''
+              !isDoubleForm ? 'text-base sm:text-lg md:text-xl' : 'text-sm'
             }`}
           >
             {label}
@@ -90,7 +92,9 @@ export const Checkbox = ({
             setValue(props.name, checked)
           }}
         />
-        <span className="font-normal">{label}</span>
+        <span className={`font-normal leading-tight ${isDoubleForm ? 'text-sm' : 'text-base'}`}>
+          {label}
+        </span>
       </label>
       {requiredFromProps && errors[name] && <Error />}
     </Width>

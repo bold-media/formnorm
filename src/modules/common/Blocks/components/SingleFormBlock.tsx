@@ -13,6 +13,7 @@ export const SingleFormBlock = (props: SingleFormBlockType) => {
       <div className="max-w-3xl mx-auto">
         <RenderForm
           form={form as Form}
+          formType="single"
           className="px-4 xs:px-8 sm:px-12 pt-12 sm:pt-16 pb-8 border border-zinc-200"
         >
           {typeof form === 'object' && (
