@@ -2,7 +2,7 @@ import React from 'react'
 import { getAllCategories, getAllPosts } from '@/modules/post/data'
 import { PreviewCard } from '@/modules/common/PreviewCard'
 import { Metadata, ResolvingMetadata } from 'next'
-import { getSettings } from '@/modules/common/data'
+
 import { generateMeta } from '@/utils/generateMeta'
 import { PostCategories } from '@/modules/post/PostCategories'
 import { cn } from '@/utils/cn'

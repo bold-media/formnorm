@@ -179,7 +179,6 @@ export const formBuilder = formBuilderPlugin({
       },
       fields: sharedFields,
     },
-
     select: {
       ...fields.select,
       labels: {
@@ -404,6 +403,21 @@ export const formBuilder = formBuilderPlugin({
           },
         },
       ],
+    },
+    upload: {
+      // @ts-ignore
+      slug: 'upload',
+      labels: {
+        singular: {
+          en: 'Upload',
+          ru: 'Загрузка',
+        },
+        plural: {
+          en: 'Uploads',
+          ru: 'Загрузки',
+        },
+      },
+      fields: sharedFields,
     },
     radio: radioField,
     country: false,

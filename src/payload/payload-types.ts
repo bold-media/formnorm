@@ -67,6 +67,7 @@ export interface Config {
   blocks: {};
   collections: {
     media: Media;
+    upload: Upload;
     page: Page;
     user: User;
     post: Post;
@@ -83,6 +84,7 @@ export interface Config {
   collectionsJoins: {};
   collectionsSelect: {
     media: MediaSelect<false> | MediaSelect<true>;
+    upload: UploadSelect<false> | UploadSelect<true>;
     page: PageSelect<false> | PageSelect<true>;
     user: UserSelect<false> | UserSelect<true>;
     post: PostSelect<false> | PostSelect<true>;
@@ -208,6 +210,24 @@ export interface Media {
       filename?: string | null;
     };
   };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "upload".
+ */
+export interface Upload {
+  id: string;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -623,6 +643,17 @@ export interface Form {
             width?: number | null;
             defaultValue?: string | null;
             required?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'upload';
+          }
+        | {
+            name: string;
+            label?: string | null;
+            placeholder?: string | null;
+            width?: number | null;
+            defaultValue?: string | null;
+            required?: boolean | null;
             options: {
               label: string;
               value: string;
@@ -723,6 +754,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: string | Media;
+      } | null)
+    | ({
+        relationTo: 'upload';
+        value: string | Upload;
       } | null)
     | ({
         relationTo: 'page';
@@ -893,6 +928,23 @@ export interface MediaSelect<T extends boolean = true> {
               filename?: T;
             };
       };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "upload_select".
+ */
+export interface UploadSelect<T extends boolean = true> {
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1170,6 +1222,18 @@ export interface FormsSelect<T extends boolean = true> {
               blockName?: T;
             };
         textarea?:
+          | T
+          | {
+              name?: T;
+              label?: T;
+              placeholder?: T;
+              width?: T;
+              defaultValue?: T;
+              required?: T;
+              id?: T;
+              blockName?: T;
+            };
+        upload?:
           | T
           | {
               name?: T;

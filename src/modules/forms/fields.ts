@@ -6,6 +6,7 @@ import { Number } from './fields/Number'
 import { Select } from './fields/Select'
 import { Text } from './fields/Text'
 import { Textarea } from './fields/Textarea'
+import { Upload } from './fields/Upload'
 
 export type SupportedFieldTypes =
   | 'checkbox'
@@ -16,6 +17,7 @@ export type SupportedFieldTypes =
   | 'select'
   | 'text'
   | 'textarea'
+  | 'upload'
 
 // Update the fields object with proper typing
 export const fields: Record<SupportedFieldTypes, React.ComponentType<any>> = {
@@ -27,4 +29,5 @@ export const fields: Record<SupportedFieldTypes, React.ComponentType<any>> = {
   select: Select,
   text: Text,
   textarea: Textarea,
+  upload: Upload,
 }

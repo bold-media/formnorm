@@ -1,4 +1,4 @@
-import { Page, PageHero } from '@payload-types'
+import { PageHero } from '@payload-types'
 import React from 'react'
 import { PrimaryHero } from './PrimaryHero'
 import DefaultHero from './DefaultHero'
