@@ -7,15 +7,20 @@ export const EmbedBlock = (props: EmbedBlockType) => {
 
   if (!code) return null
 
-  if (landscapeVideo) {
+  // Check if the code contains a YouTube iframe
+  const isYouTube = code.includes('youtube.com/embed')
+
+  if (landscapeVideo || isYouTube) {
     return (
-      <AspectRatio ratio={16 / 9} className="w-full">
-        <div
-          dangerouslySetInnerHTML={{ __html: code }}
-          className="h-full w-full"
-          suppressHydrationWarning={true}
-        />
-      </AspectRatio>
+      <div className="w-[100vw] relative left-[50%] right-[50%] -ml-[50vw] -mr-[50vw] max-w-none overflow-hidden">
+        <AspectRatio ratio={32 / 9}>
+          <div
+            dangerouslySetInnerHTML={{ __html: code }}
+            className="h-full w-full [&>iframe]:h-full [&>iframe]:w-full [&>iframe]:border-0 [&>iframe]:rounded-none [&>iframe]:shadow-none [&>iframe]:scale-[2]"
+            suppressHydrationWarning={true}
+          />
+        </AspectRatio>
+      </div>
     )
   }
 
