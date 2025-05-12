@@ -12,6 +12,7 @@ import { Header } from '@/modules/layout/Header'
 import { Footer } from '@/modules/layout/Footer'
 import { Toaster } from '@/components/Sonner'
 import { ClientCookieConsent } from '@/modules/layout/ClientCookies'
+import { YandexMetrika } from '@/modules/layout/YandexMetrika'
 
 const montserrat = Montserrat({
   subsets: ['cyrillic'],
@@ -45,6 +46,7 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
         </div>
         <Toaster />
         <ClientCookieConsent />
+        <YandexMetrika />
       </body>
     </html>
   )
