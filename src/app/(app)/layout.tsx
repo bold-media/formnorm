@@ -46,7 +46,16 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
         </div>
         <Toaster />
         <ClientCookieConsent />
-        <YandexMetrika />
+        <YandexMetrika
+          initParameters={{
+            accurateTrackBounce: true,
+            clickmap: true,
+            trackHash: true,
+            trackLinks: true,
+            webvisor: true,
+            ecommerce: false,
+          }}
+        />
       </body>
     </html>
   )
