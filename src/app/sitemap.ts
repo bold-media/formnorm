@@ -44,6 +44,7 @@ const getPages = cache(
         updatedAt: true,
         pathname: true,
       },
+      limit: 0,
     })
     return pages
   },
@@ -62,6 +63,7 @@ const getPosts = cache(
         updatedAt: true,
         slug: true,
       },
+      limit: 0,
     })
     return posts
   },
@@ -80,6 +82,7 @@ const getProjects = cache(
         updatedAt: true,
         slug: true,
       },
+      limit: 0,
     })
     return projects
   },
@@ -98,6 +101,7 @@ const getServices = cache(
         updatedAt: true,
         slug: true,
       },
+      limit: 0,
     })
     return services
   },
@@ -116,6 +120,7 @@ const getTerms = cache(
         updatedAt: true,
         slug: true,
       },
+      limit: 0,
     })
     return terms
   },
@@ -134,6 +139,7 @@ const getCategories = cache(
         updatedAt: true,
         slug: true,
       },
+      limit: 0,
     })
     return categories
   },
