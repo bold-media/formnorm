@@ -14,7 +14,7 @@ export const Upload: CollectionConfig = {
     },
   },
   admin: {
-    // hidden: true,
+    hidden: true,
   },
   upload: true,
   access: {
