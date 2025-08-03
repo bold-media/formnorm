@@ -6,6 +6,7 @@ import { Metadata, ResolvingMetadata } from 'next'
 import { generateMeta } from '@/utils/generateMeta'
 import { getPayload } from 'payload'
 import config from '@payload-config'
+import { checkAndRedirect } from '@/utils/redirects'
 
 import ServiceIcon from '@/assets/photo.svg'
 import { getTermBySlug } from '@/modules/term/data'
@@ -21,6 +22,8 @@ const TermPage = async ({ params }: Props) => {
   const term = await getTermBySlug(slug)
 
   if (!term) {
+    // Check for redirects before returning 404
+    await checkAndRedirect(`/term/${slug}`)
     notFound()
   }
 

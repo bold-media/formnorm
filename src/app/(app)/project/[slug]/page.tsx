@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation'
 import { Metadata, ResolvingMetadata } from 'next'
 import { generateMeta } from '@/utils/generateMeta'
 import { getPathSegments } from '@/utils/getPathSegments'
+import { checkAndRedirect } from '@/utils/redirects'
 
 import { RichText } from '@/modules/common/RichText'
 import { PageBreadcrumbs } from '@/modules/common/PageBreadcrumbs'
@@ -22,6 +23,8 @@ const ProjectPage = async ({ params }: Props) => {
   const project = await getProjectBySlug(slug)
 
   if (!project) {
+    // Check for redirects before returning 404
+    await checkAndRedirect(`/project/${slug}`)
     notFound()
   }
 

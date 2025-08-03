@@ -10,6 +10,7 @@ import { getPageByPathname } from '@/modules/common/data'
 import { RichText } from '@/modules/common/RichText'
 import { Hero } from '@/modules/common/Hero'
 import { PageBreadcrumbs } from '@/modules/common/PageBreadcrumbs'
+import { checkAndRedirect } from '@/utils/redirects'
 
 interface Props {
   params: Promise<{
@@ -23,6 +24,8 @@ const Pages = async ({ params }: Props) => {
   const page = await getPageByPathname(pathname)
 
   if (!page) {
+    // Check for redirects before returning 404
+    await checkAndRedirect(pathname)
     notFound()
   }
 

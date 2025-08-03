@@ -10,6 +10,8 @@ type PayloadMetadata =
       title?: string | null
       description?: string | null
       image?: Media | string | null | undefined
+      canonicalURL?: string | null
+      noIndex?: boolean | null
     }
   | string
   | undefined
@@ -35,6 +37,7 @@ export const generateMeta = async (args: {
 }): Promise<Metadata> => {
   const { meta: data, fallback, pathname } = args
   const seo = typeof data === 'object' ? data : undefined
+  const serverUrl = getServerSideURL()
 
   const ogImage = getImageURL(seo?.image)
 
@@ -48,7 +51,20 @@ export const generateMeta = async (args: {
     : fallback?.description
       ? fallback?.description
       : ''
-  return {
+  
+  // Generate canonical URL
+  let canonicalURL: string | undefined
+  if (seo?.canonicalURL) {
+    // If canonical URL is provided, use it
+    canonicalURL = seo.canonicalURL.startsWith('http') 
+      ? seo.canonicalURL 
+      : `${serverUrl}${seo.canonicalURL}`
+  } else if (pathname) {
+    // Otherwise, use the pathname as canonical
+    canonicalURL = `${serverUrl}${pathname}`
+  }
+
+  const metadata: Metadata = {
     title,
     description,
     openGraph: mergeOpenGraph({
@@ -58,4 +74,21 @@ export const generateMeta = async (args: {
       url: pathname || undefined,
     }),
   }
+
+  // Add canonical URL if available
+  if (canonicalURL) {
+    metadata.alternates = {
+      canonical: canonicalURL,
+    }
+  }
+
+  // Add robots meta if noIndex is true
+  if (seo?.noIndex) {
+    metadata.robots = {
+      index: false,
+      follow: true,
+    }
+  }
+
+  return metadata
 }

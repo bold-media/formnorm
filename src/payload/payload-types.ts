@@ -77,6 +77,7 @@ export interface Config {
     service: Service;
     forms: Form;
     'form-submissions': FormSubmission;
+    redirects: Redirect;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -94,6 +95,7 @@ export interface Config {
     service: ServiceSelect<false> | ServiceSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
+    redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -258,12 +260,26 @@ export interface Page {
     [k: string]: unknown;
   } | null;
   meta?: {
+    /**
+     * This will be displayed as the title in search engine results
+     */
     title?: string | null;
+    /**
+     * This will be displayed as the description in search engine results
+     */
     description?: string | null;
     /**
-     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     * This image will be used when sharing on social media
      */
     image?: (string | null) | Media;
+    /**
+     * The canonical URL for this page. Leave empty to use the default URL.
+     */
+    canonicalURL?: string | null;
+    /**
+     * Checking this box will add meta tags to the page, asking search engines not to index this page. It will also remove it from the sitemap.
+     */
+    noIndex?: boolean | null;
   };
   breadcrumbs?:
     | {
@@ -372,12 +388,26 @@ export interface Post {
     [k: string]: unknown;
   } | null;
   meta?: {
+    /**
+     * This will be displayed as the title in search engine results
+     */
     title?: string | null;
+    /**
+     * This will be displayed as the description in search engine results
+     */
     description?: string | null;
     /**
-     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     * This image will be used when sharing on social media
      */
     image?: (string | null) | Media;
+    /**
+     * The canonical URL for this page. Leave empty to use the default URL.
+     */
+    canonicalURL?: string | null;
+    /**
+     * Checking this box will add meta tags to the page, asking search engines not to index this page. It will also remove it from the sitemap.
+     */
+    noIndex?: boolean | null;
   };
   updatedAt: string;
   createdAt: string;
@@ -435,12 +465,26 @@ export interface Project {
     [k: string]: unknown;
   } | null;
   meta?: {
+    /**
+     * This will be displayed as the title in search engine results
+     */
     title?: string | null;
+    /**
+     * This will be displayed as the description in search engine results
+     */
     description?: string | null;
     /**
-     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     * This image will be used when sharing on social media
      */
     image?: (string | null) | Media;
+    /**
+     * The canonical URL for this page. Leave empty to use the default URL.
+     */
+    canonicalURL?: string | null;
+    /**
+     * Checking this box will add meta tags to the page, asking search engines not to index this page. It will also remove it from the sitemap.
+     */
+    noIndex?: boolean | null;
   };
   updatedAt: string;
   createdAt: string;
@@ -478,12 +522,26 @@ export interface Term {
     [k: string]: unknown;
   } | null;
   meta?: {
+    /**
+     * This will be displayed as the title in search engine results
+     */
     title?: string | null;
+    /**
+     * This will be displayed as the description in search engine results
+     */
     description?: string | null;
     /**
-     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     * This image will be used when sharing on social media
      */
     image?: (string | null) | Media;
+    /**
+     * The canonical URL for this page. Leave empty to use the default URL.
+     */
+    canonicalURL?: string | null;
+    /**
+     * Checking this box will add meta tags to the page, asking search engines not to index this page. It will also remove it from the sitemap.
+     */
+    noIndex?: boolean | null;
   };
   updatedAt: string;
   createdAt: string;
@@ -520,12 +578,26 @@ export interface Service {
     [k: string]: unknown;
   } | null;
   meta?: {
+    /**
+     * This will be displayed as the title in search engine results
+     */
     title?: string | null;
+    /**
+     * This will be displayed as the description in search engine results
+     */
     description?: string | null;
     /**
-     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     * This image will be used when sharing on social media
      */
     image?: (string | null) | Media;
+    /**
+     * The canonical URL for this page. Leave empty to use the default URL.
+     */
+    canonicalURL?: string | null;
+    /**
+     * Checking this box will add meta tags to the page, asking search engines not to index this page. It will also remove it from the sitemap.
+     */
+    noIndex?: boolean | null;
   };
   updatedAt: string;
   createdAt: string;
@@ -746,6 +818,48 @@ export interface FormSubmission {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "redirects".
+ */
+export interface Redirect {
+  id: string;
+  /**
+   * The relative path to redirect from (e.g., /old-page or /post/old-slug)
+   */
+  from: string;
+  to?: {
+    type?: ('reference' | 'custom') | null;
+    reference?:
+      | ({
+          relationTo: 'page';
+          value: string | Page;
+        } | null)
+      | ({
+          relationTo: 'post';
+          value: string | Post;
+        } | null)
+      | ({
+          relationTo: 'service';
+          value: string | Service;
+        } | null)
+      | ({
+          relationTo: 'project';
+          value: string | Project;
+        } | null)
+      | ({
+          relationTo: 'category';
+          value: string | Category;
+        } | null)
+      | ({
+          relationTo: 'term';
+          value: string | Term;
+        } | null);
+    url?: string | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -794,6 +908,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'form-submissions';
         value: string | FormSubmission;
+      } | null)
+    | ({
+        relationTo: 'redirects';
+        value: string | Redirect;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -965,6 +1083,8 @@ export interface PageSelect<T extends boolean = true> {
         title?: T;
         description?: T;
         image?: T;
+        canonicalURL?: T;
+        noIndex?: T;
       };
   breadcrumbs?:
     | T
@@ -1039,6 +1159,8 @@ export interface PostSelect<T extends boolean = true> {
         title?: T;
         description?: T;
         image?: T;
+        canonicalURL?: T;
+        noIndex?: T;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -1081,6 +1203,8 @@ export interface ProjectSelect<T extends boolean = true> {
         title?: T;
         description?: T;
         image?: T;
+        canonicalURL?: T;
+        noIndex?: T;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -1105,6 +1229,8 @@ export interface TermSelect<T extends boolean = true> {
         title?: T;
         description?: T;
         image?: T;
+        canonicalURL?: T;
+        noIndex?: T;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -1128,6 +1254,8 @@ export interface ServiceSelect<T extends boolean = true> {
         title?: T;
         description?: T;
         image?: T;
+        canonicalURL?: T;
+        noIndex?: T;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -1301,6 +1429,22 @@ export interface FormSubmissionsSelect<T extends boolean = true> {
         field?: T;
         value?: T;
         id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "redirects_select".
+ */
+export interface RedirectsSelect<T extends boolean = true> {
+  from?: T;
+  to?:
+    | T
+    | {
+        type?: T;
+        reference?: T;
+        url?: T;
       };
   updatedAt?: T;
   createdAt?: T;

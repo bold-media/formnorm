@@ -1,22 +1,39 @@
 import { seoPlugin } from '@payloadcms/plugin-seo'
 import { GenerateTitle, GenerateURL } from '@payloadcms/plugin-seo/types'
-import { Page } from '@payload-types'
+import { Page, Post, Service, Project, Term, Category } from '@payload-types'
 
-const generateTitle: GenerateTitle<Page> = ({ doc }) => {
-  return doc?.title
-    ? `${doc.title} | ${process.env.NEXT_PUBLIC_APP_NAME}`
+// Type for collections that have SEO fields
+type SEOCollection = Page | Post | Service | Project | Term | Category
+
+const generateTitle: GenerateTitle<SEOCollection> = ({ doc, collectionSlug }) => {
+  // Category uses 'name' field instead of 'title'
+  const title = collectionSlug === 'category' 
+    ? (doc as Category)?.name 
+    : (doc as Page | Post | Service | Project | Term)?.title
+    
+  return title
+    ? `${title} | ${process.env.NEXT_PUBLIC_APP_NAME}`
     : process.env.NEXT_PUBLIC_SITE_NAME!
 }
 
-const generateURL: GenerateURL<Page> = ({ doc, collectionSlug }) => {
+const generateURL: GenerateURL<SEOCollection> = ({ doc, collectionSlug }) => {
+  const baseURL = process.env.NEXT_PUBLIC_APP_URL || ''
+  
   switch (collectionSlug) {
     case 'page':
-      return `${process.env.NEXT_PUBLIC_APP_URL}${doc?.pathname === '/' ? '' : doc?.pathname}`.replace(
-        /^\/+/,
-        '/',
-      )
+      return `${baseURL}${(doc as Page)?.pathname === '/' ? '' : (doc as Page)?.pathname}`
+    case 'post':
+      return `${baseURL}/post/${(doc as Post)?.slug}`
+    case 'service':
+      return `${baseURL}/service/${(doc as Service)?.slug}`
+    case 'project':
+      return `${baseURL}/project/${(doc as Project)?.slug}`
+    case 'term':
+      return `${baseURL}/term/${(doc as Term)?.slug}`
+    case 'category':
+      return `${baseURL}/blog/${(doc as Category)?.slug}`
     default:
-      return ``
+      return baseURL
   }
 }
 

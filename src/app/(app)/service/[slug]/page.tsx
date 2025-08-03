@@ -7,6 +7,7 @@ import { Metadata, ResolvingMetadata } from 'next'
 import { generateMeta } from '@/utils/generateMeta'
 import { getPayload } from 'payload'
 import config from '@payload-config'
+import { checkAndRedirect } from '@/utils/redirects'
 
 import ServiceIcon from '@/assets/photo.svg'
 
@@ -21,6 +22,8 @@ const ServicePage = async ({ params }: Props) => {
   const service = await getServiceBySlug(slug)
 
   if (!service) {
+    // Check for redirects before returning 404
+    await checkAndRedirect(`/service/${slug}`)
     notFound()
   }
 

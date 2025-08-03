@@ -3,14 +3,7 @@ import { syncPathname } from '@/payload/hooks/syncPathname'
 import { en } from '@/payload/i18n/en'
 import { ru } from '@/payload/i18n/ru'
 import { CollectionConfig } from 'payload'
-
-import {
-  MetaDescriptionField,
-  MetaImageField,
-  MetaTitleField,
-  OverviewField,
-  PreviewField,
-} from '@payloadcms/plugin-seo/fields'
+import { seoFields } from '@/payload/fields/seo'
 import { createBreadcrumbsField, createParentField } from '@payloadcms/plugin-nested-docs'
 import { access } from '@/payload/access'
 import { generatePreviewPath } from '@/utils/generatePreviewPath'
@@ -171,29 +164,13 @@ export const Page: CollectionConfig = {
         {
           name: 'meta',
           label: 'SEO',
-          fields: [
-            OverviewField({
-              titlePath: 'meta.title',
-              descriptionPath: 'meta.description',
-              imagePath: 'meta.image',
-            }),
-            MetaTitleField({
-              hasGenerateFn: true,
-              overrides: {
-                label: {
-                  en: en.common.title.singular,
-                  ru: ru.common.title.singular,
-                },
-              },
-            }),
-            MetaDescriptionField({}),
-            MetaImageField({ relationTo: 'media' }),
-            PreviewField({
-              hasGenerateFn: true,
-              titlePath: 'meta.title',
-              descriptionPath: 'meta.description',
-            }),
-          ],
+          fields: seoFields({
+            titlePath: 'meta.title',
+            descriptionPath: 'meta.description',
+            imagePath: 'meta.image',
+            hasGenerateFn: true,
+            includeNoIndex: true,
+          }),
         },
       ],
     },

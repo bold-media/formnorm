@@ -9,6 +9,7 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 import { cn } from '@/utils/cn'
 import { typographyVariants } from '@/styles/typography'
+import { checkAndRedirect } from '@/utils/redirects'
 
 import Link from 'next/link'
 import Image from 'next/image'
@@ -27,6 +28,8 @@ const PostPage = async ({ params }: Props) => {
   const post = await getPostBySlug(slug)
 
   if (!post) {
+    // Check for redirects before returning 404
+    await checkAndRedirect(`/post/${slug}`)
     notFound()
   }
   const relatedPosts = await getRelatedPosts(slug)

@@ -5,14 +5,7 @@ import { ru } from '@/payload/i18n/ru'
 import { generatePreviewPath } from '@/utils/generatePreviewPath'
 import { CollectionConfig } from 'payload'
 import { access } from '@/payload/access'
-
-import {
-  MetaDescriptionField,
-  MetaImageField,
-  MetaTitleField,
-  OverviewField,
-  PreviewField,
-} from '@payloadcms/plugin-seo/fields'
+import { seoFields } from '@/payload/fields/seo'
 import { revalidateTerm, revalidateTermDelete } from './hooks/revalidateTerm'
 import { blocksEditor } from '@/payload/fields/lexical/blocksEditor'
 
@@ -152,44 +145,13 @@ export const Term: CollectionConfig = {
         {
           name: 'meta',
           label: 'SEO',
-          fields: [
-            OverviewField({
-              titlePath: 'meta.title',
-              descriptionPath: 'meta.description',
-              imagePath: 'meta.image',
-            }),
-            MetaTitleField({
-              hasGenerateFn: true,
-              overrides: {
-                label: {
-                  en: en.common.title.singular,
-                  ru: ru.common.title.singular,
-                },
-              },
-            }),
-            MetaDescriptionField({
-              overrides: {
-                label: {
-                  en: en.common.description.singular,
-                  ru: ru.common.description.singular,
-                },
-              },
-            }),
-            MetaImageField({
-              relationTo: 'media',
-              overrides: {
-                label: {
-                  en: en.common.image.singular,
-                  ru: ru.common.image.singular,
-                },
-              },
-            }),
-            PreviewField({
-              hasGenerateFn: true,
-              titlePath: 'meta.title',
-              descriptionPath: 'meta.description',
-            }),
-          ],
+          fields: seoFields({
+            titlePath: 'meta.title',
+            descriptionPath: 'meta.description',
+            imagePath: 'meta.image',
+            hasGenerateFn: true,
+            includeNoIndex: true,
+          }),
         },
       ],
     },
