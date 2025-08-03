@@ -5,7 +5,7 @@ interface LinkProps {
   type?: ('reference' | 'custom') | null | undefined
   newTab?: boolean | null
   reference?: {
-    relationTo: 'page' | 'term' | 'service' | 'post'
+    relationTo: 'page' | 'term' | 'service' | 'post' | 'project' | 'category'
     value: string | Page | Term | Service | Post
   } | null
   url?: string | null

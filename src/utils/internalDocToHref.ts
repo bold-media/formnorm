@@ -19,8 +19,10 @@ export const internalDocToHref = ({
       return `/term/${value?.slug}`
     case 'service':
       return `/service/${value?.slug}`
-    case 'post':
-      return `/post/${value?.slug}`
+    case 'category':
+      return `/blog/${value?.slug}`
+    case 'project':
+      return `/project/${value?.slug}`
     default:
       return '/'
   }
