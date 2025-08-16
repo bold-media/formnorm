@@ -42,6 +42,8 @@ export const LinkJSXConverter: (args: {
         )
         href = '#' // fallback
       }
+    } else if (node.fields.linkType === 'custom' && node.fields.url) {
+      href = node.fields.url
     }
 
     return (

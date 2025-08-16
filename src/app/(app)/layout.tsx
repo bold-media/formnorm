@@ -13,6 +13,7 @@ import { Footer } from '@/modules/layout/Footer'
 import { Toaster } from '@/components/Sonner'
 import { ClientCookieConsent } from '@/modules/layout/ClientCookies'
 import { YandexMetrika } from '@/modules/layout/YandexMetrika'
+import { GoogleAnalytics } from '@next/third-parties/google'
 
 const montserrat = Montserrat({
   subsets: ['cyrillic'],
@@ -23,6 +24,8 @@ const montserrat = Montserrat({
 const RootLayout = async ({ children }: { children: React.ReactNode }) => {
   const { isEnabled: draft } = await draftMode()
   const settings = await getSettings()
+
+  const gaId = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID
 
   return (
     <html lang="ru">
@@ -57,6 +60,7 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
           }}
         />
       </body>
+      {gaId && <GoogleAnalytics gaId={gaId} />}
     </html>
   )
 }

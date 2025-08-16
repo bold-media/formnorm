@@ -1,7 +1,7 @@
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import { cache } from '@/utils/cache'
-import { redirect } from 'next/navigation'
+import { permanentRedirect } from 'next/navigation'
 
 type RedirectType = {
   id: string
@@ -55,10 +55,8 @@ export const getRedirects = async () => {
 
 export const checkAndRedirect = async (pathname: string): Promise<void> => {
   const redirects = await getRedirects()
-  
-  const matchedRedirect = redirects.find(
-    (redirect) => redirect.from === pathname
-  )
+
+  const matchedRedirect = redirects.find((redirect) => redirect.from === pathname)
 
   if (!matchedRedirect) {
     return
@@ -68,12 +66,9 @@ export const checkAndRedirect = async (pathname: string): Promise<void> => {
 
   if (matchedRedirect.to.type === 'custom' && matchedRedirect.to.url) {
     redirectTo = matchedRedirect.to.url
-  } else if (
-    matchedRedirect.to.type === 'reference' &&
-    matchedRedirect.to.reference?.value
-  ) {
+  } else if (matchedRedirect.to.type === 'reference' && matchedRedirect.to.reference?.value) {
     const { relationTo, value } = matchedRedirect.to.reference
-    
+
     // Build the URL based on the collection type
     switch (relationTo) {
       case 'page':
@@ -100,6 +95,6 @@ export const checkAndRedirect = async (pathname: string): Promise<void> => {
   }
 
   if (redirectTo) {
-    redirect(redirectTo)
+    permanentRedirect(redirectTo)
   }
 }

@@ -22,6 +22,7 @@
     "@heroicons/react": "^2.2.0",
     "@lexical/react": "0.27.1",
     "@lexical/selection": "0.27.1",
+    "@next/third-parties": "^15.4.6",
     "@payloadcms/db-postgres": "3.28.1",
     "@payloadcms/drizzle": "3.28.1",
     "@payloadcms/email-nodemailer": "3.28.1",
