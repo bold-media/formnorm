@@ -21,6 +21,7 @@ export const Project: CollectionConfig = {
       ru: 'Проекты',
     },
   },
+  orderable: true,
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'pathname', 'publishedAt', 'updatedAt'],
