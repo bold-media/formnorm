@@ -13,6 +13,7 @@ type SeoFieldsOptions = {
   imagePath?: string
   includeNoIndex?: boolean
   hasGenerateFn?: boolean
+  previewSuffix?: string
   noIndexAccess?:
     | {
         create?: FieldAccess
@@ -29,7 +30,8 @@ export const seoFields = ({
   includeNoIndex = true,
   hasGenerateFn = true,
   noIndexAccess,
-}: SeoFieldsOptions = {}): Field[] => {
+}: // previewSuffix,
+SeoFieldsOptions = {}): Field[] => {
   const baseFields: Field[] = [
     OverviewField({
       titlePath,
@@ -70,6 +72,11 @@ export const seoFields = ({
       hasGenerateFn: true,
       titlePath,
       descriptionPath,
+      // overrides: {
+      //   custom: {
+      //     previewSuffix,
+      //   },
+      // },
     }),
     MetaImageField({
       relationTo: 'media',

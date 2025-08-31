@@ -2,6 +2,7 @@ import { revalidateGlobal } from '@/payload/hooks/revalidateGlobal'
 import { MetaDescriptionField, MetaTitleField } from '@payloadcms/plugin-seo/fields'
 import { GlobalConfig } from 'payload'
 import { link, linkGroup } from '@/payload/fields/link'
+import { seoFields } from '@/payload/fields/seo'
 
 export const Settings: GlobalConfig = {
   slug: 'settings',
@@ -138,12 +139,31 @@ export const Settings: GlobalConfig = {
             ru: `Эти настройки используются как запасные для страниц, у которых не настроен SEO. Если у страницы настроен SEO, эти настройки будут проигнорированы.`,
           },
           fields: [
-            MetaTitleField({
-              hasGenerateFn: false,
-            }),
-            MetaDescriptionField({
-              hasGenerateFn: false,
-            }),
+            {
+              name: 'default',
+              type: 'group',
+              fields: seoFields({
+                titlePath: 'seo.default.title',
+                descriptionPath: 'seo.default.description',
+                imagePath: 'seo.default.image',
+              }),
+            },
+
+            {
+              name: 'blog',
+              label: {
+                en: 'Blog Posts SEO',
+                ru: 'SEO для Блога',
+              },
+              type: 'group',
+              fields: seoFields({
+                titlePath: 'seo.blog.title',
+                descriptionPath: 'seo.blog.description',
+                imagePath: 'seo.blog.image',
+                // previewSuffix: '/blog',
+                includeNoIndex: true,
+              }),
+            },
           ],
         },
       ],

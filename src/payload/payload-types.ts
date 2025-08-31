@@ -1582,8 +1582,50 @@ export interface Settings {
     };
   };
   seo?: {
-    title?: string | null;
-    description?: string | null;
+    default?: {
+      /**
+       * This will be displayed as the title in search engine results
+       */
+      title?: string | null;
+      /**
+       * This will be displayed as the description in search engine results
+       */
+      description?: string | null;
+      /**
+       * This image will be used when sharing on social media
+       */
+      image?: (string | null) | Media;
+      /**
+       * The canonical URL for this page. Leave empty to use the default URL.
+       */
+      canonicalURL?: string | null;
+      /**
+       * Checking this box will add meta tags to the page, asking search engines not to index this page. It will also remove it from the sitemap.
+       */
+      noIndex?: boolean | null;
+    };
+    blog?: {
+      /**
+       * This will be displayed as the title in search engine results
+       */
+      title?: string | null;
+      /**
+       * This will be displayed as the description in search engine results
+       */
+      description?: string | null;
+      /**
+       * This image will be used when sharing on social media
+       */
+      image?: (string | null) | Media;
+      /**
+       * The canonical URL for this page. Leave empty to use the default URL.
+       */
+      canonicalURL?: string | null;
+      /**
+       * Checking this box will add meta tags to the page, asking search engines not to index this page. It will also remove it from the sitemap.
+       */
+      noIndex?: boolean | null;
+    };
   };
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -1656,8 +1698,24 @@ export interface SettingsSelect<T extends boolean = true> {
   seo?:
     | T
     | {
-        title?: T;
-        description?: T;
+        default?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              image?: T;
+              canonicalURL?: T;
+              noIndex?: T;
+            };
+        blog?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              image?: T;
+              canonicalURL?: T;
+              noIndex?: T;
+            };
       };
   updatedAt?: T;
   createdAt?: T;
