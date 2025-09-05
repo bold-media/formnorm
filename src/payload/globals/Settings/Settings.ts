@@ -382,7 +382,7 @@ export const Settings: GlobalConfig = {
                         en: 'Service Name',
                         ru: 'Название услуги',
                       },
-                      required: true,
+                      required: false,
                     },
                     {
                       name: 'fieldType',

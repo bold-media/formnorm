@@ -15,7 +15,7 @@ interface ServiceOption {
 }
 
 interface Service {
-  name: string
+  name?: string
   pricePerM2?: number
   fixedPrice?: number
   ignoreArea?: boolean
@@ -96,48 +96,92 @@ const ServiceItem: React.FC<{
   selectedOption?: string
   onOptionChange: (serviceName: string, optionName: string) => void
   currency: string
-}> = ({ service, isSelected, onToggle, selectedOption, onOptionChange, currency }) => (
-  <div className="space-y-3">
-    <div className="flex items-start space-x-3">
-      <Checkbox checked={isSelected} onCheckedChange={onToggle} className="mt-0.5" />
-      <Label className="flex-1 flex justify-between items-center cursor-pointer">
-        <span className="font-normal text-base leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-          {service.name}
-        </span>
-        <span className="text-base text-muted-foreground whitespace-nowrap">
-          {getServicePriceDisplay(service, currency)}
-        </span>
-      </Label>
-    </div>
+}> = ({ service, isSelected, onToggle, selectedOption, onOptionChange, currency }) => {
+  // Если у сервиса нет названия, но есть опции - отображаем опции как радиокнопки
+  if (!service.name && service.hasOptions && service.options) {
+    return (
+      <div className="space-y-3">
+        <RadioGroup
+          value={selectedOption}
+          onValueChange={(value: string) => onOptionChange('', value)}
+        >
+          {service.options.map((option, index) => (
+            <div key={`option-${option.name}-${index}`} className="flex items-center space-x-2">
+              <RadioGroupItem value={option.name} id={`option-${option.name}-${index}`} />
+              <Label
+                htmlFor={`option-${option.name}-${index}`}
+                className="flex-1 flex justify-between items-center cursor-pointer"
+              >
+                <span className="font-normal text-base">{option.name}</span>
+                <span className="text-base text-muted-foreground whitespace-nowrap">
+                  {option.pricePerM2} {currency}/м²
+                </span>
+              </Label>
+            </div>
+          ))}
+        </RadioGroup>
+      </div>
+    )
+  }
 
-    {service.hasOptions && isSelected && service.options && (
-      <Card className="ml-6 p-3 bg-secondary/20 border-secondary">
-        <CardContent className="p-0 space-y-2">
-          <p className="text-sm font-medium text-secondary-foreground mb-2">Выберите вариант:</p>
-          <RadioGroup
-            value={selectedOption}
-            onValueChange={(value: string) => onOptionChange(service.name, value)}
-          >
-            {service.options.map((option) => (
-              <div key={option.name} className="flex items-center space-x-2">
-                <RadioGroupItem value={option.name} id={`${service.name}-${option.name}`} />
-                <Label
-                  htmlFor={`${service.name}-${option.name}`}
-                  className="flex-1 flex justify-between items-center cursor-pointer"
+  // Обычный сервис с названием
+  return (
+    <div className="space-y-3">
+      <div className="flex items-start space-x-3">
+        <Checkbox
+          id={`service-${service.name}`}
+          checked={isSelected}
+          onCheckedChange={onToggle}
+          className="mt-0.5"
+        />
+        <Label
+          htmlFor={`service-${service.name}`}
+          className="flex-1 flex justify-between items-center cursor-pointer"
+        >
+          <span className="font-normal text-base leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+            {service.name}
+          </span>
+          <span className="text-base text-muted-foreground whitespace-nowrap">
+            {getServicePriceDisplay(service, currency)}
+          </span>
+        </Label>
+      </div>
+
+      {service.hasOptions && isSelected && service.options && (
+        <Card className="ml-6 p-3 bg-secondary/20 border-secondary">
+          <CardContent className="p-0 space-y-2">
+            <p className="text-sm font-medium text-secondary-foreground mb-2">Выберите вариант:</p>
+            <RadioGroup
+              value={selectedOption}
+              onValueChange={(value: string) => onOptionChange(service.name || '', value)}
+            >
+              {service.options.map((option, index) => (
+                <div
+                  key={`${service.name}-${option.name}-${index}`}
+                  className="flex items-center space-x-2"
                 >
-                  <span className="font-normal text-base">{option.name}</span>
-                  <span className="text-base text-muted-foreground whitespace-nowrap">
-                    {option.pricePerM2} {currency}/м²
-                  </span>
-                </Label>
-              </div>
-            ))}
-          </RadioGroup>
-        </CardContent>
-      </Card>
-    )}
-  </div>
-)
+                  <RadioGroupItem
+                    value={option.name}
+                    id={`${service.name}-${option.name}-${index}`}
+                  />
+                  <Label
+                    htmlFor={`${service.name}-${option.name}-${index}`}
+                    className="flex-1 flex justify-between items-center cursor-pointer"
+                  >
+                    <span className="font-normal text-base">{option.name}</span>
+                    <span className="text-base text-muted-foreground whitespace-nowrap">
+                      {option.pricePerM2} {currency}/м²
+                    </span>
+                  </Label>
+                </div>
+              ))}
+            </RadioGroup>
+          </CardContent>
+        </Card>
+      )}
+    </div>
+  )
+}
 
 // Компонент секции услуг
 const ServicesSection: React.FC<{
@@ -160,17 +204,22 @@ const ServicesSection: React.FC<{
   <div className="space-y-4">
     <h3 className="font-medium text-base">{title}</h3>
     <div className="space-y-4">
-      {services.map((service) => (
-        <ServiceItem
-          key={service.name}
-          service={service}
-          isSelected={selectedServices.includes(service.name)}
-          onToggle={() => onServiceToggle(service.name)}
-          selectedOption={serviceOptions[service.name]}
-          onOptionChange={onOptionChange}
-          currency={currency}
-        />
-      ))}
+      {services.map((service, index) => {
+        // Для сервисов без названия используем уникальный ключ
+        const serviceKey = service.name || `unnamed-${index}`
+
+        return (
+          <ServiceItem
+            key={`${title}-${serviceKey}-${index}`}
+            service={service}
+            isSelected={service.name ? selectedServices.includes(service.name) : true}
+            onToggle={() => (service.name ? onServiceToggle(service.name) : () => {})}
+            selectedOption={serviceOptions[service.name || '']}
+            onOptionChange={onOptionChange}
+            currency={currency}
+          />
+        )
+      })}
     </div>
   </div>
 )
@@ -187,11 +236,11 @@ const ElementsRadioGroup: React.FC<{
   <div className="space-y-3">
     {title && <Label className="font-medium text-base">{title}</Label>}
     <RadioGroup value={selected} onValueChange={onChange}>
-      {elements.map((element) => (
-        <div key={element.name} className="flex items-center space-x-2">
-          <RadioGroupItem value={element.name} id={`${name}-${element.name}`} />
+      {elements.map((element, index) => (
+        <div key={`${name}-${element.name}-${index}`} className="flex items-center space-x-2">
+          <RadioGroupItem value={element.name} id={`${name}-${element.name}-${index}`} />
           <Label
-            htmlFor={`${name}-${element.name}`}
+            htmlFor={`${name}-${element.name}-${index}`}
             className="flex-1 flex justify-between items-center cursor-pointer"
           >
             <span className="font-normal text-base">{element.name}</span>
@@ -392,17 +441,30 @@ const CalculatorBlock = () => {
       const items: any[] = []
 
       services.forEach((service) => {
-        if (!formData.selectedServices.includes(service.name)) return
+        // Для сервисов без названия проверяем выбранную опцию
+        if (!service.name && service.hasOptions && service.options?.length) {
+          const selectedOption = formData.serviceOptions['']
+          const option = service.options.find((opt) => opt.name === selectedOption)
+          if (option) {
+            const serviceCost = option.pricePerM2 * area
+            cost += serviceCost
+            items.push({ name: option.name, cost: serviceCost })
+          }
+          return
+        }
+
+        // Для обычных сервисов с названием
+        if (service.name && !formData.selectedServices.includes(service.name)) return
 
         let serviceCost = 0
         let serviceName = service.name
 
         if (service.hasOptions && service.options?.length) {
-          const selectedOption = formData.serviceOptions[service.name]
+          const selectedOption = formData.serviceOptions[service.name || '']
           const option = service.options.find((opt) => opt.name === selectedOption)
           if (option) {
             serviceCost = option.pricePerM2 * area
-            serviceName = `${service.name}: ${option.name}`
+            serviceName = service.name ? `${service.name}: ${option.name}` : option.name
           }
         } else {
           serviceCost = service.ignoreArea
@@ -693,13 +755,20 @@ ${calc.elementItems
                   {/* Чекбоксы */}
                   {section.fieldType === 'checkbox' && (
                     <div className="space-y-3">
-                      {section.elements.map((element) => (
-                        <div key={element.name} className="flex items-center space-x-3">
+                      {section.elements.map((element, index) => (
+                        <div
+                          key={`${section.title}-${element.name}-${index}`}
+                          className="flex items-center space-x-3"
+                        >
                           <Checkbox
+                            id={`element-${section.title}-${element.name}-${index}`}
                             checked={formData.selectedElements.includes(element.name)}
                             onCheckedChange={() => handlers.elementToggle(element.name)}
                           />
-                          <Label className="flex-1 flex justify-between items-center cursor-pointer">
+                          <Label
+                            htmlFor={`element-${section.title}-${element.name}-${index}`}
+                            className="flex-1 flex justify-between items-center cursor-pointer"
+                          >
                             <span className="font-normal text-base">{element.name}</span>
                             <span className="text-base text-muted-foreground whitespace-nowrap">
                               {formatPrice(element.price, calculatorConfig.currency)}

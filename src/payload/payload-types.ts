@@ -1677,7 +1677,7 @@ export interface Settings {
           title: string;
           services?:
             | {
-                name: string;
+                name?: string | null;
                 fieldType?: ('radio' | 'checkbox') | null;
                 pricePerM2?: number | null;
                 fixedPrice?: number | null;
