@@ -7,5 +7,17 @@ import { Term } from './Term'
 import { Service } from './Service'
 import { Project } from './Project'
 import { Upload } from './Upload'
+// import { CalculatorResult } from './CalculatorResult'
 
-export const collections = [Media, Upload, Page, User, Post, Category, Project, Term, Service]
+export const collections = [
+  Media,
+  Upload,
+  Page,
+  User,
+  Post,
+  Category,
+  Project,
+  Term,
+  Service,
+  // CalculatorResult,
+]

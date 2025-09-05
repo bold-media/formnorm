@@ -166,6 +166,587 @@ export const Settings: GlobalConfig = {
             },
           ],
         },
+        {
+          name: 'calculator',
+          label: {
+            en: 'Price Calculator',
+            ru: 'Калькулятор цен',
+          },
+          description: {
+            en: 'House design project calculator settings',
+            ru: 'Настройки калькулятора проектирования дома',
+          },
+          fields: [
+            {
+              name: 'calculatorTitle',
+              type: 'text',
+              label: {
+                en: 'Calculator Title',
+                ru: 'Название калькулятора',
+              },
+              defaultValue: 'Калькулятор проектирования дома',
+              required: true,
+            },
+            {
+              name: 'currency',
+              type: 'text',
+              label: {
+                en: 'Currency Symbol',
+                ru: 'Символ валюты',
+              },
+              defaultValue: 'р.',
+              required: true,
+            },
+            {
+              name: 'areaSettings',
+              type: 'group',
+              label: {
+                en: 'Area Settings',
+                ru: 'Настройки площади',
+              },
+              fields: [
+                {
+                  name: 'label',
+                  type: 'text',
+                  label: {
+                    en: 'Group Label',
+                    ru: 'Заголовок группы',
+                  },
+                  defaultValue: 'Общая площадь дома (все помещения на всех этажах)',
+                },
+                {
+                  name: 'placeholder',
+                  type: 'text',
+                  label: {
+                    en: 'Placeholder',
+                    ru: 'Подсказка',
+                  },
+                  defaultValue: 'Введите площадь в м²',
+                },
+                {
+                  name: 'defaultArea',
+                  type: 'number',
+                  label: {
+                    en: 'Default Area',
+                    ru: 'Площадь по умолчанию',
+                  },
+                  defaultValue: 0,
+                },
+                {
+                  name: 'areaCoefficients',
+                  type: 'array',
+                  label: {
+                    en: 'Area Coefficients',
+                    ru: 'Коэффициенты по площади',
+                  },
+                  fields: [
+                    {
+                      name: 'label',
+                      type: 'text',
+                      label: {
+                        en: 'Range Description',
+                        ru: 'Описание диапазона',
+                      },
+                      required: true,
+                    },
+                    {
+                      name: 'minArea',
+                      type: 'number',
+                      label: {
+                        en: 'Minimum Area',
+                        ru: 'Минимальная площадь',
+                      },
+                      required: true,
+                    },
+                    {
+                      name: 'maxArea',
+                      type: 'number',
+                      label: {
+                        en: 'Maximum Area',
+                        ru: 'Максимальная площадь',
+                      },
+                    },
+                    {
+                      name: 'coefficient',
+                      type: 'number',
+                      label: {
+                        en: 'Coefficient',
+                        ru: 'Коэффициент',
+                      },
+                      required: true,
+                    },
+                  ],
+                  defaultValue: [
+                    { label: 'площадь 100-150 м²', minArea: 100, maxArea: 150, coefficient: 1.2 },
+                    { label: 'площадь 150-250 м²', minArea: 150, maxArea: 250, coefficient: 1.0 },
+                    {
+                      label: 'площадь более 250 м²',
+                      minArea: 250,
+                      maxArea: null,
+                      coefficient: 0.9,
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              name: 'floorSettings',
+              type: 'group',
+              label: {
+                en: 'Floor Settings',
+                ru: 'Настройки этажности',
+              },
+              fields: [
+                {
+                  name: 'label',
+                  type: 'text',
+                  label: {
+                    en: 'Group Label',
+                    ru: 'Заголовок группы',
+                  },
+                  defaultValue: 'Этажность',
+                },
+                {
+                  name: 'floorOptions',
+                  type: 'array',
+                  label: {
+                    en: 'Floor Options',
+                    ru: 'Варианты этажности',
+                  },
+                  fields: [
+                    {
+                      name: 'name',
+                      type: 'text',
+                      label: {
+                        en: 'Name',
+                        ru: 'Название',
+                      },
+                      required: true,
+                    },
+                    {
+                      name: 'coefficient',
+                      type: 'number',
+                      label: {
+                        en: 'Coefficient',
+                        ru: 'Коэффициент',
+                      },
+                      required: true,
+                    },
+                    {
+                      name: 'isDefault',
+                      type: 'checkbox',
+                      label: {
+                        en: 'Default',
+                        ru: 'По умолчанию',
+                      },
+                    },
+                  ],
+                  defaultValue: [
+                    { name: 'Одноэтажный', coefficient: 1, isDefault: true },
+                    { name: 'Двухэтажный (полный или мансардный второй этаж)', coefficient: 1.1 },
+                    { name: 'Одноэтажный с цокольным этажом или подвалом', coefficient: 1.1 },
+                    { name: 'Двухэтажный с цокольным этажом или подвалом', coefficient: 1.2 },
+                  ],
+                },
+              ],
+            },
+            {
+              name: 'servicesSections',
+              type: 'array',
+              label: {
+                en: 'Services Sections',
+                ru: 'Разделы услуг',
+              },
+              fields: [
+                {
+                  name: 'title',
+                  type: 'text',
+                  label: {
+                    en: 'Group Label',
+                    ru: 'Заголовок группы',
+                  },
+                  required: true,
+                },
+                {
+                  name: 'services',
+                  type: 'array',
+                  label: {
+                    en: 'Services',
+                    ru: 'Услуги',
+                  },
+                  fields: [
+                    {
+                      name: 'name',
+                      type: 'text',
+                      label: {
+                        en: 'Service Name',
+                        ru: 'Название услуги',
+                      },
+                      required: true,
+                    },
+                    {
+                      name: 'fieldType',
+                      type: 'select',
+                      label: {
+                        en: 'Field Type',
+                        ru: 'Тип поля',
+                      },
+                      options: [
+                        { label: 'Радио кнопка', value: 'radio' },
+                        { label: 'Чекбокс', value: 'checkbox' },
+                      ],
+                      defaultValue: 'checkbox',
+                    },
+                    {
+                      name: 'pricePerM2',
+                      type: 'number',
+                      label: {
+                        en: 'Price per m²',
+                        ru: 'Цена за м²',
+                      },
+                      admin: {
+                        condition: (_, siblingData) => !siblingData?.ignoreArea,
+                      },
+                    },
+                    {
+                      name: 'fixedPrice',
+                      type: 'number',
+                      label: {
+                        en: 'Fixed Price',
+                        ru: 'Фиксированная цена',
+                      },
+                      admin: {
+                        condition: (_, siblingData) => siblingData?.ignoreArea === true,
+                      },
+                    },
+                    {
+                      name: 'ignoreArea',
+                      type: 'checkbox',
+                      label: {
+                        en: 'Ignore Area',
+                        ru: 'Не учитывать площадь',
+                      },
+                    },
+                    {
+                      name: 'isRequired',
+                      type: 'checkbox',
+                      label: {
+                        en: 'Required Field',
+                        ru: 'Обязательное поле',
+                      },
+                    },
+                    {
+                      name: 'isDefault',
+                      type: 'checkbox',
+                      label: {
+                        en: 'Default Selected',
+                        ru: 'Выбрано по умолчанию',
+                      },
+                    },
+                    {
+                      name: 'radioGroup',
+                      type: 'text',
+                      label: {
+                        en: 'Radio Group',
+                        ru: 'Группа радио кнопок',
+                      },
+                      admin: {
+                        description: 'Для группировки радио кнопок (например: "opr-group")',
+                        condition: (data) => data.fieldType === 'radio',
+                      },
+                    },
+                    {
+                      name: 'hasOptions',
+                      type: 'checkbox',
+                      label: {
+                        en: 'Has Options',
+                        ru: 'Есть варианты выбора',
+                      },
+                      admin: {
+                        description: 'При выборе этой услуги появятся дополнительные варианты',
+                      },
+                    },
+                    {
+                      name: 'options',
+                      type: 'array',
+                      label: {
+                        en: 'Service Options',
+                        ru: 'Варианты услуги',
+                      },
+                      admin: {
+                        condition: (_, siblingData) => siblingData?.hasOptions === true,
+                      },
+                      fields: [
+                        {
+                          name: 'name',
+                          type: 'text',
+                          label: {
+                            en: 'Option Name',
+                            ru: 'Название варианта',
+                          },
+                          required: true,
+                        },
+                        {
+                          name: 'pricePerM2',
+                          type: 'number',
+                          label: {
+                            en: 'Price per m²',
+                            ru: 'Цена за м²',
+                          },
+                        },
+                        {
+                          name: 'description',
+                          type: 'text',
+                          label: {
+                            en: 'Description',
+                            ru: 'Описание',
+                          },
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+              defaultValue: [
+                {
+                  title: 'Общестроительные',
+                  services: [
+                    {
+                      name: 'Объемно-планировочные решения (ОПР)',
+                      fieldType: 'radio',
+                      pricePerM2: 495,
+                      isRequired: true,
+                      isDefault: true,
+                      radioGroup: 'opr-group',
+                    },
+                    {
+                      name: 'Архитектурный проект (АР)',
+                      fieldType: 'checkbox',
+                      pricePerM2: 1105,
+                      isDefault: true,
+                    },
+                    {
+                      name: 'План застройки участка',
+                      fieldType: 'checkbox',
+                      fixedPrice: 19500,
+                      ignoreArea: true,
+                    },
+                    {
+                      name: 'Проект конструкций (КР)',
+                      fieldType: 'checkbox',
+                      pricePerM2: 915,
+                    },
+                  ],
+                },
+                {
+                  title: 'Инженерные сети',
+                  services: [
+                    {
+                      name: 'Проект наружных сетей здания',
+                      fieldType: 'checkbox',
+                      pricePerM2: 200,
+                    },
+                    {
+                      name: 'Проект ливневой канализации',
+                      fieldType: 'checkbox',
+                      fixedPrice: 18000,
+                      ignoreArea: true,
+                    },
+                    {
+                      name: 'Проект внутренней канализации',
+                      fieldType: 'checkbox',
+                      pricePerM2: 260,
+                    },
+                    {
+                      name: 'Проект системы вентиляции',
+                      fieldType: 'checkbox',
+                      pricePerM2: 260,
+                      hasOptions: true,
+                      options: [
+                        {
+                          name: 'Децентрализованная система',
+                          pricePerM2: 260,
+                          description:
+                            'с притоком через клапаны (бризеры) и системой вытяжных воздуховодов',
+                        },
+                        {
+                          name: 'Централизованная система',
+                          pricePerM2: 340,
+                          description:
+                            'с приточно-вытяжной установкой, рекуператором, системой воздуховодов',
+                        },
+                      ],
+                    },
+                    {
+                      name: 'Проект электроснабжения',
+                      fieldType: 'checkbox',
+                      pricePerM2: 230,
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              name: 'additionalSections',
+              type: 'array',
+              label: {
+                en: 'Additional Sections',
+                ru: 'Дополнительные разделы',
+              },
+              fields: [
+                {
+                  name: 'title',
+                  type: 'text',
+                  label: {
+                    en: 'Group Label',
+                    ru: 'Заголовок группы',
+                  },
+                  required: true,
+                },
+                {
+                  name: 'fieldType',
+                  type: 'select',
+                  label: {
+                    en: 'Field Type',
+                    ru: 'Тип поля',
+                  },
+                  options: [
+                    { label: 'Чекбоксы', value: 'checkbox' },
+                    { label: 'Радио кнопки', value: 'radio' },
+                  ],
+                  defaultValue: 'checkbox',
+                },
+                {
+                  name: 'elements',
+                  type: 'array',
+                  label: {
+                    en: 'Elements',
+                    ru: 'Элементы',
+                  },
+                  fields: [
+                    {
+                      name: 'name',
+                      type: 'text',
+                      label: {
+                        en: 'Element Name',
+                        ru: 'Название элемента',
+                      },
+                      required: true,
+                    },
+                    {
+                      name: 'price',
+                      type: 'number',
+                      label: {
+                        en: 'Price',
+                        ru: 'Цена',
+                      },
+                      required: true,
+                    },
+                    {
+                      name: 'isDefault',
+                      type: 'checkbox',
+                      label: {
+                        en: 'Default Selected',
+                        ru: 'Выбрано по умолчанию',
+                      },
+                    },
+                  ],
+                },
+              ],
+              defaultValue: [
+                {
+                  title: 'Кровля',
+                  fieldType: 'checkbox',
+                  elements: [
+                    {
+                      name: 'Эксплуатируемая кровля',
+                      price: 12000,
+                    },
+                  ],
+                },
+                {
+                  title: 'Бассейн',
+                  fieldType: 'radio',
+                  elements: [
+                    {
+                      name: 'Монолитный бассейн или купель',
+                      price: 12000,
+                    },
+                    {
+                      name: 'Пластиковый (композитный) бассейн',
+                      price: 3000,
+                    },
+                    {
+                      name: 'нет бассейна',
+                      price: 0,
+                      isDefault: true,
+                    },
+                  ],
+                },
+                {
+                  title: 'Погреб',
+                  fieldType: 'radio',
+                  elements: [
+                    {
+                      name: 'Монолитный погреб',
+                      price: 9000,
+                    },
+                    {
+                      name: 'Пластиковый погреб',
+                      price: 2000,
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              name: 'interfaceTexts',
+              type: 'group',
+              label: {
+                en: 'Interface Texts',
+                ru: 'Тексты интерфейса',
+              },
+              fields: [
+                {
+                  name: 'submitButtonText',
+                  type: 'text',
+                  label: {
+                    en: 'Submit Button Text',
+                    ru: 'Текст кнопки расчета',
+                  },
+                  defaultValue: 'Рассчитать стоимость',
+                },
+                {
+                  name: 'resetButtonText',
+                  type: 'text',
+                  label: {
+                    en: 'Reset Button Text',
+                    ru: 'Текст кнопки сброса',
+                  },
+                  defaultValue: 'Сбросить',
+                },
+                {
+                  name: 'totalPriceLabel',
+                  type: 'text',
+                  label: {
+                    en: 'Total Price Label',
+                    ru: 'Текст итоговой цены',
+                  },
+                  defaultValue: 'Стоимость всех разделов',
+                },
+                {
+                  name: 'pricePerM2Label',
+                  type: 'text',
+                  label: {
+                    en: 'Price per m² Label',
+                    ru: 'Текст цены за м²',
+                  },
+                  defaultValue: 'Цена всех разделов за м²',
+                },
+              ],
+            },
+          ],
+        },
       ],
     },
   ],

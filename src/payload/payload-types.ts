@@ -54,6 +54,7 @@ export type SupportedTimezones =
   | 'Asia/Singapore'
   | 'Asia/Tokyo'
   | 'Asia/Seoul'
+  | 'Australia/Brisbane'
   | 'Australia/Sydney'
   | 'Pacific/Guam'
   | 'Pacific/Noumea'
@@ -342,6 +343,13 @@ export interface User {
   hash?: string | null;
   loginAttempts?: number | null;
   lockUntil?: string | null;
+  sessions?:
+    | {
+        id: string;
+        createdAt?: string | null;
+        expiresAt: string;
+      }[]
+    | null;
   password?: string | null;
 }
 /**
@@ -430,6 +438,7 @@ export interface Category {
  */
 export interface Project {
   id: string;
+  _order?: string | null;
   slug?: string | null;
   title: string;
   suffix?: string | null;
@@ -1136,6 +1145,13 @@ export interface UserSelect<T extends boolean = true> {
   hash?: T;
   loginAttempts?: T;
   lockUntil?: T;
+  sessions?:
+    | T
+    | {
+        id?: T;
+        createdAt?: T;
+        expiresAt?: T;
+      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1181,6 +1197,7 @@ export interface CategorySelect<T extends boolean = true> {
  * via the `definition` "project_select".
  */
 export interface ProjectSelect<T extends boolean = true> {
+  _order?: T;
   slug?: T;
   title?: T;
   suffix?: T;
@@ -1627,6 +1644,90 @@ export interface Settings {
       noIndex?: boolean | null;
     };
   };
+  calculator: {
+    calculatorTitle: string;
+    currency: string;
+    areaSettings?: {
+      label?: string | null;
+      placeholder?: string | null;
+      defaultArea?: number | null;
+      areaCoefficients?:
+        | {
+            label: string;
+            minArea: number;
+            maxArea?: number | null;
+            coefficient: number;
+            id?: string | null;
+          }[]
+        | null;
+    };
+    floorSettings?: {
+      label?: string | null;
+      floorOptions?:
+        | {
+            name: string;
+            coefficient: number;
+            isDefault?: boolean | null;
+            id?: string | null;
+          }[]
+        | null;
+    };
+    servicesSections?:
+      | {
+          title: string;
+          services?:
+            | {
+                name: string;
+                fieldType?: ('radio' | 'checkbox') | null;
+                pricePerM2?: number | null;
+                fixedPrice?: number | null;
+                ignoreArea?: boolean | null;
+                isRequired?: boolean | null;
+                isDefault?: boolean | null;
+                /**
+                 * Для группировки радио кнопок (например: "opr-group")
+                 */
+                radioGroup?: string | null;
+                /**
+                 * При выборе этой услуги появятся дополнительные варианты
+                 */
+                hasOptions?: boolean | null;
+                options?:
+                  | {
+                      name: string;
+                      pricePerM2?: number | null;
+                      description?: string | null;
+                      id?: string | null;
+                    }[]
+                  | null;
+                id?: string | null;
+              }[]
+            | null;
+          id?: string | null;
+        }[]
+      | null;
+    additionalSections?:
+      | {
+          title: string;
+          fieldType?: ('checkbox' | 'radio') | null;
+          elements?:
+            | {
+                name: string;
+                price: number;
+                isDefault?: boolean | null;
+                id?: string | null;
+              }[]
+            | null;
+          id?: string | null;
+        }[]
+      | null;
+    interfaceTexts?: {
+      submitButtonText?: string | null;
+      resetButtonText?: string | null;
+      totalPriceLabel?: string | null;
+      pricePerM2Label?: string | null;
+    };
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1715,6 +1816,92 @@ export interface SettingsSelect<T extends boolean = true> {
               image?: T;
               canonicalURL?: T;
               noIndex?: T;
+            };
+      };
+  calculator?:
+    | T
+    | {
+        calculatorTitle?: T;
+        currency?: T;
+        areaSettings?:
+          | T
+          | {
+              label?: T;
+              placeholder?: T;
+              defaultArea?: T;
+              areaCoefficients?:
+                | T
+                | {
+                    label?: T;
+                    minArea?: T;
+                    maxArea?: T;
+                    coefficient?: T;
+                    id?: T;
+                  };
+            };
+        floorSettings?:
+          | T
+          | {
+              label?: T;
+              floorOptions?:
+                | T
+                | {
+                    name?: T;
+                    coefficient?: T;
+                    isDefault?: T;
+                    id?: T;
+                  };
+            };
+        servicesSections?:
+          | T
+          | {
+              title?: T;
+              services?:
+                | T
+                | {
+                    name?: T;
+                    fieldType?: T;
+                    pricePerM2?: T;
+                    fixedPrice?: T;
+                    ignoreArea?: T;
+                    isRequired?: T;
+                    isDefault?: T;
+                    radioGroup?: T;
+                    hasOptions?: T;
+                    options?:
+                      | T
+                      | {
+                          name?: T;
+                          pricePerM2?: T;
+                          description?: T;
+                          id?: T;
+                        };
+                    id?: T;
+                  };
+              id?: T;
+            };
+        additionalSections?:
+          | T
+          | {
+              title?: T;
+              fieldType?: T;
+              elements?:
+                | T
+                | {
+                    name?: T;
+                    price?: T;
+                    isDefault?: T;
+                    id?: T;
+                  };
+              id?: T;
+            };
+        interfaceTexts?:
+          | T
+          | {
+              submitButtonText?: T;
+              resetButtonText?: T;
+              totalPriceLabel?: T;
+              pricePerM2Label?: T;
             };
       };
   updatedAt?: T;

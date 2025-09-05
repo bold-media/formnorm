@@ -13,6 +13,7 @@ import { messages } from './i18n'
 import { plugins } from './plugins'
 import { rootEditor } from './fields/lexical/rootEditor'
 import { globals } from './globals'
+import { endpoints } from './endpoints'
 import { migrations } from '@/migrations'
 import { disableEnums } from './overrides/disableEnums'
 
@@ -56,6 +57,7 @@ export default buildConfig({
   },
   collections,
   globals,
+  endpoints,
   editor: rootEditor,
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

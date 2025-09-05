@@ -14,6 +14,7 @@ import { Toaster } from '@/components/Sonner'
 import { ClientCookieConsent } from '@/modules/layout/ClientCookies'
 import { YandexMetrika } from '@/modules/layout/YandexMetrika'
 import { GoogleAnalytics } from '@next/third-parties/google'
+import Script from 'next/script'
 
 const montserrat = Montserrat({
   subsets: ['cyrillic'],
@@ -59,6 +60,9 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
             ecommerce: false,
           }}
         />
+        {process.env.NODE_ENV === 'production' && (
+          <Script src="//code.jivo.ru/widget/wv6EIdwhr5" strategy="afterInteractive" />
+        )}
       </body>
       {gaId && <GoogleAnalytics gaId={gaId} />}
     </html>
