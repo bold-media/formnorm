@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-// Используем puppeteer-core в продакшене для лучшей совместимости с Docker
+// Use puppeteer-core in production for better Docker compatibility
 const puppeteer =
   process.env.NODE_ENV === 'production' ? require('puppeteer-core') : require('puppeteer')
 
@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
     console.log('HTML length:', html.length)
     console.log('Filename:', filename)
 
-    // Запускаем браузер с дополнительными опциями для продакшена
+    // Launch browser with additional options for production
     const launchOptions: any = {
       headless: true,
       args: [
@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
       ],
     }
 
-    // В продакшене используем системный Chromium
+    // In production, use system Chromium
     if (process.env.NODE_ENV === 'production') {
       launchOptions.executablePath = process.env.PUPPETEER_EXECUTABLE_PATH || '/usr/bin/chromium-browser'
       console.log('Using production executable path:', launchOptions.executablePath)
@@ -53,15 +53,15 @@ export async function POST(request: NextRequest) {
       const page = await browser.newPage()
       console.log('New page created')
 
-      // Устанавливаем размер страницы
+      // Set page size
       await page.setViewport({ width: 1200, height: 800 })
       console.log('Viewport set')
 
-      // Загружаем HTML контент
+      // Load HTML content
       await page.setContent(html, { waitUntil: 'networkidle0' })
       console.log('HTML content loaded')
 
-      // Генерируем PDF
+      // Generate PDF
       console.log('Starting PDF generation...')
       const pdfBuffer = await page.pdf({
         format: 'A4',
@@ -81,7 +81,7 @@ export async function POST(request: NextRequest) {
       await browser.close()
       console.log('Browser closed')
 
-      // Возвращаем PDF как blob
+      // Return PDF as blob
       return new NextResponse(pdfBuffer, {
         headers: {
           'Content-Type': 'application/pdf',

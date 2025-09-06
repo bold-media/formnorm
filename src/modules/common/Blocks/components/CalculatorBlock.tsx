@@ -9,7 +9,7 @@ import { Label } from '@/components/Label'
 import { HTMLReport } from '@/components/PDF'
 import { renderToString } from 'react-dom/server'
 
-// ============= ТИПЫ =============
+// ============= TYPES =============
 interface ServiceOption {
   name: string
   pricePerM2: number
@@ -75,7 +75,7 @@ interface CalculatorConfig {
   }
 }
 
-// ============= ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ =============
+// ============= HELPER FUNCTIONS =============
 const formatPrice = (price: number, currency: string) => `${price.toLocaleString()} ${currency}`
 
 const getServicePriceDisplay = (
@@ -97,9 +97,9 @@ const getServicePriceDisplay = (
   return `${Math.round(adjustedPrice)} ${currency}/м²`
 }
 
-// ============= КОМПОНЕНТЫ =============
+// ============= COMPONENTS =============
 
-// Компонент для услуги с опциями
+// Service component with options
 const ServiceItem: React.FC<{
   service: Service
   isSelected: boolean
@@ -119,7 +119,7 @@ const ServiceItem: React.FC<{
   areaCoefficient = 1,
   floorCoefficient = 1,
 }) => {
-  // Если у сервиса нет названия, но есть опции - отображаем опции как радиокнопки
+  // If service has no name but has options - display options as radio buttons
   if (!service.name && service.hasOptions && service.options) {
     return (
       <div className="space-y-3">
@@ -147,7 +147,7 @@ const ServiceItem: React.FC<{
     )
   }
 
-  // Обычный сервис с названием
+  // Regular service with name
   return (
     <div className="space-y-3">
       <div className="flex items-start space-x-3">
@@ -207,7 +207,7 @@ const ServiceItem: React.FC<{
   )
 }
 
-// Компонент секции услуг
+// Service section component
 const ServicesSection: React.FC<{
   title: string
   services: Service[]
@@ -233,7 +233,7 @@ const ServicesSection: React.FC<{
     <h3 className="font-medium text-base">{title}</h3>
     <div className="space-y-3">
       {services.map((service, index) => {
-        // Для сервисов без названия используем уникальный ключ
+        // For services without name use unique key
         const serviceKey = service.name || `unnamed-${index}`
 
         return (
@@ -254,7 +254,7 @@ const ServicesSection: React.FC<{
   </div>
 )
 
-// Компонент для элементов с радио-выбором
+// Component for radio selection elements
 const ElementsRadioGroup: React.FC<{
   title: string
   name: string
@@ -284,7 +284,7 @@ const ElementsRadioGroup: React.FC<{
   </div>
 )
 
-// Универсальный компонент для секции результатов
+// Universal component for results section
 const ResultsSection: React.FC<{
   title: string
   items: Array<{ name: string; cost: number }>
@@ -307,12 +307,12 @@ const ResultsSection: React.FC<{
   )
 }
 
-// Компонент результатов
+// Results component
 const ResultsDisplay: React.FC<{
   calculations: any
   config: CalculatorConfig
 }> = ({ calculations, config }) => {
-  // Определяем секции для отображения
+  // Determine sections for display
   const sections = [
     {
       title: 'Услуги',
@@ -372,9 +372,9 @@ const ResultsDisplay: React.FC<{
   )
 }
 
-// ============= ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ =============
+// ============= HELPER FUNCTIONS =============
 
-// ============= ОСНОВНОЙ КОМПОНЕНТ =============
+// ============= MAIN COMPONENT =============
 const CalculatorBlock = () => {
   const [formData, setFormData] = useState({
     area: '',
@@ -389,7 +389,7 @@ const CalculatorBlock = () => {
   const [loading, setLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
 
-  // Универсальные обработчики
+  // Universal handlers
   const handlers = {
     field: (field: string, value: any) => setFormData((prev) => ({ ...prev, [field]: value })),
 
@@ -416,7 +416,7 @@ const CalculatorBlock = () => {
       })),
 
     reset: () => {
-      // Сбрасываем форму без предвыбранных значений
+      // Reset form without preselected values
       setFormData({
         area: '',
         selectedFloor: '',
@@ -428,14 +428,14 @@ const CalculatorBlock = () => {
     },
   }
 
-  // Загрузка конфигурации
+  // Load configuration
   useEffect(() => {
     fetch('/api/calculator/config')
       .then((res) => res.json())
       .then((config) => {
         setCalculatorConfig(config)
 
-        // Инициализируем форму без предвыбранных значений
+        // Initialize form without preselected values
         if (config) {
           setFormData({
             area: '',
@@ -451,13 +451,13 @@ const CalculatorBlock = () => {
       .finally(() => setLoading(false))
   }, [])
 
-  // Расчеты
+  // Calculations
   const calculations = useMemo(() => {
     const inputArea = parseFloat(formData.area.toString()) || 0
-    const area = Math.max(inputArea, 100) // Минимальная площадь 100 м²
+    const area = Math.max(inputArea, 100) // Minimum area 100 m²
     if (!calculatorConfig || inputArea <= 0 || !formData.selectedFloor) {
       return {
-        area: inputArea, // Показываем введенную площадь
+        area: inputArea, // Show entered area
         totalCost: 0,
         pricePerM2: 0,
         generalItems: [],
@@ -469,24 +469,24 @@ const CalculatorBlock = () => {
 
     const calculateServices = (services: Service[]) => {
       let cost = 0
-      let areaBasedCost = 0 // Стоимость услуг, зависящих от площади
+      let areaBasedCost = 0 // Cost of services depending on area
       const items: any[] = []
 
       services.forEach((service) => {
-        // Для сервисов без названия проверяем выбранную опцию
+        // For services without name check selected option
         if (!service.name && service.hasOptions && service.options?.length) {
           const selectedOption = formData.serviceOptions['']
           const option = service.options.find((opt) => opt.name === selectedOption)
           if (option) {
             const serviceCost = option.pricePerM2 * area
             cost += serviceCost
-            areaBasedCost += serviceCost // Опции всегда зависят от площади
+            areaBasedCost += serviceCost // Options always depend on area
             items.push({ name: option.name, cost: serviceCost })
           }
           return
         }
 
-        // Для обычных сервисов с названием
+        // For regular services with name
         if (service.name && !formData.selectedServices.includes(service.name)) return
 
         let serviceCost = 0
@@ -497,16 +497,16 @@ const CalculatorBlock = () => {
           const option = service.options.find((opt) => opt.name === selectedOption)
           if (option) {
             serviceCost = option.pricePerM2 * area
-            areaBasedCost += serviceCost // Опции всегда зависят от площади
+            areaBasedCost += serviceCost // Options always depend on area
             serviceName = service.name ? `${service.name}: ${option.name}` : option.name
           }
         } else {
           if (service.ignoreArea) {
             serviceCost = service.fixedPrice || 0
-            // Не добавляем в areaBasedCost, так как не зависит от площади
+            // Do not add to areaBasedCost as it does not depend on area
           } else {
             serviceCost = (service.pricePerM2 || 0) * area
-            areaBasedCost += serviceCost // Зависит от площади
+            areaBasedCost += serviceCost // Depends on area
           }
         }
 
@@ -519,7 +519,7 @@ const CalculatorBlock = () => {
       return { cost, items, areaBasedCost }
     }
 
-    // Определяем коэффициент по площади
+    // Determine coefficient by area
     let areaCoefficient = 1
     const areaCoeffs = calculatorConfig.areaSettings?.areaCoefficients || []
 
@@ -530,47 +530,47 @@ const CalculatorBlock = () => {
       }
     }
 
-    // Коэффициент этажности
+    // Floor coefficient
     const floorOption = calculatorConfig.floorSettings?.floorOptions?.find(
       (opt: any) => opt.name === formData.selectedFloor,
     )
     const floorCoefficient = floorOption ? floorOption.coefficient : 1
 
-    // Объединяем все сервисы из всех секций
+    // Combine all services from all sections
     const allServices = (calculatorConfig.servicesSections || []).flatMap(
       (section) => section.services,
     )
     const servicesResult = calculateServices(allServices)
 
-    // Применяем коэффициенты только к стоимости сервисов, зависящих от площади
+    // Apply coefficients only to cost of services depending on area
     const areaBasedCostWithCoefficients =
       servicesResult.areaBasedCost * areaCoefficient * floorCoefficient
 
-    // Стоимость сервисов с ignoreArea остается без коэффициентов
+    // Cost of services with ignoreArea remains without coefficients
     const fixedCost = servicesResult.cost - servicesResult.areaBasedCost
 
-    // Общая стоимость сервисов
+    // Total cost of services
     const servicesWithCoefficients = areaBasedCostWithCoefficients + fixedCost
 
-    // Дополнительные элементы
+    // Additional elements
     let additionalCost = 0
     const elementItems: any[] = []
     const allSections = calculatorConfig.additionalSections || []
 
-    // Обработка всех выбранных элементов
+    // Processing all selected elements
     const selectedElementNames = [
       ...formData.selectedElements,
-      // Добавляем выбранные значения из радио-секций
+      // Add selected values from radio sections
       ...Object.values(formData.selectedRadioValues).filter(
         (value) => value && value.trim() !== '',
       ),
     ]
 
-    // Группируем элементы по секциям
+    // Group elements by sections
     const elementsBySection: { [key: string]: any[] } = {}
 
     selectedElementNames.forEach((name) => {
-      // Ищем элемент во всех секциях
+      // Search element in all sections
       for (const section of allSections) {
         const element = section.elements.find((e) => e.name === name)
         if (element && element.price > 0) {
@@ -588,7 +588,7 @@ const CalculatorBlock = () => {
       }
     })
 
-    // Формируем итоговый массив с заголовками секций
+    // Form final array with section headers
     Object.entries(elementsBySection).forEach(([sectionTitle, elements]) => {
       elementItems.push({
         name: sectionTitle,
@@ -601,50 +601,50 @@ const CalculatorBlock = () => {
     const totalCost = servicesWithCoefficients + additionalCost
 
     return {
-      area: inputArea, // Показываем введенную площадь
+      area: inputArea, // Show entered area
       areaCoefficient,
       floorCoefficient,
       totalCost,
-      pricePerM2: areaBasedCostWithCoefficients / area, // Только услуги, зависящие от площади
+      pricePerM2: areaBasedCostWithCoefficients / area, // Only services depending on area
       generalItems: servicesResult.items.map((item: any) => {
-        // Проверяем, является ли этот элемент услугой с ignoreArea
+        // Check if this element is a service with ignoreArea
         const service = allServices.find(
           (s) =>
             s.name === item.name ||
             (s.hasOptions && s.options?.some((opt) => opt.name === item.name)),
         )
 
-        // Если услуга с ignoreArea, не применяем коэффициенты
+        // If service with ignoreArea, do not apply coefficients
         if (service?.ignoreArea) {
           return item
         }
 
-        // Для остальных применяем коэффициенты
+        // For others apply coefficients
         return {
           ...item,
           cost: item.cost * areaCoefficient * floorCoefficient,
         }
       }),
-      engineeringItems: [], // Теперь все сервисы в generalItems
+      engineeringItems: [], // Now all services in generalItems
       elementItems,
       additionalElementsCost: additionalCost,
     }
   }, [formData, calculatorConfig])
 
-  // PDF генерация
+  // PDF generation
 
-  // Генерируем уникальный номер расчета (6 цифр)
+  // Generate unique calculation number (6 digits)
   const generateCalculationNumber = () => {
-    const min = 100000 // 6 цифр
-    const max = 999999 // 6 цифр
+    const min = 100000 // 6 digits
+    const max = 999999 // 6 digits
     return Math.floor(Math.random() * (max - min + 1)) + min
   }
 
-  // Генерируем номер сразу при загрузке компонента
+  // Generate number immediately when component loads
   const [calculationNumber] = React.useState(() => generateCalculationNumber().toString())
 
   const generatePDF = async () => {
-    // Проверяем, что все необходимые данные заполнены
+    // Check that all required data is filled
     if (!formData.area || !formData.selectedFloor) {
       alert('Пожалуйста, заполните площадь и выберите этажность')
       return
@@ -657,7 +657,7 @@ const CalculatorBlock = () => {
 
     setIsSaving(true)
     try {
-      // Создаем HTML контент
+      // Create HTML content
       const reportComponent = React.createElement(HTMLReport, {
         calculations: {
           ...calculations,
@@ -795,7 +795,7 @@ const CalculatorBlock = () => {
       console.log('HTML content length:', htmlContent.length)
       console.log('HTML preview:', htmlContent.substring(0, 500) + '...')
 
-      // Отправляем запрос на API для генерации PDF
+      // Send request to API for PDF generation
       const response = await fetch('/api/generate-pdf', {
         method: 'POST',
         headers: {
@@ -812,7 +812,7 @@ const CalculatorBlock = () => {
         throw new Error(errorData.details || 'Failed to generate PDF')
       }
 
-      // Скачиваем PDF
+      // Download PDF
       const blob = await response.blob()
       const url = URL.createObjectURL(blob)
       const link = document.createElement('a')
@@ -832,7 +832,7 @@ const CalculatorBlock = () => {
     }
   }
 
-  // Загрузка
+  // Loading
   if (loading || !calculatorConfig) {
     return (
       <div className="container mx-auto p-6">
