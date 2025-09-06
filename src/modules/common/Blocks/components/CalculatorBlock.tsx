@@ -159,10 +159,7 @@ const ServiceItem: React.FC<{
           htmlFor={`service-${service.name}`}
           className="flex-1 flex justify-between items-center cursor-pointer"
         >
-          <span
-            className="font-normal text-base peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-            style={{ lineHeight: '1.6' }}
-          >
+          <span className="font-normal text-base leading-normal peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
             {service.name}
           </span>
           <span className="text-base text-muted-foreground whitespace-nowrap">
@@ -231,7 +228,7 @@ const ServicesSection: React.FC<{
 }) => (
   <div className="space-y-4">
     <h3 className="font-medium text-base">{title}</h3>
-    <div className="space-y-4">
+    <div className="space-y-3">
       {services.map((service, index) => {
         // Для сервисов без названия используем уникальный ключ
         const serviceKey = service.name || `unnamed-${index}`
@@ -834,7 +831,7 @@ ${calc.elementItems
                             htmlFor={`element-${section.title}-${element.name}-${index}`}
                             className="flex-1 flex justify-between items-center cursor-pointer"
                           >
-                            <span className="font-normal text-base" style={{ lineHeight: '1.6' }}>
+                            <span className="font-normal text-base leading-normal">
                               {element.name}
                             </span>
                             <span className="text-base text-muted-foreground whitespace-nowrap">
