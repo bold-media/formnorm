@@ -51,6 +51,7 @@ interface CalculatorConfig {
     label: string
     placeholder: string
     defaultArea: number
+    description: string
     areaCoefficients?: Array<{
       label: string
       minArea: number
@@ -75,15 +76,23 @@ interface CalculatorConfig {
 // ============= ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ =============
 const formatPrice = (price: number, currency: string) => `${price.toLocaleString()} ${currency}`
 
-const getServicePriceDisplay = (service: Service, currency: string) => {
+const getServicePriceDisplay = (
+  service: Service,
+  currency: string,
+  areaCoefficient: number = 1,
+  floorCoefficient: number = 1,
+) => {
   if (service.hasOptions && service.options?.length) {
-    const minPrice = Math.min(...service.options.map((opt) => opt.pricePerM2 || 0))
-    return `от ${minPrice} ${currency}/м²`
+    const minPrice = Math.min(
+      ...service.options.map((opt) => (opt.pricePerM2 || 0) * areaCoefficient * floorCoefficient),
+    )
+    return `от ${Math.round(minPrice)} ${currency}/м²`
   }
   if (service.ignoreArea) {
     return service.fixedPrice ? formatPrice(service.fixedPrice, currency) : 'Цена не указана'
   }
-  return `${service.pricePerM2 || 0} ${currency}/м²`
+  const adjustedPrice = (service.pricePerM2 || 0) * areaCoefficient * floorCoefficient
+  return `${Math.round(adjustedPrice)} ${currency}/м²`
 }
 
 // ============= КОМПОНЕНТЫ =============
@@ -96,7 +105,18 @@ const ServiceItem: React.FC<{
   selectedOption?: string
   onOptionChange: (serviceName: string, optionName: string) => void
   currency: string
-}> = ({ service, isSelected, onToggle, selectedOption, onOptionChange, currency }) => {
+  areaCoefficient?: number
+  floorCoefficient?: number
+}> = ({
+  service,
+  isSelected,
+  onToggle,
+  selectedOption,
+  onOptionChange,
+  currency,
+  areaCoefficient = 1,
+  floorCoefficient = 1,
+}) => {
   // Если у сервиса нет названия, но есть опции - отображаем опции как радиокнопки
   if (!service.name && service.hasOptions && service.options) {
     return (
@@ -114,7 +134,8 @@ const ServiceItem: React.FC<{
               >
                 <span className="font-normal text-base">{option.name}</span>
                 <span className="text-base text-muted-foreground whitespace-nowrap">
-                  {option.pricePerM2} {currency}/м²
+                  {Math.round((option.pricePerM2 || 0) * areaCoefficient * floorCoefficient)}{' '}
+                  {currency}/м²
                 </span>
               </Label>
             </div>
@@ -138,11 +159,11 @@ const ServiceItem: React.FC<{
           htmlFor={`service-${service.name}`}
           className="flex-1 flex justify-between items-center cursor-pointer"
         >
-          <span className="font-normal text-base leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+          <span className="font-normal text-base leading-relaxed peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
             {service.name}
           </span>
           <span className="text-base text-muted-foreground whitespace-nowrap">
-            {getServicePriceDisplay(service, currency)}
+            {getServicePriceDisplay(service, currency, areaCoefficient, floorCoefficient)}
           </span>
         </Label>
       </div>
@@ -192,6 +213,8 @@ const ServicesSection: React.FC<{
   onServiceToggle: (name: string) => void
   onOptionChange: (serviceName: string, optionName: string) => void
   currency: string
+  areaCoefficient?: number
+  floorCoefficient?: number
 }> = ({
   title,
   services,
@@ -200,6 +223,8 @@ const ServicesSection: React.FC<{
   onServiceToggle,
   onOptionChange,
   currency,
+  areaCoefficient = 1,
+  floorCoefficient = 1,
 }) => (
   <div className="space-y-4">
     <h3 className="font-medium text-base">{title}</h3>
@@ -217,6 +242,8 @@ const ServicesSection: React.FC<{
             selectedOption={serviceOptions[service.name || '']}
             onOptionChange={onOptionChange}
             currency={currency}
+            areaCoefficient={areaCoefficient}
+            floorCoefficient={floorCoefficient}
           />
         )
       })}
@@ -423,10 +450,11 @@ const CalculatorBlock = () => {
 
   // Расчеты
   const calculations = useMemo(() => {
-    const area = parseFloat(formData.area.toString()) || 0
-    if (!calculatorConfig || area <= 0 || !formData.selectedFloor) {
+    const inputArea = parseFloat(formData.area.toString()) || 0
+    const area = Math.max(inputArea, 100) // Минимальная площадь 100 м²
+    if (!calculatorConfig || inputArea <= 0 || !formData.selectedFloor) {
       return {
-        area: area,
+        area: inputArea, // Показываем введенную площадь
         totalCost: 0,
         pricePerM2: 0,
         generalItems: [],
@@ -438,6 +466,7 @@ const CalculatorBlock = () => {
 
     const calculateServices = (services: Service[]) => {
       let cost = 0
+      let areaBasedCost = 0 // Стоимость услуг, зависящих от площади
       const items: any[] = []
 
       services.forEach((service) => {
@@ -448,6 +477,7 @@ const CalculatorBlock = () => {
           if (option) {
             const serviceCost = option.pricePerM2 * area
             cost += serviceCost
+            areaBasedCost += serviceCost // Опции всегда зависят от площади
             items.push({ name: option.name, cost: serviceCost })
           }
           return
@@ -464,12 +494,17 @@ const CalculatorBlock = () => {
           const option = service.options.find((opt) => opt.name === selectedOption)
           if (option) {
             serviceCost = option.pricePerM2 * area
+            areaBasedCost += serviceCost // Опции всегда зависят от площади
             serviceName = service.name ? `${service.name}: ${option.name}` : option.name
           }
         } else {
-          serviceCost = service.ignoreArea
-            ? service.fixedPrice || 0
-            : (service.pricePerM2 || 0) * area
+          if (service.ignoreArea) {
+            serviceCost = service.fixedPrice || 0
+            // Не добавляем в areaBasedCost, так как не зависит от площади
+          } else {
+            serviceCost = (service.pricePerM2 || 0) * area
+            areaBasedCost += serviceCost // Зависит от площади
+          }
         }
 
         if (serviceCost > 0) {
@@ -478,7 +513,7 @@ const CalculatorBlock = () => {
         }
       })
 
-      return { cost, items }
+      return { cost, items, areaBasedCost }
     }
 
     // Определяем коэффициент по площади
@@ -504,8 +539,15 @@ const CalculatorBlock = () => {
     )
     const servicesResult = calculateServices(allServices)
 
-    // Применяем коэффициенты к стоимости сервисов
-    const servicesWithCoefficients = servicesResult.cost * areaCoefficient * floorCoefficient
+    // Применяем коэффициенты только к стоимости сервисов, зависящих от площади
+    const areaBasedCostWithCoefficients =
+      servicesResult.areaBasedCost * areaCoefficient * floorCoefficient
+
+    // Стоимость сервисов с ignoreArea остается без коэффициентов
+    const fixedCost = servicesResult.cost - servicesResult.areaBasedCost
+
+    // Общая стоимость сервисов
+    const servicesWithCoefficients = areaBasedCostWithCoefficients + fixedCost
 
     // Дополнительные элементы
     let additionalCost = 0
@@ -536,15 +578,30 @@ const CalculatorBlock = () => {
     const totalCost = servicesWithCoefficients + additionalCost
 
     return {
-      area: area,
+      area: inputArea, // Показываем введенную площадь
       areaCoefficient,
       floorCoefficient,
       totalCost,
-      pricePerM2: totalCost / area,
-      generalItems: servicesResult.items.map((item: any) => ({
-        ...item,
-        cost: item.cost * areaCoefficient * floorCoefficient,
-      })),
+      pricePerM2: areaBasedCostWithCoefficients / area, // Только услуги, зависящие от площади
+      generalItems: servicesResult.items.map((item: any) => {
+        // Проверяем, является ли этот элемент услугой с ignoreArea
+        const service = allServices.find(
+          (s) =>
+            s.name === item.name ||
+            (s.hasOptions && s.options?.some((opt) => opt.name === item.name)),
+        )
+
+        // Если услуга с ignoreArea, не применяем коэффициенты
+        if (service?.ignoreArea) {
+          return item
+        }
+
+        // Для остальных применяем коэффициенты
+        return {
+          ...item,
+          cost: item.cost * areaCoefficient * floorCoefficient,
+        }
+      }),
       engineeringItems: [], // Теперь все сервисы в generalItems
       elementItems,
       additionalElementsCost: additionalCost,
@@ -693,6 +750,9 @@ ${calc.elementItems
                   )}
                   placeholder={calculatorConfig.areaSettings?.placeholder || 'Введите площадь'}
                 />
+                <p className="text-xs text-muted-foreground">
+                  {calculatorConfig.areaSettings?.description}
+                </p>
               </div>
 
               <div className="space-y-3">
@@ -734,6 +794,8 @@ ${calc.elementItems
                   onServiceToggle={handlers.serviceToggle}
                   onOptionChange={handlers.serviceOption}
                   currency={calculatorConfig.currency}
+                  areaCoefficient={calculations.areaCoefficient}
+                  floorCoefficient={calculations.floorCoefficient}
                 />
               ))}
             </CardContent>
@@ -769,7 +831,9 @@ ${calc.elementItems
                             htmlFor={`element-${section.title}-${element.name}-${index}`}
                             className="flex-1 flex justify-between items-center cursor-pointer"
                           >
-                            <span className="font-normal text-base">{element.name}</span>
+                            <span className="font-normal text-base leading-relaxed">
+                              {element.name}
+                            </span>
                             <span className="text-base text-muted-foreground whitespace-nowrap">
                               {formatPrice(element.price, calculatorConfig.currency)}
                             </span>

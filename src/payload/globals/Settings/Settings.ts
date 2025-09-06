@@ -232,6 +232,15 @@ export const Settings: GlobalConfig = {
                   },
                   defaultValue: 0,
                 },
+
+                {
+                  name: 'description',
+                  type: 'text',
+                  label: {
+                    en: 'Description',
+                    ru: 'Описание',
+                  },
+                },
                 {
                   name: 'areaCoefficients',
                   type: 'array',

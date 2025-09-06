@@ -1651,6 +1651,7 @@ export interface Settings {
       label?: string | null;
       placeholder?: string | null;
       defaultArea?: number | null;
+      description?: string | null;
       areaCoefficients?:
         | {
             label: string;
@@ -1829,6 +1830,7 @@ export interface SettingsSelect<T extends boolean = true> {
               label?: T;
               placeholder?: T;
               defaultArea?: T;
+              description?: T;
               areaCoefficients?:
                 | T
                 | {
