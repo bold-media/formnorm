@@ -1,7 +1,6 @@
 import { notFound } from 'next/navigation'
 import { getPayload } from 'payload'
 import config from '@payload-config'
-import { CalculatorResult as CalculatorResultType } from '@payload-types'
 import CalculatorResultView from '@/modules/common/Blocks/components/CalculatorResultView'
 
 interface PageProps {
@@ -13,17 +12,17 @@ interface PageProps {
 export default async function CalculatorResultPage({ params }: PageProps) {
   const { id } = await params
   const payload = await getPayload({ config })
-  
+
   try {
     const result = await payload.findByID({
       collection: 'calculator-results',
       id,
-    }) as CalculatorResultType
-    
+    })
+
     if (!result) {
       notFound()
     }
-    
+
     return (
       <div className="min-h-screen bg-gray-50">
         <CalculatorResultView result={result} />
