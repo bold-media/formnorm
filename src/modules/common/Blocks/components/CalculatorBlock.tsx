@@ -274,7 +274,7 @@ const ElementsRadioGroup: React.FC<{
           >
             <span className="font-normal text-base">{element.name}</span>
             <span className="text-base text-muted-foreground whitespace-nowrap">
-              {element.price > 0 ? formatPrice(element.price, currency) : 'бесплатно'}
+              {formatPrice(element.price, currency)}
             </span>
           </Label>
         </div>
@@ -286,7 +286,7 @@ const ElementsRadioGroup: React.FC<{
 // Universal component for results section
 const ResultsSection: React.FC<{
   title: string
-  items: Array<{ name: string; cost: number }>
+  items: Array<{ name: string; cost: number; isSectionTitle?: boolean }>
   currency: string
 }> = ({ title, items, currency }) => {
   if (items.length === 0) return null
@@ -294,14 +294,25 @@ const ResultsSection: React.FC<{
   return (
     <div className="space-y-2">
       <h4 className="text-base font-medium">{title}:</h4>
-      {items.map((item, idx) => (
-        <div key={idx} className="flex justify-between text-base">
-          <span className="text-muted-foreground">{item.name}</span>
-          <span className="text-muted-foreground whitespace-nowrap">
-            {formatPrice(item.cost, currency)}
-          </span>
-        </div>
-      ))}
+      {items.map((item, idx) => {
+        // Check if this is a section title
+        if (item.isSectionTitle) {
+          return (
+            <div key={idx} className="mt-2 mb-1">
+              <span className="text-sm font-medium text-muted-foreground uppercase">{item.name}</span>
+            </div>
+          )
+        }
+        
+        return (
+          <div key={idx} className="flex justify-between text-base">
+            <span className="text-muted-foreground">{item.name}</span>
+            <span className="text-muted-foreground whitespace-nowrap">
+              {formatPrice(item.cost, currency)}
+            </span>
+          </div>
+        )
+      })}
     </div>
   )
 }
@@ -642,6 +653,22 @@ const CalculatorBlock: React.FC<CalculatorBlockProps> = ({ initialConfig }) => {
     // Check that all required data is filled
     if (!formData.area || !formData.selectedFloor) {
       alert('Пожалуйста, заполните площадь и выберите этажность')
+      return
+    }
+
+    // Check for required radio services (services with fieldType="radio" or without name but with options)
+    const radioServices = calculatorConfig?.servicesSections?.flatMap(section => 
+      section.services.filter(service => 
+        service.fieldType === 'radio' || (!service.name && service.hasOptions && service.options?.length)
+      )
+    ) || []
+    
+    const hasUnselectedRadioService = radioServices.some(service => 
+      !formData.serviceOptions[service.name || '']
+    )
+    
+    if (hasUnselectedRadioService) {
+      alert('Пожалуйста, выберите вариант для всех обязательных услуг')
       return
     }
 
