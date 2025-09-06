@@ -120,7 +120,7 @@ export async function POST(request: NextRequest) {
       console.log('HTML content loaded')
 
       // Wait a bit for any dynamic content
-      await page.waitForTimeout(2000)
+      await new Promise(resolve => setTimeout(resolve, 2000))
       console.log('Waited for dynamic content')
 
       // Generate PDF with timeout
