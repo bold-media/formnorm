@@ -159,7 +159,10 @@ const ServiceItem: React.FC<{
           htmlFor={`service-${service.name}`}
           className="flex-1 flex justify-between items-center cursor-pointer"
         >
-          <span className="font-normal text-base leading-relaxed peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+          <span
+            className="font-normal text-base peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            style={{ lineHeight: '1.6' }}
+          >
             {service.name}
           </span>
           <span className="text-base text-muted-foreground whitespace-nowrap">
@@ -831,7 +834,7 @@ ${calc.elementItems
                             htmlFor={`element-${section.title}-${element.name}-${index}`}
                             className="flex-1 flex justify-between items-center cursor-pointer"
                           >
-                            <span className="font-normal text-base leading-relaxed">
+                            <span className="font-normal text-base" style={{ lineHeight: '1.6' }}>
                               {element.name}
                             </span>
                             <span className="text-base text-muted-foreground whitespace-nowrap">
