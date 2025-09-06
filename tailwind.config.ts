@@ -28,6 +28,7 @@ const config = {
       typography: typographyConfig,
       fontFamily: {
         sans: ['var(--font-sans)'],
+        montserrat: ['var(--font-montserrat)', 'sans-serif'],
       },
       height: {
         header: 'var(--header-height)',

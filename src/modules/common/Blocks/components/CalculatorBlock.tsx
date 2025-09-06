@@ -6,6 +6,8 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/Card'
 import { Checkbox } from '@/components/Checkbox'
 import { RadioGroup, RadioGroupItem } from '@/components/RadioGroup'
 import { Label } from '@/components/Label'
+import { HTMLReport } from '@/components/PDF'
+import { renderToString } from 'react-dom/server'
 
 // ============= ТИПЫ =============
 interface ServiceOption {
@@ -563,16 +565,36 @@ const CalculatorBlock = () => {
       ),
     ]
 
+    // Группируем элементы по секциям
+    const elementsBySection: { [key: string]: any[] } = {}
+
     selectedElementNames.forEach((name) => {
       // Ищем элемент во всех секциях
       for (const section of allSections) {
         const element = section.elements.find((e) => e.name === name)
         if (element && element.price > 0) {
           additionalCost += element.price
-          elementItems.push({ name: element.name, cost: element.price })
+
+          if (!elementsBySection[section.title]) {
+            elementsBySection[section.title] = []
+          }
+          elementsBySection[section.title].push({
+            name: element.name,
+            cost: element.price,
+          })
           break
         }
       }
+    })
+
+    // Формируем итоговый массив с заголовками секций
+    Object.entries(elementsBySection).forEach(([sectionTitle, elements]) => {
+      elementItems.push({
+        name: sectionTitle,
+        cost: 0,
+        isSectionTitle: true,
+      })
+      elementItems.push(...elements)
     })
 
     const totalCost = servicesWithCoefficients + additionalCost
@@ -608,91 +630,191 @@ const CalculatorBlock = () => {
     }
   }, [formData, calculatorConfig])
 
-  // Сохранение и экспорт
-  const saveAndExport = async () => {
+  // PDF генерация
+
+  // Генерируем уникальный номер расчета (6 цифр)
+  const generateCalculationNumber = () => {
+    const min = 100000 // 6 цифр
+    const max = 999999 // 6 цифр
+    return Math.floor(Math.random() * (max - min + 1)) + min
+  }
+
+  // Генерируем номер сразу при загрузке компонента
+  const [calculationNumber] = React.useState(() => generateCalculationNumber().toString())
+
+  const generatePDF = async () => {
     setIsSaving(true)
     try {
-      const response = await fetch('/api/calculator', {
+      // Создаем HTML контент
+      const reportComponent = React.createElement(HTMLReport, {
+        calculations: {
+          ...calculations,
+          areaCoefficient: calculations.areaCoefficient || 1,
+          floorCoefficient: calculations.floorCoefficient || 1,
+        },
+        formData,
+        config: calculatorConfig || { currency: '₽' },
+        calculationNumber,
+      })
+
+      const reportHTML = renderToString(reportComponent)
+
+      const htmlContent = `
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <meta charset="utf-8">
+            <title>Расчет стоимости проектирования</title>
+            <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+            <style>
+              body { margin: 0; padding: 0; font-family: 'Montserrat', Arial, sans-serif; }
+              
+              /* Структурированные размеры текста */
+              .text-xl { font-size: 1.25rem; line-height: 1.75rem; }
+              .text-lg { font-size: 1.125rem; line-height: 1.5rem; }
+              .text-base { font-size: 1rem; line-height: 1.5rem; }
+              .text-sm { font-size: 0.875rem; line-height: 1.25rem; }
+              .text-xs { font-size: 0.75rem; line-height: 1rem; }
+              
+              /* Цвета */
+              .text-foreground { color: #1f2937; }
+              .text-muted-foreground { color: #6b7280; }
+              .text-primary { color: #1f2937; }
+              .text-blue-600 { color: #2563eb; }
+              .text-zinc-800 { color: #27272a; }
+              .bg-background { background-color: #ffffff; }
+              .bg-gray-50 { background-color: #f9fafb; }
+              .bg-zinc-50 { background-color: #fafafa; }
+              .bg-blue-50 { background-color: #eff6ff; }
+              .border { border-color: #d1d5db; }
+              .border-gray-200 { border-color: #e5e7eb; }
+              .border-zinc-200 { border-color: #e4e4e7; }
+              .border-blue-200 { border-color: #bfdbfe; }
+              .border-primary { border-color: #1f2937; }
+              .border-primary\/20 { border-color: #6b7280; }
+              .border-muted { border-color: #e5e7eb; }
+              .border-muted\/30 { border-color: #d1d5db; }
+              
+              /* Flexbox */
+              .flex { display: flex; }
+              .justify-between { justify-content: space-between; }
+              .items-center { align-items: center; }
+              .text-center { text-align: center; }
+              .text-right { text-align: right; }
+              
+              /* Структурированные отступы */
+              .mb-1 { margin-bottom: 0.25rem; }
+              .mb-2 { margin-bottom: 0.5rem; }
+              .mb-3 { margin-bottom: 0.75rem; }
+              .mb-4 { margin-bottom: 1rem; }
+              .mb-6 { margin-bottom: 1.5rem; }
+              .mb-8 { margin-bottom: 2rem; }
+              .mb-10 { margin-bottom: 2.5rem; }
+              .mt-2 { margin-top: 0.5rem; }
+              .mt-4 { margin-top: 1rem; }
+              .mt-8 { margin-top: 2rem; }
+              .mt-10 { margin-top: 2.5rem; }
+              .pt-2 { padding-top: 0.5rem; }
+              .pt-4 { padding-top: 1rem; }
+              .pb-2 { padding-bottom: 0.5rem; }
+              .pb-4 { padding-bottom: 1rem; }
+              .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+              .ml-2 { margin-left: 0.5rem; }
+              .space-y-1 > * + * { margin-top: 0.25rem; }
+              .space-y-2 > * + * { margin-top: 0.5rem; }
+              .space-x-2 > * + * { margin-left: 0.5rem; }
+              .space-x-3 > * + * { margin-left: 0.75rem; }
+              .space-x-4 > * + * { margin-left: 1rem; }
+              
+              /* Typography */
+              .font-bold { font-weight: 700; }
+              .font-medium { font-weight: 500; }
+              .leading-relaxed { line-height: 1.625; }
+              .uppercase { text-transform: uppercase; }
+              .tracking-wide { letter-spacing: 0.025em; }
+              
+              /* Layout */
+              .max-w-3xl { max-width: 48rem; }
+              .mx-auto { margin-left: auto; margin-right: auto; }
+              .whitespace-nowrap { white-space: nowrap; }
+              .flex-1 { flex: 1 1 0%; }
+              
+              /* Container padding */
+              .p-3 { padding: 0.75rem; }
+              .p-4 { padding: 1rem; }
+              .px-2 { padding-left: 0.5rem; padding-right: 0.5rem; }
+              .py-1 { padding-top: 0.25rem; padding-bottom: 0.25rem; }
+              .pt-2 { padding-top: 0.5rem; }
+              .pb-2 { padding-bottom: 0.5rem; }
+              
+              /* Borders */
+              .border { border-width: 1px; }
+              .border-t { border-top-width: 1px; }
+              .border-t-2 { border-top-width: 2px; }
+              .border-b { border-bottom-width: 1px; }
+              .border-b-2 { border-bottom-width: 2px; }
+              .border-2 { border-width: 2px; }
+              .border-4 { border-width: 4px; }
+              
+              /* Rounded corners */
+              .rounded { border-radius: 0.25rem; }
+              .rounded-md { border-radius: 0.375rem; }
+              .rounded-lg { border-radius: 0.5rem; }
+              
+              /* Negative margins */
+              .-mx-2 { margin-left: -0.5rem; margin-right: -0.5rem; }
+              .-my-1 { margin-top: -0.25rem; margin-bottom: -0.25rem; }
+              
+              /* Last child */
+              .last\:border-b-0:last-child { border-bottom-width: 0; }
+              
+              /* Links */
+              .no-underline { text-decoration: none; }
+            </style>
+          </head>
+          <body>
+            <div id="pdf-content">
+              ${reportHTML}
+            </div>
+          </body>
+        </html>
+      `
+
+      console.log('HTML content length:', htmlContent.length)
+      console.log('HTML preview:', htmlContent.substring(0, 500) + '...')
+
+      // Отправляем запрос на API для генерации PDF
+      const response = await fetch('/api/generate-pdf', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({
-          ...formData,
-          calculations: {
-            generalItems: calculations.generalItems,
-            engineeringItems: calculations.engineeringItems,
-            elementItems: calculations.elementItems,
-            totalCost: calculations.totalCost,
-            pricePerM2: calculations.pricePerM2,
-          },
+          html: htmlContent,
+          filename: `calculation-${calculationNumber}.pdf`,
         }),
       })
 
-      const result = await response.json()
-      if (result.success) {
-        // Генерация текстового отчета
-        const report = generateReport(
-          calculations,
-          formData,
-          calculatorConfig!,
-          result.calculationId,
-        )
-
-        if (confirm('Расчет сохранен!\n\nOK - скачать файл\nОтмена - отправить в Telegram')) {
-          downloadFile(report, `Расчет_${result.calculationId}.txt`)
-        } else {
-          shareToTelegram(report)
-        }
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.details || 'Failed to generate PDF')
       }
+
+      // Скачиваем PDF
+      const blob = await response.blob()
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `calculation-${calculationNumber}.pdf`
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      URL.revokeObjectURL(url)
     } catch (error) {
-      console.error('Ошибка:', error)
-      alert('Ошибка сохранения расчета')
+      console.error('Error generating PDF:', error)
     } finally {
       setIsSaving(false)
     }
-  }
-
-  // Генерация отчета
-  const generateReport = (calc: any, data: any, config: CalculatorConfig, id: string) =>
-    `
-РАСЧЕТ СТОИМОСТИ ПРОЕКТИРОВАНИЯ
-================================
-Дата: ${new Date().toLocaleDateString('ru-RU')}
-ID: ${id}
-
-ПАРАМЕТРЫ:
-Площадь: ${calc.area} м²
-Этажность: ${data.selectedFloor}
-
-УСЛУГИ:
-${calc.generalItems
-  .map((i: any) => `• ${i.name}: ${formatPrice(i.cost, config.currency)}`)
-  .join('\n')}
-${calc.engineeringItems
-  .map((i: any) => `• ${i.name}: ${formatPrice(i.cost, config.currency)}`)
-  .join('\n')}
-
-ДОПОЛНИТЕЛЬНО:
-${calc.elementItems
-  .map((i: any) => `• ${i.name}: ${formatPrice(i.cost, config.currency)}`)
-  .join('\n')}
-
-ИТОГО: ${formatPrice(calc.totalCost, config.currency)}
-Цена за м²: ${formatPrice(Math.round(calc.pricePerM2), config.currency)}
-`.trim()
-
-  // Утилиты
-  const downloadFile = (content: string, filename: string) => {
-    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' })
-    const url = URL.createObjectURL(blob)
-    const link = document.createElement('a')
-    link.href = url
-    link.download = filename
-    link.click()
-    URL.revokeObjectURL(url)
-  }
-
-  const shareToTelegram = (text: string) => {
-    window.open(`https://t.me/share/url?text=${encodeURIComponent(text)}`, '_blank')
   }
 
   // Загрузка
@@ -878,10 +1000,11 @@ ${calc.elementItems
 
               <div className="flex gap-3 mt-6">
                 <Button
-                  onClick={() => {}}
+                  onClick={generatePDF}
+                  disabled={isSaving}
                   className="flex-1 [&]:whitespace-normal [&]:text-center [&]:h-auto [&]:py-3"
                 >
-                  Сохранить и получить расчет
+                  {isSaving ? 'Создание PDF...' : 'Сохранить и получить расчет'}
                 </Button>
                 <Button variant="outline" onClick={handlers.reset} className="[&]:h-auto [&]:py-3">
                   Сбросить
