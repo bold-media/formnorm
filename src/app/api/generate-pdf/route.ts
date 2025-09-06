@@ -80,7 +80,7 @@ export async function POST(request: NextRequest) {
       
       // Try alternative launch options
       console.log('Trying alternative launch options...')
-      const alternativeOptions = {
+      const alternativeOptions: any = {
         headless: true,
         args: [
           '--no-sandbox',
