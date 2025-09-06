@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
-import puppeteer from 'puppeteer'
+
+// Используем puppeteer-core в продакшене для лучшей совместимости с Docker
+const puppeteer =
+  process.env.NODE_ENV === 'production' ? require('puppeteer-core') : require('puppeteer')
 
 export async function POST(request: NextRequest) {
   try {
@@ -10,10 +13,13 @@ export async function POST(request: NextRequest) {
     }
 
     console.log('Starting PDF generation...')
+    console.log('NODE_ENV:', process.env.NODE_ENV)
+    console.log('PUPPETEER_EXECUTABLE_PATH:', process.env.PUPPETEER_EXECUTABLE_PATH)
 
-    // Запускаем браузер с дополнительными опциями для разработки
-    const browser = await puppeteer.launch({
+    // Запускаем браузер с дополнительными опциями для продакшена
+    const launchOptions = {
       headless: true,
+      executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined,
       args: [
         '--no-sandbox',
         '--disable-setuid-sandbox',
@@ -23,8 +29,14 @@ export async function POST(request: NextRequest) {
         '--no-zygote',
         '--single-process',
         '--disable-gpu',
+        '--disable-web-security',
+        '--disable-features=VizDisplayCompositor',
       ],
-    })
+    }
+
+    console.log('Launch options:', launchOptions)
+
+    const browser = await puppeteer.launch(launchOptions)
 
     console.log('Browser launched successfully')
 
