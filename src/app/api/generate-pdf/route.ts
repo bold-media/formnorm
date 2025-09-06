@@ -30,10 +30,35 @@ export async function POST(request: NextRequest) {
         '--disable-accelerated-2d-canvas',
         '--no-first-run',
         '--no-zygote',
-        '--single-process',
         '--disable-gpu',
         '--disable-web-security',
         '--disable-features=VizDisplayCompositor',
+        '--disable-background-timer-throttling',
+        '--disable-backgrounding-occluded-windows',
+        '--disable-renderer-backgrounding',
+        '--disable-extensions',
+        '--disable-plugins',
+        '--disable-default-apps',
+        '--disable-sync',
+        '--disable-translate',
+        '--hide-scrollbars',
+        '--mute-audio',
+        '--no-default-browser-check',
+        '--no-pings',
+        '--password-store=basic',
+        '--use-mock-keychain',
+        '--disable-background-networking',
+        '--disable-component-extensions-with-background-pages',
+        '--disable-ipc-flooding-protection',
+        '--disable-hang-monitor',
+        '--disable-prompt-on-repost',
+        '--disable-domain-reliability',
+        '--disable-client-side-phishing-detection',
+        '--disable-component-update',
+        '--disable-features=TranslateUI',
+        '--disable-ipc-flooding-protection',
+        '--memory-pressure-off',
+        '--max_old_space_size=4096',
       ],
     }
 
@@ -46,40 +71,91 @@ export async function POST(request: NextRequest) {
     console.log('Launch options:', launchOptions)
 
     console.log('Attempting to launch browser...')
-    const browser = await puppeteer.launch(launchOptions)
-    console.log('Browser launched successfully')
+    let browser
+    try {
+      browser = await puppeteer.launch(launchOptions)
+      console.log('Browser launched successfully')
+    } catch (launchError) {
+      console.error('Primary launch failed:', launchError)
+      
+      // Try alternative launch options
+      console.log('Trying alternative launch options...')
+      const alternativeOptions = {
+        headless: true,
+        args: [
+          '--no-sandbox',
+          '--disable-setuid-sandbox',
+          '--disable-dev-shm-usage',
+          '--disable-gpu',
+          '--single-process',
+        ],
+      }
+      
+      if (process.env.NODE_ENV === 'production') {
+        alternativeOptions.executablePath = process.env.PUPPETEER_EXECUTABLE_PATH || '/usr/bin/chromium-browser'
+      }
+      
+      browser = await puppeteer.launch(alternativeOptions)
+      console.log('Browser launched with alternative options')
+    }
 
     try {
       const page = await browser.newPage()
       console.log('New page created')
 
+      // Set timeouts
+      page.setDefaultTimeout(30000) // 30 seconds
+      page.setDefaultNavigationTimeout(30000) // 30 seconds
+
       // Set page size
       await page.setViewport({ width: 1200, height: 800 })
       console.log('Viewport set')
 
-      // Load HTML content
-      await page.setContent(html, { waitUntil: 'networkidle0' })
+      // Load HTML content with timeout
+      console.log('Loading HTML content...')
+      await page.setContent(html, { 
+        waitUntil: 'networkidle0',
+        timeout: 30000 
+      })
       console.log('HTML content loaded')
 
-      // Generate PDF
+      // Wait a bit for any dynamic content
+      await page.waitForTimeout(2000)
+      console.log('Waited for dynamic content')
+
+      // Generate PDF with timeout
       console.log('Starting PDF generation...')
-      const pdfBuffer = await page.pdf({
-        format: 'A4',
-        printBackground: true,
-        margin: {
-          top: '20mm',
-          right: '20mm',
-          bottom: '20mm',
-          left: '20mm',
-        },
-      })
+      const pdfBuffer = await Promise.race([
+        page.pdf({
+          format: 'A4',
+          printBackground: true,
+          margin: {
+            top: '20mm',
+            right: '20mm',
+            bottom: '20mm',
+            left: '20mm',
+          },
+        }),
+        new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('PDF generation timeout')), 30000)
+        )
+      ]) as Buffer
 
       console.log('PDF generated successfully, size:', pdfBuffer.length)
       console.log('PDF buffer type:', typeof pdfBuffer)
       console.log('PDF buffer is array:', Array.isArray(pdfBuffer))
 
-      await browser.close()
-      console.log('Browser closed')
+      // Close page first
+      await page.close()
+      console.log('Page closed')
+
+      // Close browser safely
+      try {
+        await browser.close()
+        console.log('Browser closed successfully')
+      } catch (closeError) {
+        console.log('Browser close error (non-critical):', closeError)
+      }
 
       // Return PDF as blob
       return new NextResponse(pdfBuffer, {
@@ -91,7 +167,15 @@ export async function POST(request: NextRequest) {
     } catch (error) {
       console.error('Error in PDF generation process:', error)
       console.error('Error stack:', error instanceof Error ? error.stack : 'No stack')
-      await browser.close()
+      
+      // Close browser safely even on error
+      try {
+        await browser.close()
+        console.log('Browser closed after error')
+      } catch (closeError) {
+        console.log('Browser close error after main error (non-critical):', closeError)
+      }
+      
       throw error
     }
   } catch (error) {
