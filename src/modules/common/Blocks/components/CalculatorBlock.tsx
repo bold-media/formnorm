@@ -193,7 +193,8 @@ const ServiceItem: React.FC<{
                   >
                     <span className="font-normal text-base">{option.name}</span>
                     <span className="text-base text-muted-foreground whitespace-nowrap">
-                      {option.pricePerM2} {currency}/м²
+                      {Math.round((option.pricePerM2 || 0) * areaCoefficient * floorCoefficient)}{' '}
+                      {currency}/м²
                     </span>
                   </Label>
                 </div>
@@ -643,6 +644,17 @@ const CalculatorBlock = () => {
   const [calculationNumber] = React.useState(() => generateCalculationNumber().toString())
 
   const generatePDF = async () => {
+    // Проверяем, что все необходимые данные заполнены
+    if (!formData.area || !formData.selectedFloor) {
+      alert('Пожалуйста, заполните площадь и выберите этажность')
+      return
+    }
+
+    if (calculations.totalCost === 0) {
+      alert('Пожалуйста, выберите хотя бы одну услугу')
+      return
+    }
+
     setIsSaving(true)
     try {
       // Создаем HTML контент
@@ -812,6 +824,9 @@ const CalculatorBlock = () => {
       URL.revokeObjectURL(url)
     } catch (error) {
       console.error('Error generating PDF:', error)
+      alert(
+        `Ошибка при создании PDF: ${error instanceof Error ? error.message : 'Неизвестная ошибка'}`,
+      )
     } finally {
       setIsSaving(false)
     }
