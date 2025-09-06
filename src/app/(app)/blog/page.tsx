@@ -34,14 +34,11 @@ export const generateMetadata = async ({}, parentPromise: ResolvingMetadata): Pr
 
   const fallback = await parentPromise
 
-  return {} //TODO
-  // return generateMeta({
-  //   meta: categorySlug
-  //     ? { title: `Posts in ${categorySlug}`, description: `Browse posts in ${categorySlug}` }
-  //     : settings?.seo?.posts,
-  //   fallback,
-  //   pathname: categorySlug ? `/blog/${categorySlug}` : `/blog`,
-  // });
+  return generateMeta({
+    meta: settings?.seo?.blog,
+    fallback,
+    pathname: `/blog`,
+  })
 }
 
 export default BlogPage

@@ -74,6 +74,9 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 RUN mkdir -p media
 RUN chown nextjs:nodejs media
 
+RUN mkdir -p calculator-results
+RUN chown nextjs:nodejs calculator-results
+
 USER nextjs
 
 EXPOSE 3000

@@ -164,6 +164,21 @@ export const Settings: GlobalConfig = {
                 includeNoIndex: true,
               }),
             },
+            {
+              name: 'calculator',
+              label: {
+                en: 'Calculator SEO',
+                ru: 'SEO для Калькулятора',
+              },
+              type: 'group',
+              fields: seoFields({
+                titlePath: 'seo.calculator.title',
+                descriptionPath: 'seo.calculator.description',
+                imagePath: 'seo.calculator.image',
+                // previewSuffix: '/blog',
+                includeNoIndex: true,
+              }),
+            },
           ],
         },
         {

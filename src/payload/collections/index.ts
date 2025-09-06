@@ -7,7 +7,7 @@ import { Term } from './Term'
 import { Service } from './Service'
 import { Project } from './Project'
 import { Upload } from './Upload'
-// import { CalculatorResult } from './CalculatorResult'
+import { CalculatorResult } from './CalculatorResult'
 
 export const collections = [
   Media,
@@ -19,5 +19,5 @@ export const collections = [
   Project,
   Term,
   Service,
-  // CalculatorResult,
+  CalculatorResult,
 ]

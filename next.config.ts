@@ -29,6 +29,28 @@ const config: NextConfig = {
       },
     )
     fileLoaderRule.exclude = /\.svg$/i
+    
+    // Fix for pdfmake
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      // These modules are not needed for server-side PDF generation
+      'canvg': false,
+      'html2canvas': false,
+      'dompurify': false
+    }
+    
+    // Handle binary files for pdfmake and pdfkit
+    config.module.rules.push({
+      test: /\.(trie|afm)$/,
+      type: 'asset/resource'
+    })
+    
+    // Exclude PDFKit from webpack parsing
+    config.externals = {
+      ...config.externals,
+      'pdfkit': 'commonjs pdfkit'
+    }
+    
     return config
   },
   output: 'standalone',

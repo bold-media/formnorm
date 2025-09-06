@@ -76,6 +76,7 @@ export interface Config {
     project: Project;
     term: Term;
     service: Service;
+    'calculator-results': CalculatorResult;
     forms: Form;
     'form-submissions': FormSubmission;
     redirects: Redirect;
@@ -94,6 +95,7 @@ export interface Config {
     project: ProjectSelect<false> | ProjectSelect<true>;
     term: TermSelect<false> | TermSelect<true>;
     service: ServiceSelect<false> | ServiceSelect<true>;
+    'calculator-results': CalculatorResultsSelect<false> | CalculatorResultsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
@@ -614,6 +616,67 @@ export interface Service {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "calculator-results".
+ */
+export interface CalculatorResult {
+  id: string;
+  calculationNumber?: string | null;
+  clientName?: string | null;
+  contactInfo?: {
+    email?: string | null;
+    phone?: string | null;
+  };
+  /**
+   * Итоговые данные расчета
+   */
+  calculationSummary?: {
+    area?: number | null;
+    selectedFloor?: string | null;
+    totalCost?: number | null;
+  };
+  selectedServices?: string | null;
+  additionalElements?: string | null;
+  /**
+   * Все данные расчета в JSON формате для генерации PDF
+   */
+  metadata?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  notes?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "forms".
  */
 export interface Form {
@@ -909,6 +972,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'service';
         value: string | Service;
+      } | null)
+    | ({
+        relationTo: 'calculator-results';
+        value: string | CalculatorResult;
       } | null)
     | ({
         relationTo: 'forms';
@@ -1280,6 +1347,42 @@ export interface ServiceSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "calculator-results_select".
+ */
+export interface CalculatorResultsSelect<T extends boolean = true> {
+  calculationNumber?: T;
+  clientName?: T;
+  contactInfo?:
+    | T
+    | {
+        email?: T;
+        phone?: T;
+      };
+  calculationSummary?:
+    | T
+    | {
+        area?: T;
+        selectedFloor?: T;
+        totalCost?: T;
+      };
+  selectedServices?: T;
+  additionalElements?: T;
+  metadata?: T;
+  notes?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "forms_select".
  */
 export interface FormsSelect<T extends boolean = true> {
@@ -1643,6 +1746,28 @@ export interface Settings {
        */
       noIndex?: boolean | null;
     };
+    calculator?: {
+      /**
+       * This will be displayed as the title in search engine results
+       */
+      title?: string | null;
+      /**
+       * This will be displayed as the description in search engine results
+       */
+      description?: string | null;
+      /**
+       * This image will be used when sharing on social media
+       */
+      image?: (string | null) | Media;
+      /**
+       * The canonical URL for this page. Leave empty to use the default URL.
+       */
+      canonicalURL?: string | null;
+      /**
+       * Checking this box will add meta tags to the page, asking search engines not to index this page. It will also remove it from the sitemap.
+       */
+      noIndex?: boolean | null;
+    };
   };
   calculator: {
     calculatorTitle: string;
@@ -1810,6 +1935,15 @@ export interface SettingsSelect<T extends boolean = true> {
               noIndex?: T;
             };
         blog?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              image?: T;
+              canonicalURL?: T;
+              noIndex?: T;
+            };
+        calculator?:
           | T
           | {
               title?: T;
