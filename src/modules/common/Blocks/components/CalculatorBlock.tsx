@@ -124,9 +124,7 @@ const ServiceItem: React.FC<{
   if (!service.name && service.hasOptions && service.options) {
     return (
       <div className="space-y-3">
-        {error && (
-          <p className="text-xs text-red-500">{error}</p>
-        )}
+        {error && <p className="text-xs text-red-500">{error}</p>}
         <RadioGroup
           value={selectedOption}
           onValueChange={(value: string) => onOptionChange('', value)}
@@ -273,9 +271,7 @@ const ElementsRadioGroup: React.FC<{
 }> = ({ title, name, elements, selected, onChange, currency, error }) => (
   <div className="space-y-3">
     {title && <Label className="font-medium text-base">{title}</Label>}
-    {error && (
-      <p className="text-xs text-red-500">{error}</p>
-    )}
+    {error && <p className="text-xs text-red-500">{error}</p>}
     <RadioGroup value={selected} onValueChange={onChange}>
       {elements.map((element, index) => (
         <div key={`${name}-${element.name}-${index}`} className="flex items-center space-x-2">
@@ -311,11 +307,13 @@ const ResultsSection: React.FC<{
         if (item.isSectionTitle) {
           return (
             <div key={idx} className="mt-2 mb-1">
-              <span className="text-sm font-medium text-muted-foreground uppercase">{item.name}</span>
+              <span className="text-sm font-medium text-muted-foreground uppercase">
+                {item.name}
+              </span>
             </div>
           )
         }
-        
+
         return (
           <div key={idx} className="flex justify-between text-base">
             <span className="text-muted-foreground">{item.name}</span>
@@ -351,7 +349,7 @@ const ResultsDisplay: React.FC<{
       {/* Площадь */}
       <div className="p-3 bg-secondary/50">
         <div className="flex justify-between text-base">
-          <span className="text-muted-foreground">Площадь:</span>
+          <span className="font-medium">Площадь:</span>
           <span className="font-medium whitespace-nowrap">{calculations.area} м²</span>
         </div>
       </div>
@@ -672,24 +670,27 @@ const CalculatorBlock: React.FC<CalculatorBlockProps> = ({ initialConfig }) => {
     // Clear previous errors
     setErrors({})
     const newErrors: typeof errors = {}
-    
+
     // Validate area
     if (!formData.area) {
       newErrors.area = 'Пожалуйста, введите площадь'
     }
-    
+
     // Validate floor selection
     if (!formData.selectedFloor) {
       newErrors.selectedFloor = 'Пожалуйста, выберите этажность'
     }
 
     // Check for required radio services
-    const radioServices = calculatorConfig?.servicesSections?.flatMap(section => 
-      section.services.filter(service => 
-        service.fieldType === 'radio' || (!service.name && service.hasOptions && service.options?.length)
-      )
-    ) || []
-    
+    const radioServices =
+      calculatorConfig?.servicesSections?.flatMap((section) =>
+        section.services.filter(
+          (service) =>
+            service.fieldType === 'radio' ||
+            (!service.name && service.hasOptions && service.options?.length),
+        ),
+      ) || []
+
     const radioErrors: Record<string, string> = {}
     radioServices.forEach((service, index) => {
       const serviceKey = service.name || `radio-service-${index}`
@@ -697,23 +698,22 @@ const CalculatorBlock: React.FC<CalculatorBlockProps> = ({ initialConfig }) => {
         radioErrors[serviceKey] = 'Выберите один из вариантов'
       }
     })
-    
+
     if (Object.keys(radioErrors).length > 0) {
       newErrors.radioServices = radioErrors
     }
 
     // Check for required radio sections in additional elements
     const additionalRadioErrors: Record<string, string> = {}
-    const radioSections = calculatorConfig?.additionalSections?.filter(
-      section => section.fieldType === 'radio'
-    ) || []
-    
+    const radioSections =
+      calculatorConfig?.additionalSections?.filter((section) => section.fieldType === 'radio') || []
+
     radioSections.forEach((section) => {
       if (!formData.selectedRadioValues[section.title]) {
         additionalRadioErrors[section.title] = 'Выберите один из вариантов'
       }
     })
-    
+
     if (Object.keys(additionalRadioErrors).length > 0) {
       newErrors.additionalRadios = additionalRadioErrors
     }
@@ -832,9 +832,7 @@ const CalculatorBlock: React.FC<CalculatorBlockProps> = ({ initialConfig }) => {
                   )}
                   placeholder={calculatorConfig.areaSettings?.placeholder || 'Введите площадь'}
                 />
-                {errors.area && (
-                  <p className="text-xs text-red-500 mt-1">{errors.area}</p>
-                )}
+                {errors.area && <p className="text-xs text-red-500 mt-1">{errors.area}</p>}
                 <p className="text-xs text-muted-foreground">
                   {calculatorConfig.areaSettings?.description}
                 </p>
@@ -891,11 +889,16 @@ const CalculatorBlock: React.FC<CalculatorBlockProps> = ({ initialConfig }) => {
                     // Clear error when user selects
                     if (errors.radioServices) {
                       const updatedErrors = { ...errors.radioServices }
-                      const serviceKey = serviceName || `radio-service-${section.services.findIndex(s => !s.name && s.hasOptions)}`
+                      const serviceKey =
+                        serviceName ||
+                        `radio-service-${section.services.findIndex(
+                          (s) => !s.name && s.hasOptions,
+                        )}`
                       delete updatedErrors[serviceKey]
-                      setErrors({ 
-                        ...errors, 
-                        radioServices: Object.keys(updatedErrors).length > 0 ? updatedErrors : undefined 
+                      setErrors({
+                        ...errors,
+                        radioServices:
+                          Object.keys(updatedErrors).length > 0 ? updatedErrors : undefined,
                       })
                     }
                   }}
@@ -966,9 +969,10 @@ const CalculatorBlock: React.FC<CalculatorBlockProps> = ({ initialConfig }) => {
                         if (errors.additionalRadios?.[section.title]) {
                           const updatedErrors = { ...errors.additionalRadios }
                           delete updatedErrors[section.title]
-                          setErrors({ 
-                            ...errors, 
-                            additionalRadios: Object.keys(updatedErrors).length > 0 ? updatedErrors : undefined 
+                          setErrors({
+                            ...errors,
+                            additionalRadios:
+                              Object.keys(updatedErrors).length > 0 ? updatedErrors : undefined,
                           })
                         }
                       }}

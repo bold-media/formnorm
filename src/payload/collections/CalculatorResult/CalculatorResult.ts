@@ -16,6 +16,7 @@ export const CalculatorResult: CollectionConfig = {
     },
   },
   upload: {
+    bulkUpload: false,
     filesRequiredOnCreate: false,
     mimeTypes: ['application/pdf'],
     hideRemoveFile: true,
@@ -23,11 +24,12 @@ export const CalculatorResult: CollectionConfig = {
   admin: {
     useAsTitle: 'calculationNumber',
     listSearchableFields: ['calculationNumber', 'calculationName', 'clientEmail', 'clientName'],
+    defaultColumns: ['calculationNumber', 'clientName', 'createdAt'],
   },
   access: {
     // Только чтение для всех, создание только через API
     read: () => true,
-    create: () => true,
+    create: () => false,
     update: access(),
     delete: access(),
   },
@@ -178,7 +180,14 @@ export const CalculatorResult: CollectionConfig = {
           ({ data, value }) => {
             if (value !== undefined) return value
             const items = data?.metadata?.calculations?.generalItems || []
-            return items.map((item: any) => `${item.name}: ${item.cost.toLocaleString()} ${data?.metadata?.config?.currency || '₽'}`).join('\n')
+            return items
+              .map(
+                (item: any) =>
+                  `${item.name}: ${item.cost.toLocaleString()} ${
+                    data?.metadata?.config?.currency || '₽'
+                  }`,
+              )
+              .join('\n')
           },
         ],
       },
@@ -202,18 +211,18 @@ export const CalculatorResult: CollectionConfig = {
             const currency = data?.metadata?.config?.currency || '₽'
             let result = []
             let currentSection = ''
-            
+
             for (const item of items) {
               if (item.isSectionTitle) {
                 currentSection = item.name
               } else {
-                const line = currentSection 
+                const line = currentSection
                   ? `${currentSection} - ${item.name}: ${item.cost.toLocaleString()} ${currency}`
                   : `${item.name}: ${item.cost.toLocaleString()} ${currency}`
                 result.push(line)
               }
             }
-            
+
             return result.join('\n')
           },
         ],
