@@ -1852,6 +1852,16 @@ export interface Settings {
       resetButtonText?: string | null;
       totalPriceLabel?: string | null;
       pricePerM2Label?: string | null;
+      additionalElementsTitle?: string | null;
+    };
+    instructions?: {
+      title?: string | null;
+      steps?:
+        | {
+            text: string;
+            id?: string | null;
+          }[]
+        | null;
     };
   };
   updatedAt?: string | null;
@@ -2038,6 +2048,18 @@ export interface SettingsSelect<T extends boolean = true> {
               resetButtonText?: T;
               totalPriceLabel?: T;
               pricePerM2Label?: T;
+              additionalElementsTitle?: T;
+            };
+        instructions?:
+          | T
+          | {
+              title?: T;
+              steps?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
             };
       };
   updatedAt?: T;

@@ -70,8 +70,15 @@ function transformSettingsToCalculatorConfig(settings: Settings): CalculatorConf
       totalPriceLabel: calculator.interfaceTexts?.totalPriceLabel || 'Общая стоимость:',
       pricePerM2Label: calculator.interfaceTexts?.pricePerM2Label || 'Цена за м²:',
       resetButtonText: calculator.interfaceTexts?.resetButtonText || 'Сбросить',
-      additionalElementsTitle: 'Дополнительные элементы',
+      additionalElementsTitle: calculator.interfaceTexts?.additionalElementsTitle || 'Дополнительные элементы',
+      submitButtonText: calculator.interfaceTexts?.submitButtonText || 'Рассчитать стоимость',
     },
+    instructions: calculator.instructions ? {
+      title: calculator.instructions.title || '',
+      steps: (calculator.instructions.steps || []).map(step => ({
+        text: step.text,
+      })),
+    } : undefined,
   }
 }
 

@@ -767,6 +767,52 @@ export const Settings: GlobalConfig = {
                   },
                   defaultValue: 'Цена всех разделов за м²',
                 },
+                {
+                  name: 'additionalElementsTitle',
+                  type: 'text',
+                  label: {
+                    en: 'Additional Elements Title',
+                    ru: 'Заголовок дополнительных элементов',
+                  },
+                  defaultValue: 'Дополнительные элементы',
+                },
+              ],
+            },
+            {
+              name: 'instructions',
+              type: 'group',
+              label: {
+                en: 'Instructions',
+                ru: 'Инструкции',
+              },
+              fields: [
+                {
+                  name: 'title',
+                  type: 'text',
+                  label: {
+                    en: 'Instructions Title',
+                    ru: 'Заголовок инструкции',
+                  },
+                },
+                {
+                  name: 'steps',
+                  type: 'array',
+                  label: {
+                    en: 'Instruction Steps',
+                    ru: 'Шаги инструкции',
+                  },
+                  fields: [
+                    {
+                      name: 'text',
+                      type: 'text',
+                      label: {
+                        en: 'Step Text',
+                        ru: 'Текст шага',
+                      },
+                      required: true,
+                    },
+                  ],
+                },
               ],
             },
           ],

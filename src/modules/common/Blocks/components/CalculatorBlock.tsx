@@ -7,72 +7,31 @@ import { Checkbox } from '@/components/Checkbox'
 import { RadioGroup, RadioGroupItem } from '@/components/RadioGroup'
 import { Label } from '@/components/Label'
 import { notFound, useRouter } from 'next/navigation'
+import type { Settings } from '@/payload/payload-types'
 
 // ============= TYPES =============
-interface ServiceOption {
-  name: string
-  pricePerM2: number
-  description?: string
-}
-
-interface Service {
-  name?: string
-  pricePerM2?: number
-  fixedPrice?: number
-  ignoreArea?: boolean
-  hasOptions?: boolean
-  options?: ServiceOption[]
-  fieldType?: string
-  radioGroup?: string
-  isDefault?: boolean
-  isRequired?: boolean
-}
-
-interface ServiceSection {
+// Extract types from Payload-generated Settings type
+export type CalculatorConfig = NonNullable<Settings['calculator']> & {
   title: string
-  services: Service[]
-}
-
-interface AdditionalElement {
-  name: string
-  price: number
-  isDefault?: boolean
-}
-
-interface AdditionalSection {
-  title: string
-  fieldType: 'checkbox' | 'radio'
-  elements: AdditionalElement[]
-}
-
-export interface CalculatorConfig {
-  title: string
-  currency: string
-  areaSettings: {
-    label: string
-    placeholder: string
-    defaultArea: number
-    description: string
-    areaCoefficients?: Array<{
-      label: string
-      minArea: number
-      maxArea?: number
-      coefficient: number
-    }>
-  }
-  floorSettings: {
-    label: string
-    floorOptions: Array<{ name: string; coefficient: number; isDefault?: boolean }>
-  }
-  servicesSections: ServiceSection[]
-  additionalSections: AdditionalSection[]
-  interfaceTexts: {
+  interfaceTexts: NonNullable<NonNullable<Settings['calculator']>['interfaceTexts']> & {
     totalPriceLabel: string
     pricePerM2Label: string
     resetButtonText: string
     additionalElementsTitle: string
+    submitButtonText: string
+  }
+  instructions?: {
+    title: string
+    steps: Array<{ text: string }>
   }
 }
+
+type ServiceSection = NonNullable<NonNullable<Settings['calculator']>['servicesSections']>[number]
+type Service = NonNullable<NonNullable<ServiceSection['services']>>[number]
+type AdditionalSection = NonNullable<
+  NonNullable<Settings['calculator']>['additionalSections']
+>[number]
+type AdditionalElement = NonNullable<NonNullable<AdditionalSection['elements']>>[number]
 
 // ============= HELPER FUNCTIONS =============
 const formatPrice = (price: number, currency: string) => `${price.toLocaleString()} ${currency}`
@@ -347,13 +306,17 @@ const ResultsDisplay: React.FC<{
   return (
     <div className="space-y-4">
       {/* Площадь */}
-      <div className="p-3 bg-secondary/50">
-        <div className="flex justify-between text-base">
-          <span className="font-medium">Площадь:</span>
-          <span className="font-medium whitespace-nowrap">{calculations.area} м²</span>
+      <div className="space-y-2">
+        <div className="p-3 bg-secondary/50">
+          <div className="flex justify-between text-base">
+            <span className="font-medium">Площадь:</span>
+            <span className="font-medium whitespace-nowrap">{calculations.area} м²</span>
+          </div>
         </div>
+        {config.areaSettings?.description && (
+          <p className="text-xs text-muted-foreground mt-1">{config.areaSettings.description}</p>
+        )}
       </div>
-
       {/* Детализация услуг */}
       {sections.map((section) => (
         <ResultsSection
@@ -424,7 +387,6 @@ const CalculatorBlock: React.FC<CalculatorBlockProps> = ({ initialConfig }) => {
   const [calculatorConfig, setCalculatorConfig] = useState<CalculatorConfig | null>(
     initialConfig || null,
   )
-  const [loading, setLoading] = useState(!initialConfig)
   const [isSaving, setIsSaving] = useState(false)
 
   // Universal handlers
@@ -476,7 +438,6 @@ const CalculatorBlock: React.FC<CalculatorBlockProps> = ({ initialConfig }) => {
         .then((res) => res.json())
         .then((config) => {
           setCalculatorConfig(config)
-          setLoading(false)
         })
         .catch(console.error)
     }
@@ -509,7 +470,7 @@ const CalculatorBlock: React.FC<CalculatorBlockProps> = ({ initialConfig }) => {
           const selectedOption = formData.serviceOptions['']
           const option = service.options.find((opt) => opt.name === selectedOption)
           if (option) {
-            const serviceCost = option.pricePerM2 * area
+            const serviceCost = (option.pricePerM2 ?? 0) * area
             cost += serviceCost
             areaBasedCost += serviceCost // Options always depend on area
             items.push({ name: option.name, cost: serviceCost })
@@ -527,7 +488,7 @@ const CalculatorBlock: React.FC<CalculatorBlockProps> = ({ initialConfig }) => {
           const selectedOption = formData.serviceOptions[service.name || '']
           const option = service.options.find((opt) => opt.name === selectedOption)
           if (option) {
-            serviceCost = option.pricePerM2 * area
+            serviceCost = (option.pricePerM2 ?? 0) * area
             areaBasedCost += serviceCost // Options always depend on area
             serviceName = service.name ? `${service.name}: ${option.name}` : option.name
           }
@@ -568,9 +529,9 @@ const CalculatorBlock: React.FC<CalculatorBlockProps> = ({ initialConfig }) => {
     const floorCoefficient = floorOption ? floorOption.coefficient : 1
 
     // Combine all services from all sections
-    const allServices = (calculatorConfig.servicesSections || []).flatMap(
-      (section) => section.services,
-    )
+    const allServices = (calculatorConfig.servicesSections || [])
+      .flatMap((section) => section.services || [])
+      .filter((service): service is Service => service !== null && service !== undefined)
     const servicesResult = calculateServices(allServices)
 
     // Apply coefficients only to cost of services depending on area
@@ -603,7 +564,7 @@ const CalculatorBlock: React.FC<CalculatorBlockProps> = ({ initialConfig }) => {
     selectedElementNames.forEach((name) => {
       // Search element in all sections
       for (const section of allSections) {
-        const element = section.elements.find((e) => e.name === name)
+        const element = section.elements?.find((e) => e.name === name)
         if (element && element.price > 0) {
           additionalCost += element.price
 
@@ -636,13 +597,13 @@ const CalculatorBlock: React.FC<CalculatorBlockProps> = ({ initialConfig }) => {
       areaCoefficient,
       floorCoefficient,
       totalCost,
-      pricePerM2: areaBasedCostWithCoefficients / area, // Only services depending on area
+      pricePerM2: totalCost / inputArea, // Calculate from total cost divided by actual input area
       generalItems: servicesResult.items.map((item: any) => {
         // Check if this element is a service with ignoreArea
         const service = allServices.find(
           (s) =>
-            s.name === item.name ||
-            (s.hasOptions && s.options?.some((opt) => opt.name === item.name)),
+            s?.name === item.name ||
+            (s?.hasOptions && s?.options?.some((opt) => opt.name === item.name)),
         )
 
         // If service with ignoreArea, do not apply coefficients
@@ -684,10 +645,11 @@ const CalculatorBlock: React.FC<CalculatorBlockProps> = ({ initialConfig }) => {
     // Check for required radio services
     const radioServices =
       calculatorConfig?.servicesSections?.flatMap((section) =>
-        section.services.filter(
+        (section.services || []).filter(
           (service) =>
-            service.fieldType === 'radio' ||
-            (!service.name && service.hasOptions && service.options?.length),
+            service &&
+            (service.fieldType === 'radio' ||
+              (!service.name && service.hasOptions && service.options?.length)),
         ),
       ) || []
 
@@ -787,17 +749,20 @@ const CalculatorBlock: React.FC<CalculatorBlockProps> = ({ initialConfig }) => {
       <h1 className="text-3xl font-bold text-primary mb-6">{calculatorConfig.title}</h1>
 
       {/* Инструкция */}
-      <Card className="mb-6 bg-secondary">
-        <CardContent className="pt-6">
-          <h2 className="font-semibold mb-2">Как работает калькулятор:</h2>
-          <ul className="text-sm space-y-1 text-muted-foreground">
-            <li>• Введите общую площадь дома</li>
-            <li>• Выберите этажность</li>
-            <li>• Отметьте необходимые разделы</li>
-            <li>• Добавьте дополнительные элементы</li>
-          </ul>
-        </CardContent>
-      </Card>
+      {calculatorConfig.instructions && calculatorConfig.instructions.steps.length > 0 && (
+        <Card className="mb-6 bg-secondary">
+          <CardContent className="pt-6">
+            {calculatorConfig.instructions.title && (
+              <h2 className="font-semibold mb-2">{calculatorConfig.instructions.title}</h2>
+            )}
+            <ul className="text-sm space-y-1 text-muted-foreground">
+              {calculatorConfig.instructions.steps.map((step, index) => (
+                <li key={index}>• {step.text}</li>
+              ))}
+            </ul>
+          </CardContent>
+        </Card>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Левая колонка - Ввод данных */}
@@ -855,7 +820,7 @@ const CalculatorBlock: React.FC<CalculatorBlockProps> = ({ initialConfig }) => {
                     }
                   }}
                 >
-                  {calculatorConfig.floorSettings?.floorOptions.map((option) => (
+                  {calculatorConfig.floorSettings?.floorOptions?.map((option) => (
                     <div key={option.name} className="flex items-center space-x-2">
                       <RadioGroupItem value={option.name} id={option.name} />
                       <Label htmlFor={option.name} className="font-normal text-base">
@@ -880,7 +845,7 @@ const CalculatorBlock: React.FC<CalculatorBlockProps> = ({ initialConfig }) => {
                 <ServicesSection
                   key={section.title}
                   title={section.title}
-                  services={section.services}
+                  services={section.services || []}
                   selectedServices={formData.selectedServices}
                   serviceOptions={formData.serviceOptions}
                   onServiceToggle={handlers.serviceToggle}
@@ -891,8 +856,8 @@ const CalculatorBlock: React.FC<CalculatorBlockProps> = ({ initialConfig }) => {
                       const updatedErrors = { ...errors.radioServices }
                       const serviceKey =
                         serviceName ||
-                        `radio-service-${section.services.findIndex(
-                          (s) => !s.name && s.hasOptions,
+                        `radio-service-${(section.services || []).findIndex(
+                          (s) => s && !s.name && s.hasOptions,
                         )}`
                       delete updatedErrors[serviceKey]
                       setErrors({
@@ -927,7 +892,7 @@ const CalculatorBlock: React.FC<CalculatorBlockProps> = ({ initialConfig }) => {
                   {/* Чекбоксы */}
                   {section.fieldType === 'checkbox' && (
                     <div className="space-y-3">
-                      {section.elements.map((element, index) => (
+                      {section.elements?.map((element, index) => (
                         <div
                           key={`${section.title}-${element.name}-${index}`}
                           className="flex items-center space-x-3"
@@ -958,7 +923,7 @@ const CalculatorBlock: React.FC<CalculatorBlockProps> = ({ initialConfig }) => {
                     <ElementsRadioGroup
                       title=""
                       name={section.title.toLowerCase().replace(/\s+/g, '-')}
-                      elements={section.elements}
+                      elements={section.elements || []}
                       selected={formData.selectedRadioValues[section.title] || ''}
                       onChange={(value) => {
                         handlers.field('selectedRadioValues', {
@@ -1003,10 +968,13 @@ const CalculatorBlock: React.FC<CalculatorBlockProps> = ({ initialConfig }) => {
                   disabled={isSaving}
                   className="flex-1 [&]:whitespace-normal [&]:text-center [&]:h-auto [&]:py-3"
                 >
-                  {isSaving ? 'Создание PDF...' : 'Сохранить и получить расчет'}
+                  {isSaving
+                    ? 'Создание PDF...'
+                    : calculatorConfig.interfaceTexts?.submitButtonText ||
+                      'Сохранить и скачать PDF'}
                 </Button>
                 <Button variant="outline" onClick={handlers.reset} className="[&]:h-auto [&]:py-3">
-                  Сбросить
+                  {calculatorConfig.interfaceTexts?.resetButtonText || 'Сбросить'}
                 </Button>
               </div>
             </CardContent>
