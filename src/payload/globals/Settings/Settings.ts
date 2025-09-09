@@ -781,6 +781,7 @@ export const Settings: GlobalConfig = {
             {
               name: 'resultPageSettings',
               type: 'group',
+
               label: {
                 en: 'Result Page Settings',
                 ru: 'Настройки страницы результата',
@@ -826,7 +827,8 @@ export const Settings: GlobalConfig = {
                   },
                 },
                 {
-                  name: 'downloadPdfButtonLoadingText',
+                  name: 'downloadPdfButtonLoading',
+
                   type: 'text',
                   label: {
                     en: 'Download PDF Button Loading Text',

@@ -42,6 +42,16 @@ const CalculatorResultView: React.FC<CalculatorResultViewProps> = ({
   const [isGeneratingPDF, setIsGeneratingPDF] = React.useState(false)
   const [showForm, setShowForm] = React.useState(false)
 
+  // Check if we're in the admin panel
+  const [isAdmin, setIsAdmin] = React.useState(false)
+  
+  React.useEffect(() => {
+    // Check if the current URL contains /admin
+    if (typeof window !== 'undefined') {
+      setIsAdmin(window.location.pathname.includes('/admin'))
+    }
+  }, [])
+
   // Extract metadata
   const metadata = result.metadata as any
   const calculations = metadata?.calculations || {}
@@ -141,8 +151,8 @@ const CalculatorResultView: React.FC<CalculatorResultViewProps> = ({
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left column - Summary */}
         <div className="lg:col-span-2 space-y-6">
-          {/* Client info */}
-          {(result.clientName || result.contactInfo?.email || result.contactInfo?.phone) && (
+          {/* Client info - Only visible in admin */}
+          {isAdmin && (result.clientName || result.contactInfo?.email || result.contactInfo?.phone) && (
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg font-semibold">Контактная информация</CardTitle>
@@ -279,12 +289,70 @@ const CalculatorResultView: React.FC<CalculatorResultViewProps> = ({
                             form={form}
                             showTitle={true}
                             buttonClassName="mt-4"
-                            onSuccess={() => {
+                            onSuccess={async (submissionData) => {
                               // Скрываем форму после успешной отправки
                               setShowForm(false)
+                              
+                              // Sync form data with calculator result
+                              if (submissionData && result?.id) {
+                                const updateData: any = {}
+                                let hasData = false
+                                
+                                // Map form fields to calculator result fields
+                                submissionData.forEach(({ field, value }) => {
+                                  const fieldLower = field.toLowerCase()
+                                  
+                                  // Check for name field
+                                  if ((fieldLower === 'name' || fieldLower === 'clientname' || 
+                                       fieldLower === 'fullname' || fieldLower.includes('name')) && value) {
+                                    updateData.clientName = String(value)
+                                    hasData = true
+                                  }
+                                  
+                                  // Check for email field
+                                  if ((fieldLower === 'email' || fieldLower.includes('email')) && value) {
+                                    if (!updateData.contactInfo) updateData.contactInfo = {}
+                                    updateData.contactInfo.email = String(value)
+                                    hasData = true
+                                  }
+                                  
+                                  // Check for phone field
+                                  if ((fieldLower === 'phone' || fieldLower === 'tel' || 
+                                       fieldLower.includes('phone') || fieldLower.includes('mobile')) && value) {
+                                    if (!updateData.contactInfo) updateData.contactInfo = {}
+                                    updateData.contactInfo.phone = String(value)
+                                    hasData = true
+                                  }
+                                })
+                                
+                                // Update calculator result if we have matching data
+                                if (hasData) {
+                                  try {
+                                    const response = await fetch(`/api/update-calculator-result/${result.id}`, {
+                                      method: 'PATCH',
+                                      headers: {
+                                        'Content-Type': 'application/json',
+                                      },
+                                      body: JSON.stringify({
+                                        ...updateData,
+                                        calculationNumber: result.calculationNumber,
+                                      }),
+                                    })
+                                    
+                                    if (response.ok) {
+                                      toast.success('Контактная информация обновлена')
+                                    }
+                                  } catch (error) {
+                                    console.error('Error updating calculator result:', error)
+                                  }
+                                }
+                              }
                             }}
-                            submissionContext={{
-                              calculatorResultId: result?.id,
+                            // submissionContext={{
+                            //   calculatorResultId: result?.id,
+                            // }}
+                            extraData={{
+                              calculatorResult: result?.id,
                             }}
                           >
                             {form.title && (

@@ -40,7 +40,7 @@ export const RenderForm = ({
   buttonClassName = 'mt-8',
   formType = 'single',
   onSuccess,
-  submissionContext,
+  extraData = undefined,
 }: {
   form: Form
   className?: string
@@ -48,8 +48,12 @@ export const RenderForm = ({
   showTitle?: boolean
   buttonClassName?: string
   formType?: 'single' | 'double'
-  onSuccess?: () => void
-  submissionContext?: any
+  onSuccess?: (submissionData?: any[]) => void
+  extraData?: {
+    [key: string]: any
+  }
+  // TODO: Uncomment after schema update
+  // submissionContext?: any
 }) => {
   const {
     id,
@@ -161,11 +165,14 @@ export const RenderForm = ({
           })
 
           // Submit the form
+          const requestBody: any = {
+            form: id,
+            submissionData: dataToSend,
+            ...extraData,
+          }
+
           const response = await fetch(`${getClientSideURL()}/api/form-submissions`, {
-            body: JSON.stringify({
-              form: id,
-              submissionData: dataToSend,
-            }),
+            body: JSON.stringify(requestBody),
             headers: {
               'Content-Type': 'application/json',
             },
@@ -183,7 +190,7 @@ export const RenderForm = ({
 
           // Вызываем callback после успешной отправки
           if (onSuccess) {
-            onSuccess()
+            onSuccess(dataToSend)
           }
 
           if (confirmationType === 'redirect' && redirect) {
@@ -200,7 +207,17 @@ export const RenderForm = ({
       }
       void submitForm()
     },
-    [router, id, redirect, confirmationType, confirmationMessage, formMethods, uploadedFileIds, onSuccess],
+    [
+      router,
+      id,
+      redirect,
+      confirmationType,
+      confirmationMessage,
+      formMethods,
+      uploadedFileIds,
+      onSuccess,
+      extraData,
+    ],
   )
 
   // Helper function to check if a field is a checkbox

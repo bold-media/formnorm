@@ -28,7 +28,7 @@ export const calculatorConfigEndpoint: Endpoint = {
 
       // Формируем конфигурацию калькулятора
       const calculatorConfig = {
-        title: settings.calculator?.calculatorTitle || 'Калькулятор стоимости проектирования',
+        calculatorTitle: settings.calculator?.calculatorTitle || 'Калькулятор стоимости проектирования',
         currency: settings.calculator?.currency || '₽',
         areaSettings: settings.calculator?.areaSettings || {
           label: 'Общая площадь дома (все помещения на всех этажах)',

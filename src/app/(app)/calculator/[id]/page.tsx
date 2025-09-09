@@ -29,22 +29,23 @@ export default async function CalculatorResultPage({ params }: PageProps) {
     })
 
     let form = null
-    
+
     // Собираем все тексты кнопок из настроек
     const resultPageSettings = settings?.calculator?.resultPageSettings || {}
     const buttonTexts = {
       formButton: resultPageSettings.formShowButtonText || 'Заполнить форму',
       formButtonHide: resultPageSettings.formHideButtonText || 'Скрыть форму',
       downloadPdf: resultPageSettings.downloadPdfButtonText || 'Скачать PDF',
-      downloadPdfLoading: resultPageSettings.downloadPdfButtonLoadingText || 'Генерация PDF...',
+      downloadPdfLoading: resultPageSettings.downloadPdfButtonLoading || 'Генерация PDF...',
       share: resultPageSettings.shareButtonText || 'Поделиться',
     }
-    
+
     if (resultPageSettings.resultForm) {
-      const formId = typeof resultPageSettings.resultForm === 'string' 
-        ? resultPageSettings.resultForm 
-        : resultPageSettings.resultForm.id
-      
+      const formId =
+        typeof resultPageSettings.resultForm === 'string'
+          ? resultPageSettings.resultForm
+          : resultPageSettings.resultForm.id
+
       if (formId) {
         try {
           form = await payload.findByID({

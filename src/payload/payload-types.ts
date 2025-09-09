@@ -84,7 +84,11 @@ export interface Config {
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
-  collectionsJoins: {};
+  collectionsJoins: {
+    'calculator-results': {
+      formSubmissions: 'form-submissions';
+    };
+  };
   collectionsSelect: {
     media: MediaSelect<false> | MediaSelect<true>;
     upload: UploadSelect<false> | UploadSelect<true>;
@@ -663,6 +667,11 @@ export interface CalculatorResult {
     };
     [k: string]: unknown;
   } | null;
+  formSubmissions?: {
+    docs?: (string | FormSubmission)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -674,6 +683,24 @@ export interface CalculatorResult {
   height?: number | null;
   focalX?: number | null;
   focalY?: number | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "form-submissions".
+ */
+export interface FormSubmission {
+  id: string;
+  form: string | Form;
+  submissionData?:
+    | {
+        field: string;
+        value: string;
+        id?: string | null;
+      }[]
+    | null;
+  calculatorResult?: (string | null) | CalculatorResult;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -868,23 +895,6 @@ export interface Form {
    * This can be overridden when placing the form on a page
    */
   showTitle?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "form-submissions".
- */
-export interface FormSubmission {
-  id: string;
-  form: string | Form;
-  submissionData?:
-    | {
-        field: string;
-        value: string;
-        id?: string | null;
-      }[]
-    | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1369,6 +1379,7 @@ export interface CalculatorResultsSelect<T extends boolean = true> {
   additionalElements?: T;
   metadata?: T;
   notes?: T;
+  formSubmissions?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -1550,6 +1561,7 @@ export interface FormSubmissionsSelect<T extends boolean = true> {
         value?: T;
         id?: T;
       };
+  calculatorResult?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1862,7 +1874,7 @@ export interface Settings {
       formShowButtonText?: string | null;
       formHideButtonText?: string | null;
       downloadPdfButtonText?: string | null;
-      downloadPdfButtonLoadingText?: string | null;
+      downloadPdfButtonLoading?: string | null;
       shareButtonText?: string | null;
     };
     instructions?: {
@@ -2068,7 +2080,7 @@ export interface SettingsSelect<T extends boolean = true> {
               formShowButtonText?: T;
               formHideButtonText?: T;
               downloadPdfButtonText?: T;
-              downloadPdfButtonLoadingText?: T;
+              downloadPdfButtonLoading?: T;
               shareButtonText?: T;
             };
         instructions?:

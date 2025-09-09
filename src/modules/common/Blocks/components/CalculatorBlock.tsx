@@ -12,7 +12,7 @@ import type { Settings } from '@/payload/payload-types'
 // ============= TYPES =============
 // Extract types from Payload-generated Settings type
 export type CalculatorConfig = NonNullable<Settings['calculator']> & {
-  title: string
+  calculatorTitle: string
   interfaceTexts: NonNullable<NonNullable<Settings['calculator']>['interfaceTexts']> & {
     totalPriceLabel: string
     pricePerM2Label: string
@@ -746,7 +746,7 @@ const CalculatorBlock: React.FC<CalculatorBlockProps> = ({ initialConfig }) => {
 
   return (
     <div className="container pt-6 md:pt-12 pb-12 md:pb-24">
-      <h1 className="text-3xl font-bold text-primary mb-6">{calculatorConfig.title}</h1>
+      <h1 className="text-3xl font-bold text-primary mb-6">{calculatorConfig.calculatorTitle}</h1>
 
       {/* Инструкция */}
       {calculatorConfig.instructions && calculatorConfig.instructions.steps.length > 0 && (

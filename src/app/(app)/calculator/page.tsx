@@ -15,7 +15,7 @@ function transformSettingsToCalculatorConfig(settings: Settings): CalculatorConf
   const { calculator } = settings
 
   return {
-    title: calculator.calculatorTitle || 'Калькулятор проектирования дома',
+    calculatorTitle: calculator.calculatorTitle || 'Калькулятор проектирования дома',
     currency: calculator.currency || '₽',
     areaSettings: {
       label: calculator.areaSettings?.label || 'Общая площадь дома',

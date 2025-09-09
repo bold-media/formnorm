@@ -700,6 +700,7 @@ export const formBuilder = formBuilderPlugin({
     admin: {
       enableRichTextLink: false,
       enableRichTextRelationship: false,
+      defaultColumns: ['form', 'calculatorResult', 'createdAt'],
       hidden: (args: any) => visibleFor(args, ['admin']),
     },
     labels: {
@@ -715,5 +716,58 @@ export const formBuilder = formBuilderPlugin({
     access: {
       read: access(),
     },
+    fields: ({ defaultFields }) => {
+      return [
+        ...defaultFields,
+        {
+          name: 'calculatorResult',
+          type: 'relationship',
+          relationTo: 'calculator-results',
+          label: {
+            en: 'Calculator Result',
+            ru: 'Результат калькулятора',
+          },
+          admin: {
+            position: 'sidebar',
+            condition: (_, siblingData) => siblingData?.calculatorResult !== null,
+          },
+        },
+      ]
+    },
+
+    // TODO: Uncomment after schema update
+    // fields: ({ defaultFields }) => {
+    //   return [
+    //     ...defaultFields,
+    //     {
+    //       name: 'calculatorResult',
+    //       type: 'relationship',
+    //       relationTo: 'calculator-results',
+    //       label: {
+    //         en: 'Calculator Result',
+    //         ru: 'Результат калькулятора',
+    //       },
+    //       admin: {
+    //         position: 'sidebar',
+    //         description: {
+    //           en: 'Associated calculator result',
+    //           ru: 'Связанный результат калькулятора',
+    //         },
+    //       },
+    //     },
+    //     {
+    //       name: 'calculatorResultNumber',
+    //       type: 'text',
+    //       label: {
+    //         en: 'Calculator Result Number',
+    //         ru: 'Номер расчета',
+    //       },
+    //       admin: {
+    //         position: 'sidebar',
+    //         readOnly: true,
+    //       },
+    //     },
+    //   ]
+    // },
   },
 })

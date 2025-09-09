@@ -253,5 +253,25 @@ export const CalculatorResult: CollectionConfig = {
       },
       editor: textEditor({ align: false }),
     },
+    {
+      name: 'formSubmissions',
+      type: 'join',
+      collection: 'form-submissions',
+      on: 'calculatorResult',
+    },
+    // {
+    //   type: 'ui',
+    //   name: 'formSubmissionsLink',
+    //   label: {
+    //     en: 'Related Form Submissions',
+    //     ru: 'Связанные заявки',
+    //   },
+    //   admin: {
+    //     position: 'sidebar',
+    //     components: {
+    //       Field: '@/payload/components/FormSubmissionsLink',
+    //     },
+    //   },
+    // },
   ],
 }
