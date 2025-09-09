@@ -1854,6 +1854,17 @@ export interface Settings {
       pricePerM2Label?: string | null;
       additionalElementsTitle?: string | null;
     };
+    resultPageSettings?: {
+      /**
+       * Form that will be displayed on the calculator result page
+       */
+      resultForm?: (string | null) | Form;
+      formShowButtonText?: string | null;
+      formHideButtonText?: string | null;
+      downloadPdfButtonText?: string | null;
+      downloadPdfButtonLoadingText?: string | null;
+      shareButtonText?: string | null;
+    };
     instructions?: {
       title?: string | null;
       steps?:
@@ -2049,6 +2060,16 @@ export interface SettingsSelect<T extends boolean = true> {
               totalPriceLabel?: T;
               pricePerM2Label?: T;
               additionalElementsTitle?: T;
+            };
+        resultPageSettings?:
+          | T
+          | {
+              resultForm?: T;
+              formShowButtonText?: T;
+              formHideButtonText?: T;
+              downloadPdfButtonText?: T;
+              downloadPdfButtonLoadingText?: T;
+              shareButtonText?: T;
             };
         instructions?:
           | T

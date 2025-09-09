@@ -4,18 +4,43 @@ import React from 'react'
 import { CalculatorResult as CalculatorResultType } from '@payload-types'
 import { Button } from '@/components/Button'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/Card'
-import { Download, Share2, Mail } from 'lucide-react'
+import { Download, Share2, Mail, FileText } from 'lucide-react'
 import { toast } from 'sonner'
+import { RenderForm } from '@/modules/forms/RenderForm'
+import type { Form } from '@payload-types'
+
+interface ButtonTexts {
+  formButton: string
+  formButtonHide: string
+  downloadPdf: string
+  downloadPdfLoading: string
+  share: string
+}
 
 interface CalculatorResultViewProps {
   result: CalculatorResultType
+  form?: Form | null
+  buttonTexts?: ButtonTexts
 }
 
 const formatPrice = (price: number, currency: string = '₽') =>
   `${price.toLocaleString()} ${currency}`
 
-const CalculatorResultView: React.FC<CalculatorResultViewProps> = ({ result }) => {
+const CalculatorResultView: React.FC<CalculatorResultViewProps> = ({
+  result,
+  form,
+  buttonTexts,
+}) => {
+  // Дефолтные тексты кнопок
+  const texts = buttonTexts || {
+    formButton: 'Заполнить форму',
+    formButtonHide: 'Скрыть форму',
+    downloadPdf: 'Скачать PDF',
+    downloadPdfLoading: 'Генерация PDF...',
+    share: 'Поделиться',
+  }
   const [isGeneratingPDF, setIsGeneratingPDF] = React.useState(false)
+  const [showForm, setShowForm] = React.useState(false)
 
   // Extract metadata
   const metadata = result.metadata as any
@@ -98,6 +123,10 @@ const CalculatorResultView: React.FC<CalculatorResultViewProps> = ({ result }) =
   const handleSendEmail = () => {
     // Placeholder for email functionality
     alert('Функция отправки по email будет добавлена позже')
+  }
+
+  const toggleForm = () => {
+    setShowForm(!showForm)
   }
 
   return (
@@ -237,14 +266,49 @@ const CalculatorResultView: React.FC<CalculatorResultViewProps> = ({ result }) =
                 </div>
 
                 <div className="space-y-3 pt-4">
-                  <Button onClick={handleDownloadPDF} disabled={isGeneratingPDF} className="w-full">
+                  {form && (
+                    <>
+                      <Button onClick={toggleForm} className="w-full">
+                        <FileText className="w-4 h-4 mr-2" />
+                        {showForm ? texts.formButtonHide : texts.formButton}
+                      </Button>
+
+                      {showForm && (
+                        <div className="mt-4 p-4 border rounded-lg bg-gray-50">
+                          <RenderForm
+                            form={form}
+                            showTitle={true}
+                            buttonClassName="mt-4"
+                            onSuccess={() => {
+                              // Скрываем форму после успешной отправки
+                              setShowForm(false)
+                            }}
+                            submissionContext={{
+                              calculatorResultId: result?.id,
+                            }}
+                          >
+                            {form.title && (
+                              <h3 className="text-lg font-semibold mb-4">{form.title}</h3>
+                            )}
+                          </RenderForm>
+                        </div>
+                      )}
+                    </>
+                  )}
+
+                  <Button
+                    onClick={handleDownloadPDF}
+                    disabled={isGeneratingPDF}
+                    variant="outline"
+                    className="w-full"
+                  >
                     <Download className="w-4 h-4 mr-2" />
-                    {isGeneratingPDF ? 'Генерация PDF...' : 'Скачать PDF'}
+                    {isGeneratingPDF ? texts.downloadPdfLoading : texts.downloadPdf}
                   </Button>
 
                   <Button onClick={handleShare} variant="outline" className="w-full">
                     <Share2 className="w-4 h-4 mr-2" />
-                    Поделиться
+                    {texts.share}
                   </Button>
 
                   {/* <Button onClick={handleSendEmail} variant="outline" className="w-full">

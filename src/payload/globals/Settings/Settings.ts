@@ -779,6 +779,71 @@ export const Settings: GlobalConfig = {
               ],
             },
             {
+              name: 'resultPageSettings',
+              type: 'group',
+              label: {
+                en: 'Result Page Settings',
+                ru: 'Настройки страницы результата',
+              },
+              fields: [
+                {
+                  name: 'resultForm',
+                  type: 'relationship',
+                  label: {
+                    en: 'Result Page Form',
+                    ru: 'Форма на странице результата',
+                  },
+                  relationTo: 'forms',
+                  admin: {
+                    description: {
+                      en: 'Form that will be displayed on the calculator result page',
+                      ru: 'Форма, которая будет отображаться на странице результата калькулятора',
+                    },
+                  },
+                },
+                {
+                  name: 'formShowButtonText',
+                  type: 'text',
+                  label: {
+                    en: 'Form Show Button Text',
+                    ru: 'Текст кнопки показа формы',
+                  },
+                },
+                {
+                  name: 'formHideButtonText',
+                  type: 'text',
+                  label: {
+                    en: 'Form Hide Button Text',
+                    ru: 'Текст кнопки скрытия формы',
+                  },
+                },
+                {
+                  name: 'downloadPdfButtonText',
+                  type: 'text',
+                  label: {
+                    en: 'Download PDF Button Text',
+                    ru: 'Текст кнопки скачивания PDF',
+                  },
+                },
+                {
+                  name: 'downloadPdfButtonLoadingText',
+                  type: 'text',
+                  label: {
+                    en: 'Download PDF Button Loading Text',
+                    ru: 'Текст кнопки при генерации PDF',
+                  },
+                },
+                {
+                  name: 'shareButtonText',
+                  type: 'text',
+                  label: {
+                    en: 'Share Button Text',
+                    ru: 'Текст кнопки поделиться',
+                  },
+                },
+              ],
+            },
+            {
               name: 'instructions',
               type: 'group',
               label: {

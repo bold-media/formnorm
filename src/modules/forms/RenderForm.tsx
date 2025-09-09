@@ -39,6 +39,8 @@ export const RenderForm = ({
   showTitle = true,
   buttonClassName = 'mt-8',
   formType = 'single',
+  onSuccess,
+  submissionContext,
 }: {
   form: Form
   className?: string
@@ -46,6 +48,8 @@ export const RenderForm = ({
   showTitle?: boolean
   buttonClassName?: string
   formType?: 'single' | 'double'
+  onSuccess?: () => void
+  submissionContext?: any
 }) => {
   const {
     id,
@@ -177,6 +181,11 @@ export const RenderForm = ({
           setUploadedFileIds({}) // Clear uploaded files only on successful form submission
           formMethods.reset()
 
+          // Вызываем callback после успешной отправки
+          if (onSuccess) {
+            onSuccess()
+          }
+
           if (confirmationType === 'redirect' && redirect) {
             const { url } = redirect
             if (url) router.push(url)
@@ -191,7 +200,7 @@ export const RenderForm = ({
       }
       void submitForm()
     },
-    [router, id, redirect, confirmationType, confirmationMessage, formMethods, uploadedFileIds],
+    [router, id, redirect, confirmationType, confirmationMessage, formMethods, uploadedFileIds, onSuccess],
   )
 
   // Helper function to check if a field is a checkbox
