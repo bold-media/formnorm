@@ -416,18 +416,61 @@ const CalculatorBlock: React.FC<CalculatorBlockProps> = ({ initialConfig }) => {
       })),
 
     reset: () => {
-      // Reset form without preselected values
-      setFormData({
+      // Reset form to defaults
+      const defaultData = {
         area: '',
         selectedFloor: '',
-        selectedServices: [],
-        selectedElements: [],
-        serviceOptions: {},
-        selectedRadioValues: {},
+        selectedServices: [] as string[],
+        selectedElements: [] as string[],
+        serviceOptions: {} as Record<string, string>,
+        selectedRadioValues: {} as Record<string, string>,
         clientName: '',
         clientEmail: '',
         clientPhone: '',
-      })
+      }
+
+      if (calculatorConfig) {
+        // Restore default floor
+        if (calculatorConfig.floorSettings?.floorOptions) {
+          const defaultFloor = calculatorConfig.floorSettings.floorOptions.find(
+            (opt) => opt.isDefault === true
+          )
+          if (defaultFloor) {
+            defaultData.selectedFloor = defaultFloor.name
+          }
+        }
+
+        // Restore default radio values for additional elements
+        if (calculatorConfig.additionalSections) {
+          const radioSections = calculatorConfig.additionalSections.filter(
+            (section) => section.fieldType === 'radio'
+          )
+          
+          radioSections.forEach((section) => {
+            if (section.elements) {
+              const defaultElement = section.elements.find((el) => el.isDefault === true)
+              if (defaultElement) {
+                defaultData.selectedRadioValues[section.title] = defaultElement.name
+              }
+            }
+          })
+        }
+
+        // Restore default services
+        if (calculatorConfig.servicesSections) {
+          calculatorConfig.servicesSections.forEach((section) => {
+            if (section.services) {
+              section.services.forEach((service) => {
+                if (service.isDefault && service.name) {
+                  defaultData.selectedServices.push(service.name)
+                }
+              })
+            }
+          })
+        }
+      }
+
+      setFormData(defaultData)
     },
   }
 
@@ -442,6 +485,68 @@ const CalculatorBlock: React.FC<CalculatorBlockProps> = ({ initialConfig }) => {
         .catch(console.error)
     }
   }, [initialConfig])
+
+  // Set default values when config loads
+  useEffect(() => {
+    if (!calculatorConfig) return
+
+    setFormData((prevFormData) => {
+      const newFormData = { ...prevFormData }
+      let hasChanges = false
+
+      // Set default floor if not already selected
+      if (!prevFormData.selectedFloor && calculatorConfig.floorSettings?.floorOptions) {
+        const defaultFloor = calculatorConfig.floorSettings.floorOptions.find(
+          (opt) => opt.isDefault === true
+        )
+        if (defaultFloor) {
+          newFormData.selectedFloor = defaultFloor.name
+          hasChanges = true
+        }
+      }
+
+      // Set default radio values for additional elements
+      if (calculatorConfig.additionalSections) {
+        const radioSections = calculatorConfig.additionalSections.filter(
+          (section) => section.fieldType === 'radio'
+        )
+        
+        radioSections.forEach((section) => {
+          if (!prevFormData.selectedRadioValues[section.title] && section.elements) {
+            const defaultElement = section.elements.find((el) => el.isDefault === true)
+            if (defaultElement) {
+              if (!newFormData.selectedRadioValues) {
+                newFormData.selectedRadioValues = {}
+              }
+              newFormData.selectedRadioValues[section.title] = defaultElement.name
+              hasChanges = true
+            }
+          }
+        })
+      }
+
+      // Set default service options for radio services
+      if (calculatorConfig.servicesSections) {
+        calculatorConfig.servicesSections.forEach((section) => {
+          if (section.services) {
+            section.services.forEach((service) => {
+              // Handle services with isDefault flag
+              if (service.isDefault && service.name && !prevFormData.selectedServices.includes(service.name)) {
+                newFormData.selectedServices = [...newFormData.selectedServices, service.name]
+                hasChanges = true
+              }
+              
+              // For services with radio options - we cannot check isDefault on options
+              // as it's not in the type definition
+            })
+          }
+        })
+      }
+
+      // Only return new data if there were changes
+      return hasChanges ? newFormData : prevFormData
+    })
+  }, [calculatorConfig]) // Only depend on calculatorConfig changes
 
   // Calculations
   const calculations = useMemo(() => {
