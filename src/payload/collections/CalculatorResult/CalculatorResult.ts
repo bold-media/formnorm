@@ -156,8 +156,10 @@ export const CalculatorResult: CollectionConfig = {
           hooks: {
             beforeValidate: [
               ({ data, value }) => {
-                if (value !== undefined) return value
-                return data?.metadata?.calculations?.totalCost || 0
+                if (value !== undefined) return Math.round(value * 100) / 100
+                const totalCost = data?.metadata?.calculations?.totalCost || 0
+                // Round to 2 decimal places to avoid floating point precision issues
+                return Math.round(totalCost * 100) / 100
               },
             ],
           },
