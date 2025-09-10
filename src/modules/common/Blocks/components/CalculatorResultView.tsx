@@ -339,8 +339,9 @@ const CalculatorResultView: React.FC<CalculatorResultViewProps> = ({
                                       }),
                                     })
                                     
-                                    if (response.ok) {
-                                      toast.success('Контактная информация обновлена')
+                                    // Silently update without notification
+                                    if (!response.ok) {
+                                      console.error('Failed to update calculator result')
                                     }
                                   } catch (error) {
                                     console.error('Error updating calculator result:', error)
