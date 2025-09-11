@@ -193,7 +193,16 @@ export const CalculationPDFDocument: React.FC<CalculationData> = ({
         {/* Header */}
         <View style={styles.header}>
           <Text style={styles.headerText}>Расчет стоимости проектирования</Text>
-          <Text style={styles.headerText}>№ {calculationNumber}</Text>
+          <View>
+            <Text style={styles.headerText}>№ {calculationNumber}</Text>
+            <Text style={{ fontSize: 12, color: colors.mediumGray, marginTop: 2 }}>
+              {new Date().toLocaleDateString('ru-RU', { 
+                day: 'numeric', 
+                month: 'long', 
+                year: 'numeric' 
+              })}
+            </Text>
+          </View>
         </View>
         <View style={styles.headerDivider} />
 
