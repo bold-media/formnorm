@@ -71,6 +71,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingVertical: 5,
+    flexWrap: 'nowrap',
+    alignItems: 'flex-start',
   },
   rowDivider: {
     height: 1,
@@ -80,16 +82,28 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 11,
     color: colors.mediumGray,
+    flexShrink: 0,
   },
   value: {
     fontSize: 11,
     fontWeight: 700,
     color: colors.darkGray,
+    flexShrink: 0,
+    marginLeft: 10,
+  },
+  parameterValue: {
+    fontSize: 11,
+    fontWeight: 700,
+    color: colors.darkGray,
+    flex: 1,
+    textAlign: 'right',
+    marginLeft: 10,
   },
   itemName: {
     fontSize: 11,
     color: colors.mediumGray,
     flex: 1,
+    marginRight: 10,
   },
   subsectionHeader: {
     fontSize: 10,
@@ -102,7 +116,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.totalBg,
     padding: 15,
     borderRadius: 2,
-    marginTop: 20,
+    marginTop: 10,
   },
   totalLabel: {
     fontSize: 14,
@@ -211,12 +225,12 @@ export const CalculationPDFDocument: React.FC<CalculationData> = ({
         <View style={styles.sectionBox}>
           <View style={styles.row}>
             <Text style={styles.label}>Площадь:</Text>
-            <Text style={styles.value}>{calculations.area} м²</Text>
+            <Text style={styles.parameterValue}>{calculations.area} м²</Text>
           </View>
           <View style={styles.rowDivider} />
           <View style={styles.row}>
             <Text style={styles.label}>Этажность:</Text>
-            <Text style={styles.value}>{formData.selectedFloor}</Text>
+            <Text style={styles.parameterValue}>{formData.selectedFloor}</Text>
           </View>
         </View>
 
