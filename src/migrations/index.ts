@@ -13,6 +13,7 @@ import * as migration_20250905_120554 from './20250905_120554';
 import * as migration_20250906_114919 from './20250906_114919';
 import * as migration_20250906_223350 from './20250906_223350';
 import * as migration_20250909_232507 from './20250909_232507';
+import * as migration_20250912_162201_add_pdf_suffix_content from './20250912_162201_add_pdf_suffix_content';
 
 export const migrations = [
   {
@@ -88,6 +89,11 @@ export const migrations = [
   {
     up: migration_20250909_232507.up,
     down: migration_20250909_232507.down,
-    name: '20250909_232507'
+    name: '20250909_232507',
+  },
+  {
+    up: migration_20250912_162201_add_pdf_suffix_content.up,
+    down: migration_20250912_162201_add_pdf_suffix_content.down,
+    name: '20250912_162201_add_pdf_suffix_content'
   },
 ];
