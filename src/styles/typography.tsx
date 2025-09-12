@@ -25,6 +25,13 @@ export const typographyVariants = cva(
           'prose-blockquote:font-light prose-blockquote:leading-8 prose-blockquote:text-base sm:prose-blockquote:text-lg md:prose-blockquote:text-xl',
           'prose-a:font-light prose-a:no-underline',
         ],
+        description: [
+          'prose-p:text-sm prose-p:text-muted-foreground/70',
+          'prose-ul:text-sm prose-ul:text-muted-foreground/70',
+          'prose-ol:text-sm prose-ol:text-muted-foreground/70',
+          'prose-blockquote:text-sm prose-blockquote:text-muted-foreground/70',
+          'prose-a:text-sm prose-a:text-muted-foreground/70 prose-a:underline',
+        ],
       },
     },
     defaultVariants: {

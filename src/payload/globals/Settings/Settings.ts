@@ -3,6 +3,7 @@ import { MetaDescriptionField, MetaTitleField } from '@payloadcms/plugin-seo/fie
 import { GlobalConfig } from 'payload'
 import { link, linkGroup } from '@/payload/fields/link'
 import { seoFields } from '@/payload/fields/seo'
+import { textEditor } from '@/payload/fields/lexical/textEditor'
 
 export const Settings: GlobalConfig = {
   slug: 'settings',
@@ -444,6 +445,15 @@ export const Settings: GlobalConfig = {
                       },
                     },
                     {
+                      name: 'description',
+                      type: 'richText',
+                      editor: textEditor({ headings: false, align: false }),
+                      label: {
+                        en: 'Description',
+                        ru: 'Описание',
+                      },
+                    },
+                    {
                       name: 'ignoreArea',
                       type: 'checkbox',
                       label: {
@@ -520,7 +530,8 @@ export const Settings: GlobalConfig = {
                         },
                         {
                           name: 'description',
-                          type: 'text',
+                          type: 'richText',
+                          editor: textEditor({ headings: false, align: false }),
                           label: {
                             en: 'Description',
                             ru: 'Описание',
@@ -879,6 +890,39 @@ export const Settings: GlobalConfig = {
                       required: true,
                     },
                   ],
+                },
+              ],
+            },
+            {
+              name: 'pdfSuffixContent',
+              type: 'group',
+              label: {
+                en: 'PDF Suffix Content',
+                ru: 'Дополнительный контент PDF',
+              },
+              fields: [
+                {
+                  name: 'title',
+                  type: 'text',
+                  label: {
+                    en: 'Section Title',
+                    ru: 'Заголовок раздела',
+                  },
+                },
+                {
+                  name: 'content',
+                  type: 'richText',
+                  editor: textEditor({ headings: false, align: false }),
+                  label: {
+                    en: 'Content',
+                    ru: 'Содержимое',
+                  },
+                  admin: {
+                    description: {
+                      en: 'This content will appear after the totals section in the PDF',
+                      ru: 'Этот контент появится после раздела с итогами в PDF',
+                    },
+                  },
                 },
               ],
             },

@@ -1819,6 +1819,21 @@ export interface Settings {
                 fieldType?: ('radio' | 'checkbox') | null;
                 pricePerM2?: number | null;
                 fixedPrice?: number | null;
+                description?: {
+                  root: {
+                    type: string;
+                    children: {
+                      type: string;
+                      version: number;
+                      [k: string]: unknown;
+                    }[];
+                    direction: ('ltr' | 'rtl') | null;
+                    format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                    indent: number;
+                    version: number;
+                  };
+                  [k: string]: unknown;
+                } | null;
                 ignoreArea?: boolean | null;
                 isRequired?: boolean | null;
                 isDefault?: boolean | null;
@@ -1834,7 +1849,21 @@ export interface Settings {
                   | {
                       name: string;
                       pricePerM2?: number | null;
-                      description?: string | null;
+                      description?: {
+                        root: {
+                          type: string;
+                          children: {
+                            type: string;
+                            version: number;
+                            [k: string]: unknown;
+                          }[];
+                          direction: ('ltr' | 'rtl') | null;
+                          format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                          indent: number;
+                          version: number;
+                        };
+                        [k: string]: unknown;
+                      } | null;
                       id?: string | null;
                     }[]
                   | null;
@@ -1885,6 +1914,27 @@ export interface Settings {
             id?: string | null;
           }[]
         | null;
+    };
+    pdfSuffixContent?: {
+      title?: string | null;
+      /**
+       * This content will appear after the totals section in the PDF
+       */
+      content?: {
+        root: {
+          type: string;
+          children: {
+            type: string;
+            version: number;
+            [k: string]: unknown;
+          }[];
+          direction: ('ltr' | 'rtl') | null;
+          format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+          indent: number;
+          version: number;
+        };
+        [k: string]: unknown;
+      } | null;
     };
   };
   updatedAt?: string | null;
@@ -2032,6 +2082,7 @@ export interface SettingsSelect<T extends boolean = true> {
                     fieldType?: T;
                     pricePerM2?: T;
                     fixedPrice?: T;
+                    description?: T;
                     ignoreArea?: T;
                     isRequired?: T;
                     isDefault?: T;
@@ -2093,6 +2144,12 @@ export interface SettingsSelect<T extends boolean = true> {
                     text?: T;
                     id?: T;
                   };
+            };
+        pdfSuffixContent?:
+          | T
+          | {
+              title?: T;
+              content?: T;
             };
       };
   updatedAt?: T;

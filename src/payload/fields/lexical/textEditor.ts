@@ -22,6 +22,7 @@ export const textEditor = ({ admin, headings = true, align = true, blocks = [] }
           'blockquote',
           'indent',
           'horizontalRule',
+          'experimental_table',
         ]
 
         if (headings === false && featureName === 'heading') {

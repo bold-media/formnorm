@@ -1,28 +1,50 @@
 import { FieldHook } from 'payload'
 import { CalculatorResult } from '@payload-types'
 
-const ALLOWED_CHARS = '123456789АБВГДЕЖИКЛМНПРСТУФЭЮЯ'
-
-function generateCustomId(length: number = 8): string {
-  let result = ''
-  for (let i = 0; i < length; i++) {
-    const randomIndex = Math.floor(Math.random() * ALLOWED_CHARS.length)
-    result += ALLOWED_CHARS[randomIndex]
-  }
-  return result
-}
-
 export const generateCalculationNumber: FieldHook<CalculatorResult> = async ({
   value,
   operation,
+  req,
 }: any) => {
   if (operation === 'create' && !value) {
-    // Generate two parts of 4 characters each
-    const firstPart = generateCustomId(4)
-    const secondPart = generateCustomId(4)
+    const payload = req.payload
+    const currentYear = new Date().getFullYear()
 
-    // Combine with dash in the middle
-    return `${firstPart}-${secondPart}`
+    // TEMPORARY: Reset numbering to 1
+    // Remove this block after the first calculation is created
+    const RESET_NUMBERING = false
+    if (RESET_NUMBERING) {
+      return `${currentYear}-1`
+    }
+
+    // Get the highest existing calculation number overall
+    const lastResult = await payload.find({
+      collection: 'calculator-results',
+      sort: '-createdAt',
+      limit: 1,
+      where: {
+        calculationNumber: {
+          exists: true,
+        },
+      },
+    })
+
+    let nextNumber = 1
+
+    if (lastResult.docs.length > 0) {
+      const lastCalcNumber = lastResult.docs[0].calculationNumber
+      // Extract the number after the dash
+      const parts = lastCalcNumber.split('-')
+      if (parts.length >= 2) {
+        const lastNum = parseInt(parts[parts.length - 1])
+        if (!isNaN(lastNum)) {
+          nextNumber = lastNum + 1
+        }
+      }
+    }
+
+    // Return in format: YYYY-N
+    return `${currentYear}-${nextNumber}`
   }
 
   return value

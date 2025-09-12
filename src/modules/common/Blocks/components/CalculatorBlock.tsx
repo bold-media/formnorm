@@ -8,6 +8,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/RadioGroup'
 import { Label } from '@/components/Label'
 import { notFound, useRouter } from 'next/navigation'
 import type { Settings } from '@/payload/payload-types'
+import { RichText } from '@/modules/common/RichText'
 
 // ============= TYPES =============
 // Extract types from Payload-generated Settings type
@@ -23,6 +24,10 @@ export type CalculatorConfig = NonNullable<Settings['calculator']> & {
   instructions?: {
     title: string
     steps: Array<{ text: string }>
+  }
+  pdfSuffixContent?: {
+    title: string
+    content: any
   }
 }
 
@@ -91,15 +96,25 @@ const ServiceItem: React.FC<{
           {service.options.map((option, index) => (
             <div key={`option-${option.name}-${index}`} className="flex items-center space-x-2">
               <RadioGroupItem value={option.name} id={`option-${option.name}-${index}`} />
-              <Label
-                htmlFor={`option-${option.name}-${index}`}
-                className="flex-1 flex justify-between items-center cursor-pointer"
-              >
-                <span className="font-normal text-base">{option.name}</span>
-                <span className="text-base text-muted-foreground whitespace-nowrap">
-                  {Math.round((option.pricePerM2 || 0) * areaCoefficient * floorCoefficient)}{' '}
-                  {currency}/м²
-                </span>
+              <Label htmlFor={`option-${option.name}-${index}`} className="flex-1 cursor-pointer">
+                <div className="flex justify-between items-start">
+                  <div className="flex-1">
+                    <span className="font-normal text-base">{option.name}</span>
+                    {option.description && (
+                      <div className="text-sm text-muted-foreground/70 mt-0.5">
+                        {typeof option.description === 'string' ? (
+                          option.description
+                        ) : (
+                          <RichText data={option.description} prose={{ variant: 'description' }} />
+                        )}
+                      </div>
+                    )}
+                  </div>
+                  <span className="text-base text-muted-foreground whitespace-nowrap ml-4">
+                    {Math.round((option.pricePerM2 || 0) * areaCoefficient * floorCoefficient)}{' '}
+                    {currency}/м²
+                  </span>
+                </div>
               </Label>
             </div>
           ))}
@@ -118,16 +133,26 @@ const ServiceItem: React.FC<{
           onCheckedChange={onToggle}
           className="mt-0.5"
         />
-        <Label
-          htmlFor={`service-${service.name}`}
-          className="flex-1 flex justify-between items-center cursor-pointer"
-        >
-          <span className="font-normal text-base leading-normal peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-            {service.name}
-          </span>
-          <span className="text-base text-muted-foreground whitespace-nowrap">
-            {getServicePriceDisplay(service, currency, areaCoefficient, floorCoefficient)}
-          </span>
+        <Label htmlFor={`service-${service.name}`} className="flex-1 cursor-pointer ">
+          <div className="flex justify-between items-start">
+            <div className="flex-1">
+              <span className="font-normal text-base leading-normal peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                {service.name}
+              </span>
+              {service.description && (
+                <div className="text-sm text-muted-foreground/70 mt-0.5">
+                  {typeof service.description === 'string' ? (
+                    service.description
+                  ) : (
+                    <RichText data={service.description} prose={{ variant: 'description' }} />
+                  )}
+                </div>
+              )}
+            </div>
+            <span className="text-base text-muted-foreground whitespace-nowrap">
+              {getServicePriceDisplay(service, currency, areaCoefficient, floorCoefficient)}
+            </span>
+          </div>
         </Label>
       </div>
 
@@ -150,13 +175,26 @@ const ServiceItem: React.FC<{
                   />
                   <Label
                     htmlFor={`${service.name}-${option.name}-${index}`}
-                    className="flex-1 flex justify-between items-center cursor-pointer"
+                    className="flex-1 cursor-pointer"
                   >
-                    <span className="font-normal text-base">{option.name}</span>
-                    <span className="text-base text-muted-foreground whitespace-nowrap">
-                      {Math.round((option.pricePerM2 || 0) * areaCoefficient * floorCoefficient)}{' '}
-                      {currency}/м²
-                    </span>
+                    <div className="flex justify-between items-start">
+                      <div className="flex-1">
+                        <span className="font-normal text-base">{option.name}</span>
+                        {option.description && (
+                          <div className="text-sm text-muted-foreground/70 mt-0.5">
+                            {typeof option.description === 'string' ? (
+                              option.description
+                            ) : (
+                              <RichText data={option.description} prose={{ variant: 'description' }} />
+                            )}
+                          </div>
+                        )}
+                      </div>
+                      <span className="text-base text-muted-foreground whitespace-nowrap ml-4">
+                        {Math.round((option.pricePerM2 || 0) * areaCoefficient * floorCoefficient)}{' '}
+                        {currency}/м²
+                      </span>
+                    </div>
                   </Label>
                 </div>
               ))}
@@ -433,7 +471,7 @@ const CalculatorBlock: React.FC<CalculatorBlockProps> = ({ initialConfig }) => {
         // Restore default floor
         if (calculatorConfig.floorSettings?.floorOptions) {
           const defaultFloor = calculatorConfig.floorSettings.floorOptions.find(
-            (opt) => opt.isDefault === true
+            (opt) => opt.isDefault === true,
           )
           if (defaultFloor) {
             defaultData.selectedFloor = defaultFloor.name
@@ -443,9 +481,9 @@ const CalculatorBlock: React.FC<CalculatorBlockProps> = ({ initialConfig }) => {
         // Restore default radio values for additional elements
         if (calculatorConfig.additionalSections) {
           const radioSections = calculatorConfig.additionalSections.filter(
-            (section) => section.fieldType === 'radio'
+            (section) => section.fieldType === 'radio',
           )
-          
+
           radioSections.forEach((section) => {
             if (section.elements) {
               const defaultElement = section.elements.find((el) => el.isDefault === true)
@@ -497,7 +535,7 @@ const CalculatorBlock: React.FC<CalculatorBlockProps> = ({ initialConfig }) => {
       // Set default floor if not already selected
       if (!prevFormData.selectedFloor && calculatorConfig.floorSettings?.floorOptions) {
         const defaultFloor = calculatorConfig.floorSettings.floorOptions.find(
-          (opt) => opt.isDefault === true
+          (opt) => opt.isDefault === true,
         )
         if (defaultFloor) {
           newFormData.selectedFloor = defaultFloor.name
@@ -508,9 +546,9 @@ const CalculatorBlock: React.FC<CalculatorBlockProps> = ({ initialConfig }) => {
       // Set default radio values for additional elements
       if (calculatorConfig.additionalSections) {
         const radioSections = calculatorConfig.additionalSections.filter(
-          (section) => section.fieldType === 'radio'
+          (section) => section.fieldType === 'radio',
         )
-        
+
         radioSections.forEach((section) => {
           if (!prevFormData.selectedRadioValues[section.title] && section.elements) {
             const defaultElement = section.elements.find((el) => el.isDefault === true)
@@ -531,11 +569,15 @@ const CalculatorBlock: React.FC<CalculatorBlockProps> = ({ initialConfig }) => {
           if (section.services) {
             section.services.forEach((service) => {
               // Handle services with isDefault flag
-              if (service.isDefault && service.name && !prevFormData.selectedServices.includes(service.name)) {
+              if (
+                service.isDefault &&
+                service.name &&
+                !prevFormData.selectedServices.includes(service.name)
+              ) {
                 newFormData.selectedServices = [...newFormData.selectedServices, service.name]
                 hasChanges = true
               }
-              
+
               // For services with radio options - we cannot check isDefault on options
               // as it's not in the type definition
             })

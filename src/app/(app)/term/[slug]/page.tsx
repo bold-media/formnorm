@@ -69,6 +69,7 @@ function transformSettingsToCalculatorConfig(settings: Settings): CalculatorConf
         radioGroup: service.radioGroup || undefined,
         isDefault: service.isDefault || undefined,
         isRequired: service.isRequired || undefined,
+        description: service.description || undefined,
       })),
     })),
     additionalSections: (calculator.additionalSections || []).map((section) => ({
@@ -92,6 +93,10 @@ function transformSettingsToCalculatorConfig(settings: Settings): CalculatorConf
       steps: (calculator.instructions.steps || []).map(step => ({
         text: step.text,
       })),
+    } : undefined,
+    pdfSuffixContent: calculator.pdfSuffixContent ? {
+      title: calculator.pdfSuffixContent.title || '',
+      content: calculator.pdfSuffixContent.content || null,
     } : undefined,
   }
 }
