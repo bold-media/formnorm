@@ -1,5 +1,5 @@
 {
-  "id": "d4bb2366-4f5f-47c3-af62-e36067651c5d",
+  "id": "24a0878b-76d8-4c8c-a2ef-53b0c11113da",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -9326,12 +9326,6 @@
           "type": "numeric",
           "primaryKey": false,
           "notNull": false
-        },
-        "description": {
-          "name": "description",
-          "type": "jsonb",
-          "primaryKey": false,
-          "notNull": false
         }
       },
       "indexes": {
@@ -9431,12 +9425,6 @@
         "fixed_price": {
           "name": "fixed_price",
           "type": "numeric",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "description": {
-          "name": "description",
-          "type": "jsonb",
           "primaryKey": false,
           "notNull": false
         },
