@@ -2,6 +2,7 @@ import { access, accessField } from '@/payload/access'
 import { textEditor } from '@/payload/fields/lexical/textEditor'
 import { CollectionConfig } from 'payload'
 import { generateCalculationNumber } from './hooks/generateCalculationNumber'
+import { sendTelegramNotificationHook } from './hooks/sendTelegramNotification'
 
 export const CalculatorResult: CollectionConfig = {
   slug: 'calculator-results',
@@ -276,4 +277,7 @@ export const CalculatorResult: CollectionConfig = {
     //   },
     // },
   ],
+  hooks: {
+    afterChange: [sendTelegramNotificationHook],
+  },
 }

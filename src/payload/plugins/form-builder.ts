@@ -3,6 +3,7 @@ import { visibleFor } from '@/payload/utils/visibleFor'
 import { formBuilderPlugin, fields } from '@payloadcms/plugin-form-builder'
 import { Field, FieldBase } from 'payload'
 import { revalidate, revalidateDelete } from '../hooks/revalidate'
+import { sendFormSubmissionNotification } from '../hooks/sendFormSubmissionNotification'
 
 const nameField: Field = {
   name: 'name',
@@ -715,6 +716,9 @@ export const formBuilder = formBuilderPlugin({
     },
     access: {
       read: access(),
+    },
+    hooks: {
+      afterChange: [sendFormSubmissionNotification],
     },
     fields: ({ defaultFields }) => {
       return [
