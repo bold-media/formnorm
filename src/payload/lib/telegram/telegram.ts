@@ -56,10 +56,10 @@ export async function sendTelegramNotification({
   }
 
   // Add timestamp
-  message += `\n\n_📅 ${new Date().toLocaleString('ru-RU', {
-    dateStyle: 'medium',
-    timeStyle: 'short',
-  })}_`
+  // message += `\n\n_📅 ${new Date().toLocaleString('ru-RU', {
+  //   dateStyle: 'medium',
+  //   timeStyle: 'short',
+  // })}_`
 
   try {
     // Send text message
