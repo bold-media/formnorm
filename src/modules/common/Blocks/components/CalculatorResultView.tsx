@@ -133,42 +133,15 @@ const CalculatorResultView: React.FC<CalculatorResultViewProps> = ({
   }
 
   const handleShareToTelegram = () => {
-    // Get the current page URL
-    const currentUrl = window.location.href
+    // Open Telegram bot with deep link containing calculation ID
+    const botUsername = process.env.NEXT_PUBLIC_TELEGRAM_BOT_USERNAME || 'FormnormBot'
+    const calculationParam = `calc_${result.id}`
 
-    // Get calculation details
-    const calcNumber = result.calculationNumber || 'N/A'
-    const totalCost = calculations.totalCost || 0
-    const area = calculations.area || 0
-    const pricePerM2 = calculations.pricePerM2 || 0
-    const floor = formData.selectedFloor || 'Не указано'
+    // Create deep link URL that will open the bot with /start command
+    const telegramUrl = `https://t.me/${botUsername}?start=${calculationParam}`
 
-    // Create a cleaner message without complex Unicode characters
-    // Using simple line breaks and basic formatting
-    const message = `Расчет стоимости проектирования №${calcNumber}
-
-Параметры:
-• Площадь: ${area} м²
-• Этажность: ${floor}
-
-Результаты:
-• Цена за м²: ${Math.round(pricePerM2).toLocaleString('ru-RU')} ${currency}
-• Общая стоимость: ${totalCost.toLocaleString('ru-RU')} ${currency}
-
-Дата: ${new Date(result.createdAt).toLocaleDateString('ru-RU')}
-
-Подробнее:`
-
-    // Create Telegram share URL
-    // Important: URL should be separate, not encoded with the text
-    const telegramUrl = `https://t.me/share/url?text=${encodeURIComponent(message)}&url=${encodeURIComponent(currentUrl)}`
-
-    // Open in a popup window with specific dimensions
-    window.open(
-      telegramUrl,
-      'telegram-share',
-      'width=550,height=450,toolbar=0,menubar=0,location=0,status=0'
-    )
+    // Open in new window/tab
+    window.open(telegramUrl, '_blank')
   }
 
   const toggleForm = () => {

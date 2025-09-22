@@ -26,38 +26,47 @@ export async function POST(request: NextRequest) {
           `Здравствуйте, ${userName}! 👋\n\nСейчас отправлю вам результаты расчета...`,
         )
 
-        // TODO: Fetch your calculation from database
-        // For now, sending test data
-        const testCalculation = {
-          number: '2025-41',
-          area: 100,
-          floors: '2 этажа',
-          pricePerM2: 1459,
-          totalCost: 145860,
-          currency: '₽',
-          date: new Date().toLocaleDateString('ru-RU'),
+        try {
+          // Fetch calculation from database
+          const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
+          const response = await fetch(`${baseUrl}/api/calculator-results/${calculationId}`)
+
+          if (!response.ok) {
+            await sendMessage(chatId, '❌ Расчет не найден или недоступен')
+            return NextResponse.json({ ok: true })
+          }
+
+          const result = await response.json()
+
+          // Extract data from the calculation
+          const metadata = result.metadata || {}
+          const calculations = metadata.calculations || {}
+          const formData = metadata.formData || {}
+          const config = metadata.config || {}
+          const currency = config.currency || '₽'
+
+          // Send calculation details
+          const message =
+            `📊 <b>Расчет №${result.calculationNumber}</b>\n\n` +
+            `📐 <b>Параметры:</b>\n` +
+            `• Площадь: ${calculations.area || 0} м²\n` +
+            `• Этажность: ${formData.selectedFloor || 'Не указано'}\n\n` +
+            `💰 <b>Результаты:</b>\n` +
+            `• Цена за м²: ${Math.round(calculations.pricePerM2 || 0).toLocaleString('ru-RU')} ${currency}\n` +
+            `• <b>Общая стоимость: ${(calculations.totalCost || 0).toLocaleString('ru-RU')} ${currency}</b>\n\n` +
+            `📅 Дата расчета: ${new Date(result.createdAt).toLocaleDateString('ru-RU')}\n\n` +
+            `🔗 Подробнее: ${baseUrl}/calculator/${calculationId}`
+
+          await sendMessage(chatId, message, true)
+
+          // Send PDF if available
+          if (result.url) {
+            await sendDocument(chatId, `${baseUrl}${result.url}`, `Расчет №${result.calculationNumber}.pdf`)
+          }
+        } catch (error) {
+          console.error('Error fetching calculation:', error)
+          await sendMessage(chatId, '❌ Произошла ошибка при загрузке расчета')
         }
-
-        // Send calculation details
-        const message =
-          `📊 <b>Расчет №${testCalculation.number}</b>\n\n` +
-          `📐 <b>Параметры:</b>\n` +
-          `• Площадь: ${testCalculation.area} м²\n` +
-          `• Этажность: ${testCalculation.floors}\n\n` +
-          `💰 <b>Результаты:</b>\n` +
-          `• Цена за м²: ${testCalculation.pricePerM2.toLocaleString('ru-RU')} ${
-            testCalculation.currency
-          }\n` +
-          `• <b>Общая стоимость: ${testCalculation.totalCost.toLocaleString('ru-RU')} ${
-            testCalculation.currency
-          }</b>\n\n` +
-          `📅 Дата расчета: ${testCalculation.date}\n\n` +
-          `🔗 Подробнее: https://formnorm.ru/calculator/${calculationId}`
-
-        await sendMessage(chatId, message, true)
-
-        // TODO: Send PDF if available
-        // await sendDocument(chatId, pdfUrl, 'Ваш расчет в PDF');
       } else {
         // Regular /start without calculation
         await sendMessage(

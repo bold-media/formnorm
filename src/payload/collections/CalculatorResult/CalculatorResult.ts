@@ -29,9 +29,12 @@ export const CalculatorResult: CollectionConfig = {
     defaultColumns: ['calculationNumber', 'clientName', 'createdAt'],
   },
   access: {
-    // Только чтение для всех, создание только через API
+    // Только чтение для всех, создание через API разрешено
     read: () => true,
-    create: () => false,
+    create: ({ req }) => {
+      // Allow creation from API (server-side) but not from admin panel
+      return !req.user
+    },
     update: access(),
     delete: access(),
   },
