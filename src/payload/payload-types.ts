@@ -629,6 +629,10 @@ export interface CalculatorResult {
   contactInfo?: {
     email?: string | null;
     phone?: string | null;
+    /**
+     * ID чата клиента для отправки PDF через Telegram
+     */
+    telegramChatId?: string | null;
   };
   /**
    * Итоговые данные расчета
@@ -672,6 +676,7 @@ export interface CalculatorResult {
     hasNextPage?: boolean;
     totalDocs?: number;
   };
+  sendToTelegram?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -1367,6 +1372,7 @@ export interface CalculatorResultsSelect<T extends boolean = true> {
     | {
         email?: T;
         phone?: T;
+        telegramChatId?: T;
       };
   calculationSummary?:
     | T
@@ -1380,6 +1386,7 @@ export interface CalculatorResultsSelect<T extends boolean = true> {
   metadata?: T;
   notes?: T;
   formSubmissions?: T;
+  sendToTelegram?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;

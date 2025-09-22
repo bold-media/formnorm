@@ -4,7 +4,7 @@ import React from 'react'
 import { CalculatorResult as CalculatorResultType } from '@payload-types'
 import { Button } from '@/components/Button'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/Card'
-import { Download, Share2, Mail, FileText } from 'lucide-react'
+import { Download, Share2, FileText, Send } from 'lucide-react'
 import { toast } from 'sonner'
 import { RenderForm } from '@/modules/forms/RenderForm'
 import type { Form } from '@payload-types'
@@ -15,6 +15,7 @@ interface ButtonTexts {
   downloadPdf: string
   downloadPdfLoading: string
   share: string
+  telegram: string
 }
 
 interface CalculatorResultViewProps {
@@ -38,13 +39,14 @@ const CalculatorResultView: React.FC<CalculatorResultViewProps> = ({
     downloadPdf: 'Скачать PDF',
     downloadPdfLoading: 'Генерация PDF...',
     share: 'Поделиться',
+    telegram: 'Поделиться в Telegram',
   }
   const [isGeneratingPDF, setIsGeneratingPDF] = React.useState(false)
   const [showForm, setShowForm] = React.useState(false)
 
   // Check if we're in the admin panel
   const [isAdmin, setIsAdmin] = React.useState(false)
-  
+
   React.useEffect(() => {
     // Check if the current URL contains /admin
     if (typeof window !== 'undefined') {
@@ -130,9 +132,43 @@ const CalculatorResultView: React.FC<CalculatorResultViewProps> = ({
     }
   }
 
-  const handleSendEmail = () => {
-    // Placeholder for email functionality
-    alert('Функция отправки по email будет добавлена позже')
+  const handleShareToTelegram = () => {
+    // Get the current page URL
+    const currentUrl = window.location.href
+
+    // Get calculation details
+    const calcNumber = result.calculationNumber || 'N/A'
+    const totalCost = calculations.totalCost || 0
+    const area = calculations.area || 0
+    const pricePerM2 = calculations.pricePerM2 || 0
+    const floor = formData.selectedFloor || 'Не указано'
+
+    // Create a cleaner message without complex Unicode characters
+    // Using simple line breaks and basic formatting
+    const message = `Расчет стоимости проектирования №${calcNumber}
+
+Параметры:
+• Площадь: ${area} м²
+• Этажность: ${floor}
+
+Результаты:
+• Цена за м²: ${Math.round(pricePerM2).toLocaleString('ru-RU')} ${currency}
+• Общая стоимость: ${totalCost.toLocaleString('ru-RU')} ${currency}
+
+Дата: ${new Date(result.createdAt).toLocaleDateString('ru-RU')}
+
+Подробнее:`
+
+    // Create Telegram share URL
+    // Important: URL should be separate, not encoded with the text
+    const telegramUrl = `https://t.me/share/url?text=${encodeURIComponent(message)}&url=${encodeURIComponent(currentUrl)}`
+
+    // Open in a popup window with specific dimensions
+    window.open(
+      telegramUrl,
+      'telegram-share',
+      'width=550,height=450,toolbar=0,menubar=0,location=0,status=0'
+    )
   }
 
   const toggleForm = () => {
@@ -152,31 +188,33 @@ const CalculatorResultView: React.FC<CalculatorResultViewProps> = ({
         {/* Left column - Summary */}
         <div className="lg:col-span-2 space-y-6">
           {/* Client info - Only visible in admin */}
-          {isAdmin && (result.clientName || result.contactInfo?.email || result.contactInfo?.phone) && (
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg font-semibold">Контактная информация</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                {result.clientName && (
-                  <div>
-                    <span className="text-muted-foreground">Имя:</span> {result.clientName}
-                  </div>
-                )}
-                {result.contactInfo?.email && (
-                  <div>
-                    <span className="text-muted-foreground">Email:</span> {result.contactInfo.email}
-                  </div>
-                )}
-                {result.contactInfo?.phone && (
-                  <div>
-                    <span className="text-muted-foreground">Телефон:</span>{' '}
-                    {result.contactInfo.phone}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          )}
+          {isAdmin &&
+            (result.clientName || result.contactInfo?.email || result.contactInfo?.phone) && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg font-semibold">Контактная информация</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  {result.clientName && (
+                    <div>
+                      <span className="text-muted-foreground">Имя:</span> {result.clientName}
+                    </div>
+                  )}
+                  {result.contactInfo?.email && (
+                    <div>
+                      <span className="text-muted-foreground">Email:</span>{' '}
+                      {result.contactInfo.email}
+                    </div>
+                  )}
+                  {result.contactInfo?.phone && (
+                    <div>
+                      <span className="text-muted-foreground">Телефон:</span>{' '}
+                      {result.contactInfo.phone}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            )}
 
           {/* Parameters */}
           <Card>
@@ -292,53 +330,69 @@ const CalculatorResultView: React.FC<CalculatorResultViewProps> = ({
                             onSuccess={async (submissionData) => {
                               // Скрываем форму после успешной отправки
                               setShowForm(false)
-                              
+
                               // Sync form data with calculator result
                               if (submissionData && result?.id) {
                                 const updateData: any = {}
                                 let hasData = false
-                                
+
                                 // Map form fields to calculator result fields
                                 submissionData.forEach(({ field, value }) => {
                                   const fieldLower = field.toLowerCase()
-                                  
+
                                   // Check for name field
-                                  if ((fieldLower === 'name' || fieldLower === 'clientname' || 
-                                       fieldLower === 'fullname' || fieldLower.includes('name')) && value) {
+                                  if (
+                                    (fieldLower === 'name' ||
+                                      fieldLower === 'clientname' ||
+                                      fieldLower === 'fullname' ||
+                                      fieldLower.includes('name')) &&
+                                    value
+                                  ) {
                                     updateData.clientName = String(value)
                                     hasData = true
                                   }
-                                  
+
                                   // Check for email field
-                                  if ((fieldLower === 'email' || fieldLower.includes('email')) && value) {
+                                  if (
+                                    (fieldLower === 'email' || fieldLower.includes('email')) &&
+                                    value
+                                  ) {
                                     if (!updateData.contactInfo) updateData.contactInfo = {}
                                     updateData.contactInfo.email = String(value)
                                     hasData = true
                                   }
-                                  
+
                                   // Check for phone field
-                                  if ((fieldLower === 'phone' || fieldLower === 'tel' || 
-                                       fieldLower.includes('phone') || fieldLower.includes('mobile')) && value) {
+                                  if (
+                                    (fieldLower === 'phone' ||
+                                      fieldLower === 'tel' ||
+                                      fieldLower.includes('phone') ||
+                                      fieldLower.includes('mobile')) &&
+                                    value
+                                  ) {
                                     if (!updateData.contactInfo) updateData.contactInfo = {}
                                     updateData.contactInfo.phone = String(value)
                                     hasData = true
                                   }
                                 })
-                                
+
                                 // Update calculator result if we have matching data
                                 if (hasData) {
                                   try {
-                                    const response = await fetch(`/api/update-calculator-result/${result.id}`, {
-                                      method: 'PATCH',
-                                      headers: {
-                                        'Content-Type': 'application/json',
+                                    const response = await fetch(
+                                      `/api/update-calculator-result/${result.id}`,
+                                      {
+                                        method: 'PATCH',
+                                        headers: {
+                                          'Content-Type': 'application/json',
+                                        },
+                                        body: JSON.stringify({
+                                          ...updateData,
+                                          calculationNumber: result.calculationNumber,
+                                        }),
                                       },
-                                      body: JSON.stringify({
-                                        ...updateData,
-                                        calculationNumber: result.calculationNumber,
-                                      }),
-                                    })
-                                    
+                                    )
+
                                     // Silently update without notification
                                     if (!response.ok) {
                                       console.error('Failed to update calculator result')
@@ -380,10 +434,10 @@ const CalculatorResultView: React.FC<CalculatorResultViewProps> = ({
                     {texts.share}
                   </Button>
 
-                  {/* <Button onClick={handleSendEmail} variant="outline" className="w-full">
-                    <Mail className="w-4 h-4 mr-2" />
-                    Отправить на email
-                  </Button> */}
+                  <Button onClick={handleShareToTelegram} variant="outline" className="w-full">
+                    <Send className="w-4 h-4 mr-2" />
+                    {texts.telegram}
+                  </Button>
                 </div>
               </div>
             </CardContent>

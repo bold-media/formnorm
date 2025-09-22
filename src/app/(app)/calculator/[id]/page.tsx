@@ -2,11 +2,50 @@ import { notFound } from 'next/navigation'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import CalculatorResultView from '@/modules/common/Blocks/components/CalculatorResultView'
+import { Metadata } from 'next'
 
 interface PageProps {
   params: Promise<{
     id: string
   }>
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { id } = await params
+  const payload = await getPayload({ config })
+
+  try {
+    const result = await payload.findByID({
+      collection: 'calculator-results',
+      id,
+    })
+
+    if (!result) {
+      return {
+        title: 'Расчет не найден',
+      }
+    }
+
+    const metadata = result.metadata as any
+    const calculations = metadata?.calculations || {}
+    const totalCost = calculations.totalCost || 0
+    const area = calculations.area || 0
+
+    return {
+      title: `Расчет №${result.calculationNumber}`,
+      description: `Стоимость проектирования: ${totalCost.toLocaleString('ru-RU')} ₽. Площадь: ${area} м²`,
+      openGraph: {
+        title: `Расчет №${result.calculationNumber} - Стоимость проектирования`,
+        description: `Общая стоимость: ${totalCost.toLocaleString('ru-RU')} ₽ | Площадь: ${area} м²`,
+        type: 'website',
+        locale: 'ru_RU',
+      },
+    }
+  } catch (error) {
+    return {
+      title: 'Расчет стоимости проектирования',
+    }
+  }
 }
 
 export default async function CalculatorResultPage({ params }: PageProps) {
@@ -38,6 +77,7 @@ export default async function CalculatorResultPage({ params }: PageProps) {
       downloadPdf: resultPageSettings.downloadPdfButtonText || 'Скачать PDF',
       downloadPdfLoading: resultPageSettings.downloadPdfButtonLoading || 'Генерация PDF...',
       share: resultPageSettings.shareButtonText || 'Поделиться',
+      telegram: 'Поделиться в Telegram', // Default value for now
     }
 
     if (resultPageSettings.resultForm) {

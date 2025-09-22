@@ -3,6 +3,7 @@ import { textEditor } from '@/payload/fields/lexical/textEditor'
 import { CollectionConfig } from 'payload'
 import { generateCalculationNumber } from './hooks/generateCalculationNumber'
 import { sendTelegramNotificationHook } from './hooks/sendTelegramNotification'
+import { sendToTelegramHook } from './hooks/sendToTelegram'
 
 export const CalculatorResult: CollectionConfig = {
   slug: 'calculator-results',
@@ -89,6 +90,18 @@ export const CalculatorResult: CollectionConfig = {
               },
             },
           ],
+        },
+        {
+          name: 'telegramChatId',
+          type: 'text',
+          label: {
+            en: 'Telegram Chat ID',
+            ru: 'Telegram Chat ID клиента',
+          },
+          admin: {
+            description: 'ID чата клиента для отправки PDF через Telegram',
+            readOnly: false,
+          },
         },
       ],
     },
@@ -261,6 +274,13 @@ export const CalculatorResult: CollectionConfig = {
       type: 'join',
       collection: 'form-submissions',
       on: 'calculatorResult',
+    },
+    {
+      name: 'sendToTelegram',
+      type: 'text',
+      hooks: {
+        beforeChange: [sendToTelegramHook],
+      },
     },
     // {
     //   type: 'ui',
