@@ -10,32 +10,51 @@ export const generateCalculationNumber: FieldHook<CalculatorResult> = async ({
     const payload = req.payload
     const currentYear = new Date().getFullYear()
 
-    const { totalDocs: count } = await payload.count({
+    // Find the last calculation number for the current year
+    const lastCalculation = await payload.find({
       collection: 'calculator-results',
       where: {
         calculationNumber: {
-          like: `${currentYear}-%`,
+          contains: `${currentYear}-`,
         },
       },
-    })
-
-    let nextNumber = count + 1
-    let calculationNumber = `${currentYear}-${nextNumber}`
-
-    // Check if this number already exists (in case of race condition)
-    const existing = await payload.find({
-      collection: 'calculator-results',
-      where: {
-        calculationNumber: {
-          equals: calculationNumber,
-        },
-      },
+      sort: '-createdAt',
       limit: 1,
     })
 
-    // If it exists, add timestamp to make it unique
-    if (existing.docs.length > 0) {
-      calculationNumber = `${currentYear}-${nextNumber}-${Date.now()}`
+    let nextNumber = 1
+
+    if (lastCalculation.docs.length > 0) {
+      const lastNumber = lastCalculation.docs[0].calculationNumber
+      // Extract the number part (e.g., "2024-15" -> 15)
+      const match = lastNumber?.match(new RegExp(`${currentYear}-(\\d+)`))
+      if (match && match[1]) {
+        nextNumber = parseInt(match[1]) + 1
+      }
+    }
+
+    // Keep incrementing until we find a unique number
+    let calculationNumber = `${currentYear}-${nextNumber}`
+
+    while (true) {
+      const existing = await payload.find({
+        collection: 'calculator-results',
+        where: {
+          calculationNumber: {
+            equals: calculationNumber,
+          },
+        },
+        limit: 1,
+      })
+
+      if (existing.docs.length === 0) {
+        // Found a unique number
+        break
+      }
+
+      // Increment and try again
+      nextNumber++
+      calculationNumber = `${currentYear}-${nextNumber}`
     }
 
     return calculationNumber
