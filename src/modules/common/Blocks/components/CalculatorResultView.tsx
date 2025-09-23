@@ -62,6 +62,20 @@ const CalculatorResultView: React.FC<CalculatorResultViewProps> = ({
   const currency = config?.currency || '₽'
 
   const handleDownloadPDF = async () => {
+    // Send notification about PDF download
+    try {
+      await fetch('/api/track-pdf-download', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          calculationNumber: result.calculationNumber,
+        }),
+      })
+    } catch (error) {
+      console.error('Failed to track PDF download:', error)
+      // Continue with download even if tracking fails
+    }
+
     // Check if PDF is already uploaded
     if (result.url) {
       // Direct download from uploaded file
