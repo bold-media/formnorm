@@ -1,29 +1,9 @@
 import React from 'react'
-import { Document, Page, Text, View, StyleSheet, Font, pdf, Link,  } from '@react-pdf/renderer'
+import { Document, Page, Text, View, StyleSheet, pdf, Link } from '@react-pdf/renderer'
 import { internalDocToHref } from './internalDocToHref'
 
-// Register fonts - using Google Fonts URLs for production reliability
-if (typeof window === 'undefined') {
-  try {
-    Font.register({
-      family: 'Montserrat',
-      fonts: [
-        {
-          src: 'https://fonts.gstatic.com/s/montserrat/v26/JTUSjIg1_i6t8kCHKm459Wlhyw.ttf',
-          fontWeight: 400,
-        },
-        {
-          src: 'https://fonts.gstatic.com/s/montserrat/v26/JTUSjIg1_i6t8kCHKm459WRhyzbi.ttf',
-          fontWeight: 700,
-        },
-      ],
-    })
-    console.log('Fonts registered successfully')
-  } catch (error) {
-    console.error('Failed to register fonts:', error)
-    // PDF will use default fonts if registration fails
-  }
-}
+// Skip font registration - use default Helvetica which is built-in
+// This ensures PDF generation works reliably in all environments
 
 // Define colors
 const colors = {
@@ -40,7 +20,7 @@ const colors = {
 const styles = StyleSheet.create({
   page: {
     padding: '15mm 10mm',
-    fontFamily: 'Montserrat',
+    fontFamily: 'Helvetica',
     fontSize: 11,
     color: colors.darkGray,
   },
