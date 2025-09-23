@@ -5,13 +5,12 @@ const ADMIN_CHAT_ID = process.env.TELEGRAM_CHAT_ID || '-1002992818151'
 
 export async function POST(request: NextRequest) {
   try {
-    const { calculationNumber, calculationId } = await request.json()
+    const { calculationNumber } = await request.json()
 
     // Send notification to admin channel
     const adminMessage =
       `📄 Клиент скачал PDF\n` +
-      `📊 Расчет: №${calculationNumber}\n` +
-      `🔗 ID: ${calculationId}`
+      `📊 Расчет: №${calculationNumber}`
 
     await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
       method: 'POST',
