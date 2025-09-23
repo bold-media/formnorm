@@ -7,21 +7,35 @@ export const generateCalculationNumber: FieldHook<CalculatorResult> = async ({
   req,
 }) => {
   if (operation === 'create' && !value) {
-    const payload = req.payload
-    const currentYear = new Date().getFullYear()
+    try {
+      const payload = req.payload
+      const currentYear = new Date().getFullYear()
 
-    const { totalDocs: count } = await payload.count({
-      collection: 'calculator-results',
-      where: {
-        calculationNumber: {
-          like: `${currentYear}-%`,
+      console.log('Generating calculation number for year:', currentYear)
+
+      const { totalDocs: count } = await payload.count({
+        collection: 'calculator-results',
+        where: {
+          calculationNumber: {
+            like: `${currentYear}-%`,
+          },
         },
-      },
-    })
+      })
 
-    let nextNumber = count + 1
+      console.log('Found existing calculations:', count)
 
-    return `${currentYear}-${nextNumber}`
+      let nextNumber = count + 1
+      const generatedNumber = `${currentYear}-${nextNumber}`
+
+      console.log('Generated calculation number:', generatedNumber)
+      return generatedNumber
+    } catch (error) {
+      console.error('Error in generateCalculationNumber:', error)
+      // Fallback: use timestamp to ensure uniqueness
+      const fallbackNumber = `${new Date().getFullYear()}-${Date.now()}`
+      console.log('Using fallback number:', fallbackNumber)
+      return fallbackNumber
+    }
   }
 
   return value
