@@ -66,11 +66,12 @@ export async function POST(request: NextRequest) {
       size: pdfBuffer.length,
     }
 
-    // Save to database with PDF file
+    // Save to database - temporarily skip file to test
+    console.log('Saving calculation WITHOUT file to test...')
     const result = await payload.create({
       collection: 'calculator-results',
       data: calculationData,
-      file,
+      // file, // TEMPORARILY DISABLED TO TEST
     })
 
     console.log('Calculation result saved with ID:', result.id)
@@ -94,8 +95,8 @@ export async function POST(request: NextRequest) {
           calculationNumber: result.calculationNumber,
         })
 
-        // Update with correct PDF
-        const updatedResult = await payload.update({
+        // Update with correct PDF - TEMPORARILY DISABLED
+        /* const updatedResult = await payload.update({
           collection: 'calculator-results',
           id: result.id,
           data: {},
@@ -105,12 +106,12 @@ export async function POST(request: NextRequest) {
             name: `calculation-${result.calculationNumber}.pdf`,
             size: correctPdfBuffer.length,
           },
-        })
+        }) */
 
         return NextResponse.json({
           success: true,
-          id: updatedResult.id,
-          calculationNumber: updatedResult.calculationNumber,
+          id: result.id, // changed from updatedResult
+          calculationNumber: result.calculationNumber,
         })
       } catch (updateError) {
         console.error('Error updating PDF with correct number:', updateError)
