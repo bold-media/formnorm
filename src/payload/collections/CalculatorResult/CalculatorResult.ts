@@ -94,6 +94,7 @@ export const CalculatorResult: CollectionConfig = {
             },
           ],
         },
+
         {
           name: 'telegramChatId',
           type: 'text',
