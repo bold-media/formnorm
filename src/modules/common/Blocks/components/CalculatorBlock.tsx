@@ -839,6 +839,8 @@ const CalculatorBlock: React.FC<CalculatorBlockProps> = ({ initialConfig }) => {
     }
 
     setIsSaving(true)
+    console.log('Starting save calculation process...')
+
     try {
       // Save calculation result to database
       const saveResponse = await fetch('/api/save-calculation', {
@@ -869,23 +871,40 @@ const CalculatorBlock: React.FC<CalculatorBlockProps> = ({ initialConfig }) => {
         }),
       })
 
+      console.log('Save response status:', saveResponse.status, saveResponse.ok)
+
       if (!saveResponse.ok) {
         const errorData = await saveResponse.json()
+        console.error('Save failed with error data:', errorData)
         throw new Error(errorData.details || 'Failed to save calculation')
       }
 
       const saveData = await saveResponse.json()
-      console.log('Calculation saved with ID:', saveData.id)
+      console.log('Calculation saved successfully:', {
+        id: saveData.id,
+        calculationNumber: saveData.calculationNumber,
+        success: saveData.success
+      })
 
       // Redirect to the result page
-      router.push(`/calculator/${saveData.id}`)
+      const redirectUrl = `/calculator/${saveData.id}`
+      console.log('Redirecting to:', redirectUrl)
+      router.push(redirectUrl)
     } catch (error) {
-      console.error('Error saving calculation:', error)
+      console.error('Error in save calculation process:', {
+        error: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined,
+        type: typeof error
+      })
       alert(
         `Ошибка при сохранении: ${error instanceof Error ? error.message : 'Неизвестная ошибка'}`,
       )
-    } finally {
       setIsSaving(false)
+    } finally {
+      // Small delay before resetting isSaving to ensure redirect happens
+      setTimeout(() => {
+        setIsSaving(false)
+      }, 500)
     }
   }
 
