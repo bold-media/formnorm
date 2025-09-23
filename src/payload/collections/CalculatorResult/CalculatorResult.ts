@@ -64,6 +64,19 @@ export const CalculatorResult: CollectionConfig = {
       },
     },
     {
+      name: 'telegramChatId',
+      type: 'text',
+      label: {
+        en: 'Telegram Chat ID',
+        ru: 'Telegram Chat ID клиента',
+      },
+      admin: {
+        description: 'ID чата клиента в Telegram',
+        readOnly: false,
+      },
+    },
+
+    {
       name: 'contactInfo',
       type: 'group',
       fields: [
@@ -93,19 +106,6 @@ export const CalculatorResult: CollectionConfig = {
               },
             },
           ],
-        },
-
-        {
-          name: 'telegramChatId',
-          type: 'text',
-          label: {
-            en: 'Telegram Chat ID',
-            ru: 'Telegram Chat ID клиента',
-          },
-          admin: {
-            description: 'ID чата клиента для отправки PDF через Telegram',
-            readOnly: false,
-          },
         },
       ],
     },

@@ -626,13 +626,13 @@ export interface CalculatorResult {
   id: string;
   calculationNumber?: string | null;
   clientName?: string | null;
+  /**
+   * ID чата клиента в Telegram
+   */
+  telegramChatId?: string | null;
   contactInfo?: {
     email?: string | null;
     phone?: string | null;
-    /**
-     * ID чата клиента для отправки PDF через Telegram
-     */
-    telegramChatId?: string | null;
   };
   /**
    * Итоговые данные расчета
@@ -1367,12 +1367,12 @@ export interface ServiceSelect<T extends boolean = true> {
 export interface CalculatorResultsSelect<T extends boolean = true> {
   calculationNumber?: T;
   clientName?: T;
+  telegramChatId?: T;
   contactInfo?:
     | T
     | {
         email?: T;
         phone?: T;
-        telegramChatId?: T;
       };
   calculationSummary?:
     | T

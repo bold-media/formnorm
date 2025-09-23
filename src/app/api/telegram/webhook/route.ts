@@ -29,6 +29,30 @@ export async function POST(request: NextRequest) {
         try {
           // Fetch calculation from database
           const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
+
+          // First, update the calculator result with the user's Telegram info
+          try {
+            const updateResponse = await fetch(`${baseUrl}/api/update-calculator-telegram/${calculationId}`, {
+              method: 'PATCH',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                telegramChatId: String(chatId),
+                telegramUsername: body.message.from.username || null,
+                telegramFirstName: body.message.from.first_name || null,
+                telegramLastName: body.message.from.last_name || null,
+              }),
+            })
+
+            if (updateResponse.ok) {
+              console.log('Updated calculation with Telegram chat ID:', chatId)
+            }
+          } catch (updateError) {
+            console.error('Failed to update Telegram chat ID:', updateError)
+            // Continue even if update fails
+          }
+
           const response = await fetch(`${baseUrl}/api/calculator-results/${calculationId}`)
 
           if (!response.ok) {
