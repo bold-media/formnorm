@@ -39,7 +39,7 @@ const CalculatorResultView: React.FC<CalculatorResultViewProps> = ({
     downloadPdf: 'Скачать PDF',
     downloadPdfLoading: 'Генерация PDF...',
     share: 'Поделиться',
-    telegram: 'Поделиться в Telegram',
+    telegram: 'Скачать в Telegram',
   }
   const [isGeneratingPDF, setIsGeneratingPDF] = React.useState(false)
   const [showForm, setShowForm] = React.useState(false)

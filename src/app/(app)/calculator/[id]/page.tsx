@@ -33,10 +33,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
     return {
       title: `Расчет №${result.calculationNumber}`,
-      description: `Стоимость проектирования: ${totalCost.toLocaleString('ru-RU')} ₽. Площадь: ${area} м²`,
+      description: `Стоимость проектирования: ${totalCost.toLocaleString(
+        'ru-RU',
+      )} ₽. Площадь: ${area} м²`,
       openGraph: {
         title: `Расчет №${result.calculationNumber} - Стоимость проектирования`,
-        description: `Общая стоимость: ${totalCost.toLocaleString('ru-RU')} ₽ | Площадь: ${area} м²`,
+        description: `Общая стоимость: ${totalCost.toLocaleString(
+          'ru-RU',
+        )} ₽ | Площадь: ${area} м²`,
         type: 'website',
         locale: 'ru_RU',
       },
@@ -76,8 +80,8 @@ export default async function CalculatorResultPage({ params }: PageProps) {
       formButtonHide: resultPageSettings.formHideButtonText || 'Скрыть форму',
       downloadPdf: resultPageSettings.downloadPdfButtonText || 'Скачать PDF',
       downloadPdfLoading: resultPageSettings.downloadPdfButtonLoading || 'Генерация PDF...',
-      share: resultPageSettings.shareButtonText || 'Поделиться',
-      telegram: 'Поделиться в Telegram', // Default value for now
+      share: resultPageSettings.shareButtonText || 'Скопировать ссылку',
+      telegram: resultPageSettings.shareToTelegramButtonText || 'Скачать в Telegram',
     }
 
     if (resultPageSettings.resultForm) {

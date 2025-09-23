@@ -854,6 +854,14 @@ export const Settings: GlobalConfig = {
                     ru: 'Текст кнопки поделиться',
                   },
                 },
+                {
+                  name: 'shareToTelegramButtonText',
+                  type: 'text',
+                  label: {
+                    en: 'Share to Telegram Button Text',
+                    ru: 'Текст кнопки поделиться в Telegram',
+                  },
+                },
               ],
             },
             {

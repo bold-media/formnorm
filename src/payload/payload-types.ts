@@ -1912,6 +1912,7 @@ export interface Settings {
       downloadPdfButtonText?: string | null;
       downloadPdfButtonLoading?: string | null;
       shareButtonText?: string | null;
+      shareToTelegramButtonText?: string | null;
     };
     instructions?: {
       title?: string | null;
@@ -2140,6 +2141,7 @@ export interface SettingsSelect<T extends boolean = true> {
               downloadPdfButtonText?: T;
               downloadPdfButtonLoading?: T;
               shareButtonText?: T;
+              shareToTelegramButtonText?: T;
             };
         instructions?:
           | T
