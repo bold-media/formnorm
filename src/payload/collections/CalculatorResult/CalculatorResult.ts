@@ -68,11 +68,12 @@ export const CalculatorResult: CollectionConfig = {
       type: 'text',
       label: {
         en: 'Telegram Chat ID',
-        ru: 'Telegram Chat ID клиента',
+        ru: 'Telegram ID клиента',
       },
       admin: {
         description: 'ID чата клиента в Telegram',
         readOnly: false,
+        position: 'sidebar',
       },
     },
 

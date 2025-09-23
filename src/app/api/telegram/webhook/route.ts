@@ -1,8 +1,11 @@
 // src/app/api/telegram/webhook/route.ts
 
 import { NextRequest, NextResponse } from 'next/server'
+import { getPayload } from 'payload'
+import config from '@payload-config'
 
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN
+const ADMIN_CHAT_ID = process.env.TELEGRAM_CHAT_ID || '-1002992818151' // Admin channel for notifications
 
 export async function POST(request: NextRequest) {
   try {
@@ -29,29 +32,6 @@ export async function POST(request: NextRequest) {
         try {
           // Fetch calculation from database
           const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
-
-          // First, update the calculator result with the user's Telegram info
-          try {
-            const updateResponse = await fetch(`${baseUrl}/api/update-calculator-telegram/${calculationId}`, {
-              method: 'PATCH',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                telegramChatId: String(chatId),
-                telegramUsername: body.message.from.username || null,
-                telegramFirstName: body.message.from.first_name || null,
-                telegramLastName: body.message.from.last_name || null,
-              }),
-            })
-
-            if (updateResponse.ok) {
-              console.log('Updated calculation with Telegram chat ID:', chatId)
-            }
-          } catch (updateError) {
-            console.error('Failed to update Telegram chat ID:', updateError)
-            // Continue even if update fails
-          }
 
           const response = await fetch(`${baseUrl}/api/calculator-results/${calculationId}`)
 
@@ -86,6 +66,36 @@ export async function POST(request: NextRequest) {
           // Send PDF if available
           if (result.url) {
             await sendDocument(chatId, `${baseUrl}${result.url}`, `Расчет №${result.calculationNumber}.pdf`)
+          }
+
+          // Save Telegram ID to database
+          try {
+            const payload = await getPayload({ config })
+            await payload.update({
+              collection: 'calculator-results',
+              id: calculationId,
+              data: {
+                telegramChatId: String(chatId),
+              },
+            })
+            console.log('Updated calculation with Telegram ID:', chatId)
+          } catch (updateError) {
+            console.error('Failed to update Telegram ID in database:', updateError)
+            // Continue even if update fails
+          }
+
+          // Send notification to admin channel about client receiving calculation
+          try {
+            const adminMessage =
+              `📱 Клиент получил расчет №${result.calculationNumber}\n` +
+              `🆔 Telegram ID: ${chatId}\n` +
+              `👤 Имя: ${body.message.from.first_name || 'Не указано'}\n` +
+              `${body.message.from.username ? `📝 Username: @${body.message.from.username}` : ''}`
+
+            await sendMessage(Number(ADMIN_CHAT_ID), adminMessage, true)
+          } catch (adminError) {
+            console.error('Failed to send admin notification:', adminError)
+            // Don't fail the main process if admin notification fails
           }
         } catch (error) {
           console.error('Error fetching calculation:', error)
