@@ -1,25 +1,28 @@
 import React from 'react'
 import { Document, Page, Text, View, StyleSheet, Font, pdf, Link,  } from '@react-pdf/renderer'
-import path from 'path'
 import { internalDocToHref } from './internalDocToHref'
 
-// Register Montserrat fonts
+// Register fonts - using Google Fonts URLs for production reliability
 if (typeof window === 'undefined') {
-  const fontsDir = path.join(process.cwd(), 'src/utils/fonts')
-
-  Font.register({
-    family: 'Montserrat',
-    fonts: [
-      {
-        src: path.join(fontsDir, 'Montserrat-Regular.ttf'),
-        fontWeight: 400,
-      },
-      {
-        src: path.join(fontsDir, 'Montserrat-Bold.ttf'),
-        fontWeight: 700,
-      },
-    ],
-  })
+  try {
+    Font.register({
+      family: 'Montserrat',
+      fonts: [
+        {
+          src: 'https://fonts.gstatic.com/s/montserrat/v26/JTUSjIg1_i6t8kCHKm459Wlhyw.ttf',
+          fontWeight: 400,
+        },
+        {
+          src: 'https://fonts.gstatic.com/s/montserrat/v26/JTUSjIg1_i6t8kCHKm459WRhyzbi.ttf',
+          fontWeight: 700,
+        },
+      ],
+    })
+    console.log('Fonts registered successfully')
+  } catch (error) {
+    console.error('Failed to register fonts:', error)
+    // PDF will use default fonts if registration fails
+  }
 }
 
 // Define colors

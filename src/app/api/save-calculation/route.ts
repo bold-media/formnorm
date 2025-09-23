@@ -4,13 +4,11 @@ import config from '@payload-config'
 import { generatePDFWithReactPDF } from '@/utils/CalculationPDF'
 
 export async function POST(request: NextRequest) {
-  console.log('API: Save calculation endpoint called')
-
   try {
     const payload = await getPayload({ config })
     const data = await request.json()
 
-    console.log('API: Received data with area:', data.area, 'and total cost:', data.totalCost)
+    console.log('API: Processing calculation with area:', data.area)
 
     const tempCalculationNumber = `TEMP-${Date.now()}`
 
@@ -75,7 +73,7 @@ export async function POST(request: NextRequest) {
       file,
     })
 
-    console.log('API: Calculation result saved with ID:', result.id, 'and number:', result.calculationNumber)
+    console.log('Calculation result saved with ID:', result.id)
 
     // If we have the real calculation number now, regenerate the PDF with correct number
     if (result.calculationNumber && result.calculationNumber !== tempCalculationNumber) {
