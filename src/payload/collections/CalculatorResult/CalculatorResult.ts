@@ -76,6 +76,19 @@ export const CalculatorResult: CollectionConfig = {
         position: 'sidebar',
       },
     },
+    {
+      name: 'telegramUsername',
+      type: 'text',
+      label: {
+        en: 'Telegram Username',
+        ru: 'Telegram Username',
+      },
+      admin: {
+        description: 'Username клиента в Telegram',
+        readOnly: false,
+        position: 'sidebar',
+      },
+    },
 
     {
       name: 'contactInfo',

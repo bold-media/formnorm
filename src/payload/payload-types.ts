@@ -630,6 +630,10 @@ export interface CalculatorResult {
    * ID чата клиента в Telegram
    */
   telegramChatId?: string | null;
+  /**
+   * Username клиента в Telegram
+   */
+  telegramUsername?: string | null;
   contactInfo?: {
     email?: string | null;
     phone?: string | null;
@@ -1368,6 +1372,7 @@ export interface CalculatorResultsSelect<T extends boolean = true> {
   calculationNumber?: T;
   clientName?: T;
   telegramChatId?: T;
+  telegramUsername?: T;
   contactInfo?:
     | T
     | {

@@ -68,7 +68,7 @@ export async function POST(request: NextRequest) {
             await sendDocument(chatId, `${baseUrl}${result.url}`, `Расчет №${result.calculationNumber}.pdf`)
           }
 
-          // Save Telegram ID to database
+          // Save Telegram ID and username to database
           try {
             const payload = await getPayload({ config })
             await payload.update({
@@ -76,11 +76,12 @@ export async function POST(request: NextRequest) {
               id: calculationId,
               data: {
                 telegramChatId: String(chatId),
+                telegramUsername: body.message.from.username ? `@${body.message.from.username}` : undefined,
               },
             })
-            console.log('Updated calculation with Telegram ID:', chatId)
+            console.log('Updated calculation with Telegram ID and username:', chatId, body.message.from.username)
           } catch (updateError) {
-            console.error('Failed to update Telegram ID in database:', updateError)
+            console.error('Failed to update Telegram info in database:', updateError)
             // Continue even if update fails
           }
 
